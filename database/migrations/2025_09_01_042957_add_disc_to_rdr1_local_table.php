@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('rdr1_local', function (Blueprint $table) {
-            $table->float('RdrItemDisc')->default(0)->nullable();
+            $table->float('RdrItemDisc')->default(0);
         });
     }
 
