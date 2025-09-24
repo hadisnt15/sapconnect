@@ -78,6 +78,8 @@
                                         Penjual
                                     @elseif ($u['user']->role === 'supervisor')
                                         Admin
+                                    @elseif ($u['user']->role === 'manager')
+                                        Manajer
                                     @elseif ($u['user']->role === 'developer')
                                         IT
                                     @endif

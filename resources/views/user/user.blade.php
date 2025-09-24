@@ -77,6 +77,8 @@
                                     Penjual
                                 @elseif ($u->role === 'supervisor')
                                     Admin
+                                @elseif ($u->role === 'manager')
+                                    Manajer
                                 @elseif ($u->role === 'developer')
                                     IT
                                 @endif
