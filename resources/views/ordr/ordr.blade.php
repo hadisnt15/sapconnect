@@ -90,7 +90,7 @@
                                             <span class="text-green-600 font-semibold">TERKIRIM</span>
                                         @elseif ($o->is_synced === 2)
                                             <span class="text-blue-600 font-semibold">PROSES KIRIM</span>
-                                        @elseif ($o->synced === 0)
+                                        @elseif ($o->is_synced === 0)
                                             <span class="text-yellow-600 font-semibold">TERTUNDA</span>
                                         @endif
                                     </td>
