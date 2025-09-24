@@ -85,7 +85,8 @@
                         class="bg-gray-50 border border-gray-300 text-sm rounded-lg text-gray-700 focus:ring focus:ring-indigo-200 w-full p-2.5">
                     <option value="">Pilih Posisi</option>
                     <option value="salesman">Penjual</option>
-                    <option value="supervisor">Supervisor</option>
+                    <option value="supervisor">Admin</option>
+                    <option value="manager">Manajer</option>
                 </select>
                 @error('role')
                     <p class="mt-2 text-sm text-red-600"><span class="font-medium">{{ $message }}</span></p>

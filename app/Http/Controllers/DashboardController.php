@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Dashboard;
 use App\Models\Dashboard2;
+use App\Models\SyncLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
 use Carbon\Carbon;
@@ -56,13 +57,16 @@ class DashboardController extends Controller
                 ->locale('id')
                 ->translatedFormat('F Y');
         }
+
+        $lastSync = SyncLog::where('name', 'dashboard')->value('last_sync');
         
         return view('dashboard.dashboard', [
             'title' => 'SCKKJ - Dasbor',
             'titleHeader' => 'Dasbor',
             'grouped' => $grouped,
             'dashboard2' => $dashboard2,
-            'namaPeriode' => $namaPeriode
+            'namaPeriode' => $namaPeriode,
+            'lastSync' => $lastSync
         ]);
     }
 
@@ -80,6 +84,12 @@ class DashboardController extends Controller
             'tahun' => $tahun,
             'bulan' => $bulan,
         ]);
+
+        SyncLog::updateOrCreate(
+            ['name' => 'dashboard'],
+            ['last_sync' => now()]
+        );
+
         return back()->with('success', 'Data Dasbor Berhasil Disinkronkan dari SAP');
     }
 
