@@ -88,7 +88,9 @@
                                     <td class="px-2 py-2 font-medium">
                                         @if ($o->is_synced === 1)
                                             <span class="text-green-600 font-semibold">TERKIRIM</span>
-                                        @else
+                                        @elseif ($o->is_synced === 2)
+                                            <span class="text-blue-600 font-semibold">PROSES KIRIM</span>
+                                        @elseif ($o->synced === 0)
                                             <span class="text-yellow-600 font-semibold">TERTUNDA</span>
                                         @endif
                                     </td>
