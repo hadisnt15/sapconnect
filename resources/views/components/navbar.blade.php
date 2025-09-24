@@ -4,7 +4,7 @@
             <div class="grid grid-cols-[1fr_2fr_1fr] h-16 items-center">
                 <div class="hidden md:block">
                     <div class="shrink-0 flex">
-                        <img class="size-8 bg-indigo-50 rounded-full w-10 h-10 p-1" src="/img/kkj.png" alt="PT Kapuas Kencana Jaya" />
+                        <img class="size-8 bg-indigo-50 rounded-full w-10 h-10 p-1" src="{{ asset('img/kkj.png') }}" alt="PT Kapuas Kencana Jaya" />
                         <div class="rounded-md px-3 py-2 text-sm font-medium text-white">
                             PT. KAPUAS KENCANA JAYA
                         </div>
@@ -102,7 +102,7 @@
             <!-- Mobile menu button -->
             <div class="grid grid-cols-[3fr_1fr] h-16 items-center">
                 <div class="shrink-0 flex">
-                    <img class="size-8 bg-indigo-50 rounded-full w-10 h-10 p-1" src="/img/kkj.png" alt="PT Kapuas Kencana Jaya" />
+                    <img class="size-8 bg-indigo-50 rounded-full w-10 h-10 p-1" src="{{ asset('img/kkj.png') }}" alt="PT Kapuas Kencana Jaya" />
                     <div class="rounded-md px-3 py-2 text-sm font-medium text-white">
                         PT. KAPUAS KENCANA JAYA
                     </div>

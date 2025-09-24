@@ -8,7 +8,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>{{ $title }}</title>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-    <link rel="icon" type="image/x-icon" href="/img/kkj - Copy.png">
+    <link rel="icon" type="image/x-icon" href="{{ asset('/img/kkj.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
