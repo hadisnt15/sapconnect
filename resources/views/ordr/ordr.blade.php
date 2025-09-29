@@ -105,7 +105,7 @@
                                             class="btn-detail open-modal-ordr-btn block px-2 py-1 text-xs rounded bg-red-800 hover:bg-red-500 w-full text-white">
                                             <i class="ri-eye-fill"></i> Detail
                                         </button>
-                                        <a href="{{ route('order.progress', $o->id) }}"
+                                        <a href="{{ route('order.progress', $o->id) }}" onclick="return confirm('Melihat Proses Pesanan Akan Memerlukan Waktu, Lanjutkan?')"
                                             class="block px-2 py-1 text-xs rounded bg-blue-500 hover:bg-blue-400 text-white w-full text-center">
                                             <i class="ri-swap-2-fill"></i> Proses
                                         </a>
@@ -181,7 +181,7 @@
                                             class="btn-detail open-modal-ordr-btn block px-2 py-1 text-xs rounded bg-red-800 hover:bg-red-500 w-full text-white">
                                             <i class="ri-eye-fill"></i>
                                         </button>
-                                        <a href="{{ route('order.progress', $o->id) }}"
+                                        <a href="{{ route('order.progress', $o->id) }}" onclick="return confirm('Melihat Proses Pesanan Akan Memerlukan Waktu, Lanjutkan?')"
                                             class="block px-2 py-1 text-xs rounded bg-blue-500 hover:bg-blue-400 text-white w-full text-center">
                                             <i class="ri-swap-2-fill"></i> 
                                         </a>
