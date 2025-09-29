@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\OitmLocal;
+use App\Models\SyncLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -21,17 +22,27 @@ class OitmController extends Controller
             ->orderBy('Series')
             ->orderBy('ItemCode')
             ->paginate(80)->withQueryString();
+        
+        $lastSync = SyncLog::where('name', 'oitm')->orderByDesc('last_sync')->first();
 
         return view('oitm.oitm', [
             'title' => 'SCKKJ - Daftar Barang',
             'titleHeader' => 'Daftar Barang',
             'items' => $items,
+            'lastSync' => $lastSync
         ]);
     }
 
     public function refresh()
     {
         Artisan::call('sync:oitm');
+        SyncLog::create(
+            [
+                'name' => 'oitm',
+                'last_sync' => now(),
+                'desc' => 'Manual'
+            ]
+        );
         return back()->with('success', 'Data Barang Berhasil Di-refresh dari SAP');
     }
 

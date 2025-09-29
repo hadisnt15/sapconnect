@@ -4,6 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\RoleMiddleware;
+use Illuminate\Console\Scheduling\Schedule;
+use App\Models\SyncLog;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -21,4 +23,51 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->call(function () {
+            $startDate = now()->startOfMonth()->format('d.m.Y');
+            $endDate   = now()->endOfMonth()->format('d.m.Y');
+            $tahun     = now()->year;
+            $bulan     = now()->month;
+
+            Artisan::call('sync:dashboard', [
+                'startDate' => $startDate,
+                'endDate'   => $endDate,
+                'tahun'     => $tahun,
+                'bulan'     => $bulan,
+            ]);
+
+            // simpan log otomatis
+            SyncLog::create([
+                'name'      => 'dashboard',
+                'desc'      => 'Otomatis',
+                'last_sync' => now(),
+            ]);
+        })->everyThirtyMinutes();
+        $schedule->call(function () {
+            Artisan::call('sync:oitm');
+            SyncLog::create([
+                'name' => 'oitm',
+                'desc' => 'Otomatis',
+                'last_sync' => now()
+            ]);
+        })->everyThirtyMinutes();
+        $schedule->call(function () {
+            Artisan::call('sync:ocrd');
+            SyncLog::create([
+                'name' => 'ocrd',
+                'desc' => 'Otomatis',
+                'last_sync' => now()
+            ]);
+        })->everyThirtyMinutes();
+        $schedule->call(function () {
+            Artisan::call('sync:oslp');
+            SyncLog::create([
+                'name' => 'oslp',
+                'desc' => 'Otomatis',
+                'last_sync' => now()
+            ]);
+        })->daily();
+    })
+    ->create();

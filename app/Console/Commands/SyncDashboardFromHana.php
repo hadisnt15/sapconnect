@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Dashboard;
 use App\Models\Dashboard2;
+use App\Models\SyncLog;
 
 class SyncDashboardFromHana extends Command
 {

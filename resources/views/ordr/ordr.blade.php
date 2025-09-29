@@ -105,6 +105,10 @@
                                             class="btn-detail open-modal-ordr-btn block px-2 py-1 text-xs rounded bg-red-800 hover:bg-red-500 w-full text-white">
                                             <i class="ri-eye-fill"></i> Detail
                                         </button>
+                                        <a href="{{ route('order.progress', $o->id) }}"
+                                            class="block px-2 py-1 text-xs rounded bg-blue-500 hover:bg-blue-400 text-white w-full text-center">
+                                            <i class="ri-swap-2-fill"></i> Proses
+                                        </a>
                                         @if (in_array($user->role, ['developer', 'salesman']))
                                             <a href="{{ route('order.edit', $o->id) }}"
                                                 class="block px-2 py-1 text-xs rounded bg-amber-500 hover:bg-amber-400 text-white w-full text-center">
@@ -177,6 +181,10 @@
                                             class="btn-detail open-modal-ordr-btn block px-2 py-1 text-xs rounded bg-red-800 hover:bg-red-500 w-full text-white">
                                             <i class="ri-eye-fill"></i>
                                         </button>
+                                        <a href="{{ route('order.progress', $o->id) }}"
+                                            class="block px-2 py-1 text-xs rounded bg-blue-500 hover:bg-blue-400 text-white w-full text-center">
+                                            <i class="ri-swap-2-fill"></i> 
+                                        </a>
                                         @if (in_array($user->role, ['developer', 'salesman']))
                                             <a href="{{ route('order.edit', $o->id) }}"
                                                 class="block px-2 py-1 text-xs rounded bg-amber-500 hover:bg-amber-400 text-white w-full text-center">

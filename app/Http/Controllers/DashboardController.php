@@ -58,7 +58,7 @@ class DashboardController extends Controller
                 ->translatedFormat('F Y');
         }
 
-        $lastSync = SyncLog::where('name', 'dashboard')->value('last_sync');
+        $lastSync = SyncLog::where('name', 'dashboard')->orderByDesc('last_sync')->first();
         
         return view('dashboard.dashboard', [
             'title' => 'SCKKJ - Dasbor',
@@ -85,9 +85,12 @@ class DashboardController extends Controller
             'bulan' => $bulan,
         ]);
 
-        SyncLog::updateOrCreate(
-            ['name' => 'dashboard'],
-            ['last_sync' => now()]
+        SyncLog::create(
+            [
+                'name' => 'dashboard',
+                'last_sync' => now(),
+                'desc' => 'Manual'
+            ]
         );
 
         return back()->with('success', 'Data Dasbor Berhasil Disinkronkan dari SAP');

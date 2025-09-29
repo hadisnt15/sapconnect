@@ -63,6 +63,19 @@ class AuthServiceProvider extends ServiceProvider
 
             return false;
         });
+        Gate::define('order.progress', function ($user, OrdrLocal $order) {
+            // Manager bebas edit
+            if ($user->role !== 'salesman') {
+                return true;
+            }
+            // Salesman: cek relasi oslp_reg
+            $reg = $user->oslpReg; // ambil oslp_reg dari user login
+            if ($user->role === 'salesman' && $reg) {
+                return $order->OdrSlpCode == $reg->RegSlpCode;
+            }
+
+            return false;
+        });
         Gate::define('order.update', function ($user, OrdrLocal $order) {
             if ($user->role === 'developer') {
                 return true;

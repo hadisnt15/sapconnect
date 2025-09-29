@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class SyncLog extends Model
 {
-    protected $fillable = ['name', 'last_sync'];
+    protected $fillable = ['name', 'desc', 'last_sync'];
 }

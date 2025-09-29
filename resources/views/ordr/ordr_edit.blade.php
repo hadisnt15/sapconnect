@@ -33,30 +33,29 @@
             <div class="">
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="mb-2">
-                        <label for="OdrCrdCode" class="mb-2 text-sm font-medium text-gray-700">Customer Code</label>
+                        <label for="OdrCrdCode" class="mb-2 text-sm font-medium text-gray-700">Kode Pelanggan</label>
                         <input type="text" id="OdrCrdCode" name="OdrCrdCode"
                             value="{{ old('OdrCrdCode', $head['OdrCrdCode']) }}" autocomplete="off"
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                             readonly />
                     </div>
                     <div class="mb-2">
-                        <label class="mb-2 text-sm font-medium text-gray-700">Customer Name</label>
+                        <label class="mb-2 text-sm font-medium text-gray-700">Nama Pelanggan</label>
                         <input type="text" value="{{ old('CstName', $cust->CardName) }}" autocomplete="off"
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                             readonly />
                     </div>
                 </div>
-
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="mb-2">
-                        <label for="OdrRefNum" class="mb-2 text-sm font-medium text-gray-700">No Ref SO</label>
+                        <label for="OdrRefNum" class="mb-2 text-sm font-medium text-gray-700">No Referensi SO</label>
                         <input type="text" id="OdrRefNum" name="OdrRefNum"
                             value="{{ old('OdrRefNum', $head['OdrRefNum']) }}" autocomplete="off"
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                             readonly />
                     </div>
                     <div class="mb-2">
-                        <label class="mb-2 text-sm font-medium text-gray-700">Tgl SO</label>
+                        <label class="mb-2 text-sm font-medium text-gray-700">Tanggal SO</label>
                         <input type="text" name="OdrDocDate" value="{{ $OdrDocDate }}" autocomplete="off"
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                             readonly />

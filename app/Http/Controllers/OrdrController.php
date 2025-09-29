@@ -61,6 +61,48 @@ class OrdrController extends Controller
         return response()->json($rows);
     }
 
+    public function progress($id)
+    {
+        $order = OrdrLocal::findOrFail($id);
+        // dd($order->is_synced);
+        if ($order->is_synced === 0) {
+            return redirect()->route('order')->with('error', 'Pesanan Belum Dikirim ke SAP!');
+        }
+        if ($order->is_deleted === 1) {
+            return redirect()->route('order')->with('error', 'Pesanan Tidak Ada!');
+        }
+        if (Gate::denies('order.progress', $order)) {
+            abort(403, 'Unauthorized');
+        }
+        try {
+            $sql = 'SELECT * FROM "KKJ_LIVE"."LVKKJ_PROSESPENJUALAN2"(' . (int) $id . ')';
+            $progress = DB::connection('hana')->select($sql);
+
+            if (empty($progress)) {
+                return view('ordr.ordr_progress', [
+                    'title'       => 'SCKKJ - Proses Pesanan',
+                    'titleHeader' => 'Proses Pesanan',
+                    'id'          => $id,
+                    'progress'    => [],
+                    'columns'     => [],
+                ])->with('warning', "Tidak ada data progress untuk Order ID {$id}");
+            }
+
+            // Ambil nama kolom otomatis
+            $columns = array_keys((array) $progress[0]);
+
+            return view('ordr.ordr_progress', [
+                'title'       => 'SCKKJ - Proses Pesanan',
+                'titleHeader' => 'Proses Pesanan',
+                'id'          => $id,
+                'progress'    => $progress,
+                'columns'     => $columns,
+            ]);
+        } catch (\Exception $e) {
+            return back()->with('error', "Gagal ambil data progress: " . $e->getMessage());
+    }
+    }
+
     /**
      * Show the form for creating a new resource.
      */

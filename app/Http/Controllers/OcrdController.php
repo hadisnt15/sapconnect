@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\SyncLog;
 
 class OcrdController extends Controller
 {
@@ -18,10 +19,12 @@ class OcrdController extends Controller
     {   
         // dd(Auth::user()->role);
         $custs = OcrdLocal::Filter(request(['search']))->orderBy('CreateDate')->orderBy('CardName')->paginate(80)->withQueryString();
+        $lastSync = SyncLog::where('name', 'ocrd')->orderByDesc('last_sync')->first();
         return view('ocrd.ocrd', [
             'title' => 'SCKKJ - Daftar Pelanggan',
             'titleHeader' => 'Daftar Pelanggan',
             'custs' => $custs,
+            'lastSync' => $lastSync,
             // 'newCusts' => $newCusts,
         ]);
     }
@@ -29,6 +32,11 @@ class OcrdController extends Controller
     public function refresh()
     {
         Artisan::call('sync:ocrd');
+        SyncLog::create([
+            'name' => 'ocrd',
+            'desc' => 'Manual',
+            'last_sync' => now()
+        ]);
         return back()->with('success', 'Data Pelanggan Berhasil Di-refresh dari SAP');
     }
 

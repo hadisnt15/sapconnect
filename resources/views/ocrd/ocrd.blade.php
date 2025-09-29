@@ -57,6 +57,13 @@
                 </div>
             </div>
         </div>
+        <div class="text-sm font-bold text-gray-500 mb-2">
+            @if ($lastSync)
+                Terakhir Disinkronkan:{{ \Carbon\Carbon::parse($lastSync->last_sync)->timezone('Asia/Makassar')->format('d-m-Y H:i:s') }} WITA ({{ $lastSync->desc }})
+            @else
+                Belum Pernah Disinkronkan
+            @endif
+        </div>
 
         {{-- DESKTOP --}}
         <div class="grid md:grid-cols-4 gap-3">
