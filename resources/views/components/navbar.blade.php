@@ -14,23 +14,23 @@
                     <div class="flex items-baseline space-x-1">
                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                         @auth
-                        <x-nav-link href="/" :active="request()->is('/')"><i class="ri-layout-grid-fill"></i> Dasbor</x-nav-link>
-                        <x-nav-link href="{{ route('order') }}"
-                            class="{{ Route::is('order', 'order.create', 'order.edit', 'order.delete') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"><i
-                                class="ri-bill-fill"></i> Pesanan</x-nav-link>
-                        <x-nav-link href="{{ route('item') }}" class="{{ Route::is('item') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"><i class="ri-settings-4-fill"></i> Barang</x-nav-link>
-                        <x-nav-link href="{{ route('customer') }}"
-                            class="{{ Route::is('customer', 'customer.create', 'customer.edit', 'customer.delete') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium">
-                            <i class="ri-account-circle-2-fill"></i> Pelanggan
-                        </x-nav-link>
-                        @if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor']))
-                        <x-nav-link href="{{ route('salesman') }}"
-                            class="{{ Route::is('salesman', 'salesman.registration') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"><i
-                                class="ri-group-2-fill"></i> Penjual</x-nav-link>
-                        <x-nav-link href="{{ route('user') }}"
-                            class="{{ Route::is('user', 'user.register', 'user.edit', 'user.delete') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"><i
-                                class="ri-user-follow-fill"></i> Pengguna</x-nav-link>
-                        @endif
+                            <x-nav-link href="/" :active="request()->is('/')"><i class="ri-layout-grid-fill"></i> Dasbor</x-nav-link>
+                            <x-nav-link href="{{ route('order') }}"
+                                class="{{ Route::is('order', 'order.create', 'order.edit', 'order.delete', 'order.progress') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"><i
+                                    class="ri-bill-fill"></i> Pesanan</x-nav-link>
+                            <x-nav-link href="{{ route('item') }}" class="{{ Route::is('item') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"><i class="ri-settings-4-fill"></i> Barang</x-nav-link>
+                            <x-nav-link href="{{ route('customer') }}"
+                                class="{{ Route::is('customer', 'customer.create', 'customer.edit', 'customer.delete') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium">
+                                <i class="ri-account-circle-2-fill"></i> Pelanggan
+                            </x-nav-link>
+                            @if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor']))
+                                <x-nav-link href="{{ route('salesman') }}"
+                                    class="{{ Route::is('salesman', 'salesman.registration') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"><i
+                                        class="ri-group-2-fill"></i> Penjual</x-nav-link>
+                                <x-nav-link href="{{ route('user') }}"
+                                    class="{{ Route::is('user', 'user.register', 'user.edit', 'user.delete') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"><i
+                                        class="ri-user-follow-fill"></i> Pengguna</x-nav-link>
+                            @endif
                         @endauth
                     </div>
                 </div>
@@ -136,20 +136,24 @@
     <div x-show="isOpen" class="md:hidden" id="mobile-menu">
         <div>
             <div class="flex justify-between space-y-1 px-2 py-2">
-                <x-nav-link href="/"
-                    class="{{ Route::is('dashboard') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm mt-1 font-medium">Dasbor</x-nav-link>
-                <x-nav-link href="{{ route('order') }}"
-                    class="{{ Route::is('order', 'order.create', 'order.edit') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm font-medium">Pesanan</x-nav-link>
-                <x-nav-link href="{{ route('item') }}"
-                    class="{{ Route::is('item') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm font-medium">Barang</x-nav-link>
-                <x-nav-link href="{{ route('customer') }}"
-                    class="{{ Route::is('customer', 'customer.create', 'customer.edit') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm font-medium">
-                    Pelanggan
-                </x-nav-link>
-                <x-nav-link href="{{ route('salesman') }}"
-                    class="{{ Route::is('salesman', 'salesman.registration') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm font-medium">Penjual</x-nav-link>
-                <x-nav-link href="{{ route('user') }}"
-                    class="{{ Route::is('user') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm font-medium">Pengguna</x-nav-link>
+                @auth
+                    <x-nav-link href="/"
+                        class="{{ Route::is('dashboard') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm mt-1 font-medium">Dasbor</x-nav-link>
+                    <x-nav-link href="{{ route('order') }}"
+                        class="{{ Route::is('order', 'order.create', 'order.edit', 'order.progress') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm font-medium">Pesanan</x-nav-link>
+                    <x-nav-link href="{{ route('item') }}"
+                        class="{{ Route::is('item') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm font-medium">Barang</x-nav-link>
+                    <x-nav-link href="{{ route('customer') }}"
+                        class="{{ Route::is('customer', 'customer.create', 'customer.edit') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm font-medium">
+                        Pelanggan
+                    </x-nav-link>
+                    @if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor']))
+                        <x-nav-link href="{{ route('salesman') }}"
+                            class="{{ Route::is('salesman', 'salesman.registration') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm font-medium">Penjual</x-nav-link>
+                        <x-nav-link href="{{ route('user') }}"
+                            class="{{ Route::is('user') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm font-medium">Pengguna</x-nav-link>
+                    @endif
+                @endauth
             </div>
         </div>
         @auth
