@@ -52,7 +52,7 @@
                 {{ \Carbon\Carbon::parse($lastSync->last_sync)->timezone('Asia/Makassar')->format('d-m-Y H:i:s') }} WITA 
                 ({{ $lastSync->desc }})
             @else
-                Belum pernah disinkronkan
+                Belum Pernah Disinkronkan
             @endif
         </div>    
 
