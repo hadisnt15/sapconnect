@@ -63,7 +63,7 @@ Route::get('/pesanan', [OrdrController::class, 'index'])->name('order')->middlew
 Route::get('/pesanan/buat/{CardCode}', [OrdrController::class, 'create'])->name('order.create')->middleware('can:order.create'); //ok
 Route::get('/pesanan/buat/baru/{RegCardCode}', [OrdrController::class, 'create'])->name('order.create.new')->middleware('role:developer|salesman'); //ok
 Route::post('/pesanan/simpan', [OrdrController::class, 'store'])->name('order.store')->middleware('role:developer|salesman'); //ok
-Route::get('/pesanan/kirim', [OrdrController::class, 'push'])->name('order.push')->middleware('role:developer|salesman'); //ok
+Route::get('/pesanan/kirim', [OrdrController::class, 'push'])->name('order.push')->middleware('role:developer|supervisor'); //ok
 Route::get('/pesanan/{order}/edit', [OrdrController::class, 'edit'])->name('order.edit'); //ok
 Route::put('/pesanan/{id}/perbarui', [OrdrController::class, 'update'])->name('order.update')->middleware('role:developer|salesman'); //ok
 Route::patch('/pesanan/perbaruiPengecekan', [OrdrController::class, 'updateChecked'])->name('order.updateChecked')->middleware('role:developer|salesman'); //ok

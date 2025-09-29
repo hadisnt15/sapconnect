@@ -26,7 +26,9 @@
                             @if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor']))
                                 <x-nav-link href="{{ route('salesman') }}"
                                     class="{{ Route::is('salesman', 'salesman.registration') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"><i
-                                        class="ri-group-2-fill"></i> Penjual</x-nav-link>
+                                    class="ri-group-2-fill"></i> Penjual</x-nav-link>
+                            @endif
+                            @if(in_array(auth()->user()->role, ['developer', 'manager']))
                                 <x-nav-link href="{{ route('user') }}"
                                     class="{{ Route::is('user', 'user.register', 'user.edit', 'user.delete') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium"><i
                                         class="ri-user-follow-fill"></i> Pengguna</x-nav-link>
@@ -150,9 +152,11 @@
                     @if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor']))
                         <x-nav-link href="{{ route('salesman') }}"
                             class="{{ Route::is('salesman', 'salesman.registration') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm font-medium">Penjual</x-nav-link>
+                    @endif 
+                    @if(in_array(auth()->user()->role, ['developer', 'manager']))
                         <x-nav-link href="{{ route('user') }}"
                             class="{{ Route::is('user') ? 'bg-red-600 text-white' : 'text-white hover:bg-red-700 hover:text-white' }} rounded-md px-1 py-2 text-sm font-medium">Pengguna</x-nav-link>
-                    @endif
+                    @endif 
                 @endauth
             </div>
         </div>

@@ -38,18 +38,18 @@
                     </div>
                 </form>
             </div>
-            @can('order.create')
-                <div class="md:ml-auto flex items-center gap-2">
+            <div class="md:ml-auto flex items-center gap-2">
+                @can('order.create')
                     <a href="{{ route('customer') }}"
                         class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
                         <i class="ri-add-box-fill"></i> Buat Pesanan Baru
                     </a>
+                @endcan
                     <a href="{{ route('order.push') }}"
                         class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
                         <i class="ri-upload-cloud-2-fill"></i> Kirim ke SAP
                     </a>
                 </div>
-            @endcan
         </div>
 
         <!-- Table -->
