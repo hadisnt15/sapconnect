@@ -154,7 +154,7 @@
         </div>
 
         <div class="mt-5 text-gray-600">
-            {{-- {{ $user->links() }} --}}
+            {{ $user->links() }} 
         </div>
     </div>
 </x-layout>
