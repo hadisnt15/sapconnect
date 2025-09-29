@@ -111,7 +111,7 @@
         </div>
 
         <div class="mt-5 text-gray-600">
-            {{-- {{ $slps->links() }} --}}
+            {{ $slps->links() }}
         </div>
     </div>
 </x-layout>

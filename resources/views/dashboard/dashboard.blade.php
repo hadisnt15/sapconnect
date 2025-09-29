@@ -47,8 +47,24 @@
                 </button>
             </form>
         </div>
-
         @endcan
+        <div class="grid md:grid-cols-4 gap-3">
+                <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
+                    <h5 class="font-bold tracking-tight text-gray-800">
+                        LAPORAN
+                    </h5>
+                    <div class="ml-auto w-full">
+                        <div class="flex items-center justify-end">
+                            <a href="" class="mt-1">
+                                <span
+                                    class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
+                                    <i class="ri-folder-6-fill"></i> Lihat Laporan
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+        </div>
 
         <!-- Dashboard 2 -->
         @if(in_array(auth()->user()->role, ['developer', 'supervisor', 'manager']))
