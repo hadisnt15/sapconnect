@@ -45,11 +45,26 @@
                         <i class="ri-add-box-fill"></i> Buat Pesanan Baru
                     </a>
                 @endcan
+                @can('order.push')
                     <a href="{{ route('order.push') }}"
                         class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
                         <i class="ri-upload-cloud-2-fill"></i> Kirim ke SAP
                     </a>
-                </div>
+                @endcan
+                @can('order.refresh')
+                    <a href="{{ route('order.refresh') }}"
+                        class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
+                        <i class="ri-refresh-fill"></i> Sinkronkan dengan SAP
+                    </a>
+                @endcan
+            </div>
+        </div>
+        <div class="text-sm font-bold text-gray-500 mb-2">
+            @if ($lastSync)
+                Terakhir Disinkronkan:{{ \Carbon\Carbon::parse($lastSync->last_sync)->timezone('Asia/Makassar')->format('d-m-Y H:i:s') }} WITA ({{ $lastSync->desc }})
+            @else
+                Belum Pernah Disinkronkan
+            @endif
         </div>
 
         <!-- Table -->
@@ -60,11 +75,12 @@
                     <table class="w-full text-sm text-left text-gray-600 border">
                         <thead class="text-xs font-bold text-white uppercase bg-red-800">
                             <tr>
-                                <th class="px-2 py-2 w-2/12">REFERENSI</th>
+                                <th class="px-2 py-2 w-1/12">REFERENSI</th>
                                 <th class="px-2 py-2 w-3/12">PELANGGAN</th>
                                 <th class="px-2 py-2 w-2/12">PENJUAL</th>
                                 <th class="px-2 py-2 w-1/24">CEK</th>
                                 <th class="px-2 py-2 w-1/24">STATUS</th>
+                                <th class="px-2 py-2 w-1/24">STATUS SAP</th>
                                 <th class="px-2 py-2 w-1/18">AKSI</th>
                             </tr>
                         </thead>
@@ -72,7 +88,7 @@
                             @foreach ($orders as $o)
                                 <tr class="bg-white border-b hover:bg-gray-50">
                                     <td class="px-2 py-2 font-medium text-gray-800">
-                                        {{ $o->OdrRefNum }} <br> {{ $o->OdrDocDate->format('d-m-Y') }}
+                                        {{ $o->OdrRefNum }} <br> {{ $o->OdrDocDate->format('d-m-Y') }} <br> 
                                     </td>
                                     <td class="px-2 py-2 font-medium text-gray-800">
                                         {{ $o->customer->CardName }} <br> {{ $o->OdrCrdCode }}
@@ -93,6 +109,16 @@
                                         @elseif ($o->is_synced === 0)
                                             <span class="text-yellow-600 font-semibold">TERTUNDA</span>
                                         @endif
+                                    </td>
+                                    <td class="px-2 py-2 font-medium">
+                                        @if (optional($o->ordrStatus)->pesanan_status === 'PESANAN TERTUNDA')
+                                            <span class="text-yellow-600 font-semibold">{{ optional($o->ordrStatus)->pesanan_status }}</span>
+                                        @elseif (optional($o->ordrStatus)->pesanan_status === 'PESANAN SELESAI')
+                                            <span class="text-green-600 font-semibold">{{ optional($o->ordrStatus)->pesanan_status }}</span>
+                                        @elseif (optional($o->ordrStatus)->pesanan_status === 'BELUM DIPROSES DI SAP')
+                                            <span class="text-gray-600 font-semibold">{{ optional($o->ordrStatus)->pesanan_status }}</span>
+                                        @endif
+
                                     </td>
                                     <td class="px-2 py-2 space-y-1">
                                         <button type="button" data-id="{{ $o->id }}"
@@ -144,10 +170,10 @@
                     <table class="w-full text-sm text-left text-gray-600 border">
                         <thead class="text-xs font-bold text-white uppercase bg-red-800">
                             <tr>
-                                <th class="px-2 py-2 w-6/12">PESANAN</th>
-                                <th class="px-2 py-2 w-1/24">CEK</th>
-                                <th class="px-2 py-2 w-1/24">STATUS</th>
-                                <th class="px-2 py-2 w-1/18">AKSI</th>
+                                <th class="px-2 py-2 w-7/12">PESANAN</th>
+                                <th class="px-2 py-2 w-1/12">CEK</th>
+                                <th class="px-2 py-2 w-4/12">STATUS</th>
+                                <th class="px-2 py-2 w-1/12">AKSI</th>
                             </tr>
                         </thead>
                         <tbody class="">
@@ -168,6 +194,14 @@
                                             <span class="text-green-600 font-semibold">TERKIRIM</span>
                                         @else
                                             <span class="text-yellow-600 font-semibold">TERTUNDA</span>
+                                        @endif
+                                        <div class="mt-2">STATUS SAP:</div>
+                                        @if ($o->ordrStatus->pesanan_status ?? '' === 'PESANAN TERTUNDA')    
+                                            <span class="text-yellow-600 font-semibold">{{$o->ordrStatus->pesanan_status ?? ''}}</span>
+                                        @elseif ($o->ordrStatus->pesanan_status ?? '' === 'PESANAN SELESAI')    
+                                            <span class="text-green-600 font-semibold">{{$o->ordrStatus->pesanan_status ?? ''}}</span>
+                                        @elseif ($o->ordrStatus->pesanan_status ?? '' === 'BELUM DIPROSES DI SAP')    
+                                            <span class="text-gray-600 font-semibold">{{$o->ordrStatus->pesanan_status ?? ''}}</span>
                                         @endif
                                     </td>
                                     <td class="px-2 py-2 space-y-1">

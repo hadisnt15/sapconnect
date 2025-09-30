@@ -53,36 +53,36 @@ class LoginController extends Controller
         $sessionId = session()->getId();
 
         $registeredDevice = UserDevice::where('user_id', $userId)->first();
-        // $same = $existingDevices->firstWhere('device_id', $deviceId);
-        if (! $registeredDevice) {
-            // login pertama → daftarkan device
-            UserDevice::create([
-                'user_id'   => $userId,
-                'device_id' => $deviceId,
-                'session_id'=> $sessionId,
-                'ip'        => $ip,
-                'device'    => $agent->device() ?: $agent->platform(),
-                'platform'  => $agent->platform(),
-                'browser'   => $agent->browser(),
-                'last_active' => now(),
-            ]);
-        } else {
-            if (Auth::check() && Auth::user()->role === 'salesman') {
-                if ($registeredDevice->device_id != $deviceId) {
-                    Auth::logout();
-                    $request->session()->invalidate();
-                    $request->session()->regenerateToken();
-                    return back()->with('error', 'Perangkat Ini Tidak Terdaftar untuk Akun Anda!');
-                }
-            }
+        // koding oke fitur tidak bisa login di device yang sama
+        // if (! $registeredDevice) {
+        //     // login pertama → daftarkan device
+        //     UserDevice::create([
+        //         'user_id'   => $userId,
+        //         'device_id' => $deviceId,
+        //         'session_id'=> $sessionId,
+        //         'ip'        => $ip,
+        //         'device'    => $agent->device() ?: $agent->platform(),
+        //         'platform'  => $agent->platform(),
+        //         'browser'   => $agent->browser(),
+        //         'last_active' => now(),
+        //     ]);
+        // } else {
+        //     if (Auth::check() && Auth::user()->role === 'salesman') {
+        //         if ($registeredDevice->device_id != $deviceId) {
+        //             Auth::logout();
+        //             $request->session()->invalidate();
+        //             $request->session()->regenerateToken();
+        //             return back()->with('error', 'Perangkat Ini Tidak Terdaftar untuk Akun Anda!');
+        //         }
+        //     }
 
-            $registeredDevice->update([
-                'session_id' => $sessionId,
-                'ip' => $ip,
-                'last_active' => now()
-            ]);
-        }
-
+        //     $registeredDevice->update([
+        //         'session_id' => $sessionId,
+        //         'ip' => $ip,
+        //         'last_active' => now()
+        //     ]);
+        // }
+        // end koding oke fitur tidak bisa login di device yang sama
 
         UserDevice::where('user_id', $userId)->where('device_id', $deviceId)->update([
             'session_id' => $sessionId,

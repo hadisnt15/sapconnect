@@ -32,6 +32,12 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('order.create', function ($user) {
             return in_array($user->role, ['developer','salesman']);
         });
+        Gate::define('order.push', function ($user) {
+            return in_array($user->role, ['developer','supervisor']);
+        });
+        Gate::define('order.refresh', function ($user) {
+            return in_array($user->role, ['developer','supervisor','manager']);
+        });
         // Gate::define('order.push', function ($user, OrdrLocal $order) {
         //     return $user->id === $order->user_id && in_array($user->role, ['developer','salesman']);
         // });

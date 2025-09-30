@@ -5,9 +5,11 @@ namespace App\Models;
 use App\Models\OslpLocal;
 use App\Models\OcrdLocal;
 use App\Models\Rdr1Local;
+use App\Models\OrdrStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Builder;
 
 class OrdrLocal extends Model
@@ -41,6 +43,13 @@ class OrdrLocal extends Model
     public function orderRow(): HasMany
     {
         return $this->hasMany(Rdr1Local::class, 'OdrId', 'id');
+    }
+
+    public function ordrStatus(): HasOne
+    {
+        // foreign key di tabel ordr_status = ref_num
+        // local key di tabel ordr_local = OdrRefNum
+        return $this->hasOne(OrdrStatus::class, 'ref_num', 'OdrRefNum');
     }
 
     public function scopeFilter(Builder $query, array $filters)   

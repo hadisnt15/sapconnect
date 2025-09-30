@@ -93,7 +93,7 @@
                             <div>
                                 <label class="text-xs text-gray-600">Kode Barang</label>
                                 <select :id="'itemSelect' + index" :name="'items[' + index + '][RdrItemCode]'"
-                                    class="border border-gray-300 bg-gray-50 rounded-md w-full text-sm p-2"
+                                    class="border border-gray-300 bg-gray-50 rounded-md w-full md:text-sm text-xs p-2"
                                     x-model="item.RdrItemCode" @change="
                                         let exists = items.some((i, idx) => i.RdrItemCode === item.RdrItemCode && idx !== index);
                                         if (exists) {
@@ -109,51 +109,51 @@
                                 <div>
                                     <label class="text-xs text-gray-600">Deskripsi</label>
                                     <input type="text" :name="'items[' + index + '][ItemName]'" x-model="item.ItemName"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
+                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
                                 </div>
                                 <div>
                                     <label class="text-xs text-gray-600">Qty</label>
                                     <input type="number" :name="'items[' + index + '][RdrItemQuantity]'"
                                         x-model="item.RdrItemQuantity"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm">
+                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
                                 </div>
                                 <div>
                                     <label class="text-xs text-gray-600">Harga</label>
                                     <input type="number" step="0.01" :name="'items[' + index + '][RdrItemPrice]'"
                                         x-model="item.RdrItemPrice"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm">
+                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
                                 </div>
                                 <div>
                                     <label class="text-xs text-gray-600">Diskon</label>
                                     <input type="number" step="0.01" :name="'items[' + index + '][RdrItemDisc]'"
                                         x-model="item.RdrItemDisc" value="0"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm">
+                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
                                 </div>
                                 <div>
                                     <label class="text-xs text-gray-600">Satuan</label>
                                     <input type="text" :name="'items[' + index + '][RdrItemSatuan]'"
                                         x-model="item.RdrItemSatuan"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
+                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
                                 </div>
                                 <div>
                                     <label class="text-xs text-gray-600">Profit Center</label>
                                     <input type="text" :name="'items[' + index + '][RdrItemProfitCenter]'"
                                         x-model="item.RdrItemProfitCenter"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
+                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
                                 </div>
+                            </div>
                                 <div>
                                     <label class="text-xs text-gray-600">Ket HKN</label>
                                     <input type="text" :name="'items[' + index + '][RdrItemKetHKN]'"
                                         x-model="item.RdrItemKetHKN"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
+                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
                                 </div>
                                 <div>
                                     <label class="text-xs text-gray-600">Ket FG</label>
                                     <input type="text" :name="'items[' + index + '][RdrItemKetFG]'"
                                         x-model="item.RdrItemKetFG"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
+                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
                                 </div>
-                            </div>
 
                             <!-- Tombol hapus -->
                             <div class="text-right border rounded-lg w-fit bg-gray-500 hover:bg-gray-400 text-white">

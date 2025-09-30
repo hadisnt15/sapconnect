@@ -62,6 +62,14 @@ return Application::configure(basePath: dirname(__DIR__))
             ]);
         })->everyThirtyMinutes();
         $schedule->call(function () {
+            Artisan::call('sync:ordr');
+            SyncLog::create([
+                'name' => 'ordr',
+                'desc' => 'Otomatis',
+                'last_sync' => now()
+            ]);
+        })->everyThirtyMinutes();
+        $schedule->call(function () {
             Artisan::call('sync:oslp');
             SyncLog::create([
                 'name' => 'oslp',

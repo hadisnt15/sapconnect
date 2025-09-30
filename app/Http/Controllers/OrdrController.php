@@ -7,6 +7,7 @@ use App\Models\OcrdLocal;
 use App\Models\OitmLocal;
 use App\Models\OrdrLocal;
 use App\Models\Rdr1Local;
+use App\Models\SyncLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +35,7 @@ class OrdrController extends Controller
         } else {
             $orders = OrdrLocal::with('customer','salesman')->where('is_deleted',0)->filter(request(['search']))->orderBy('OdrDocDate','desc')->orderBy('OdrNum')->paginate(20)->withQueryString();  
         }
+        $lastSync = SyncLog::where('name', 'ordr')->orderByDesc('last_sync')->first();
         
         // $slpCode = $user->oslpReg->RegSlpCode;
         // $orders = OrdrLocal::get();
@@ -41,8 +43,20 @@ class OrdrController extends Controller
             'title' => 'SCKKJ - Daftar Pesanan',
             'titleHeader' => 'Daftar Pesanan',
             'orders' => $orders,
-            'user' => $user
+            'user' => $user,
+            'lastSync' => $lastSync
         ]);
+    }
+
+    public function refresh()
+    {
+        Artisan::call('sync:ordr');
+        SyncLog::create([
+            'name' => 'ordr',
+            'desc' => 'Manual',
+            'last_sync' => now()
+        ]);
+        return back()->with('success', 'Data Pesanan Berhasil Di-refresh dari SAP');
     }
 
     public function detail($id)
