@@ -91,6 +91,7 @@ class PushOrdrToHana extends Command
                         'U_KKJ_RdrItemProfitCenter' => $orow->RdrItemProfitCenter,
                         'U_KKJ_RdrItemKetHKN' => $orow->RdrItemKetHKN,
                         'U_KKJ_RdrItemKetFG' => $orow->RdrItemKetFG,
+                        'U_KKJ_RdrItemDisc' => $orow->RdrItemDisc,
                     ]);
                 }
 
