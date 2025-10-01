@@ -66,6 +66,12 @@ class User extends Authenticatable
         return $this->hasOne(OslpReg::class,'RegUserId','id');
     }
 
+    public function devices()
+    {
+        return $this->hasMany(UserDevice::class);
+    }
+
+
     public function scopeFilter(Builder $query, array $filters)
     {
         $query->when(

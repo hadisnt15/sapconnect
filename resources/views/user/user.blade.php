@@ -43,10 +43,18 @@
                     class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
                     <i class="ri-user-add-fill"></i> Daftarkan Pengguna Baru
                 </a>
+                @can('user.active')
                 <a href="{{ route('user.active') }}"
                     class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
                     <i class="ri-user-add-fill"></i> Pengguna Aktif
                 </a>
+                @endcan
+                @can('user.device')
+                <a href="{{ route('user.device') }}"
+                    class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
+                    <i class="ri-user-add-fill"></i> Perangkat Pengguna
+                </a>
+                @endcan
             </div>
         </div>
 

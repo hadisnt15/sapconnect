@@ -40,6 +40,25 @@ class UserController extends Controller
         ]);
     }
 
+    public function userDevice()
+    {
+        $devices = UserDevice::with('user')->get();
+
+        return view('user.user_device', [
+            'title' => 'SCKKJ - Perangkat Pengguna',
+            'titleHeader' => 'Perangkat Pengguna',
+            'devices' => $devices
+        ]);
+    }
+
+    public function destroyUserDevice($id)
+    {
+        $device = UserDevice::findOrFail($id);
+        $device->delete();
+
+        return back()->with('success', 'Perangkat Pengguna Berhasil Dihapus.');
+    }
+
     public function kickUser($id)
     {
         // dd("Masuk kickUser dengan ID: ".$id);

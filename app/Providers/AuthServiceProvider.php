@@ -100,6 +100,16 @@ class AuthServiceProvider extends ServiceProvider
                 return $order->OdrSlpCode == $reg->RegSlpCode;
             }
         });
+        Gate::define('user.active', function ($user) {
+            if ($user->role === 'developer') {
+                return true;
+            }
+        });
+        Gate::define('user.device', function ($user) {
+            if ($user->role === 'developer') {
+                return true;
+            }
+        });
         // Gate::define('order.push', function ($user, OrdrLocal $order) {
         //     if ($user->role === 'developer') {
         //         return true;

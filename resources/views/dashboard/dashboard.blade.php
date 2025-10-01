@@ -18,7 +18,7 @@
 
         @can('dashboard.refresh')
         <!-- Filter Bulan -->
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-end mb-4 gap-2">
             <form method="POST" action="{{ route('dashboard.refresh') }}" 
                 class="mb-4 flex flex-col md:flex-row items-stretch md:items-center gap-2 w-full md:w-auto">
                 @csrf

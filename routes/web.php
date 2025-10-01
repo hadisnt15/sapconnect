@@ -84,6 +84,8 @@ Route::post('/penjual/store', [OslpController::class, 'store'])->name('salesman.
 
 Route::get('/pengguna', [UserController::class, 'index'])->name('user')->middleware('role:developer|manager'); //ok
 Route::get('/pengguna/aktif', [UserController::class, 'activeUsers'])->name('user.active')->middleware('role:developer'); //ok
+Route::get('/pengguna/perangkat', [UserController::class, 'userDevice'])->name('user.device')->middleware('role:developer'); //ok
+Route::delete('/pengguna/hapusPerangkat/{id}', [UserController::class, 'destroyUserDevice'])->name('user.destroyUserDevice')->middleware('role:developer'); //ok
 Route::post('/pengguna/{id}/tendang', [UserController::class, 'kickUser'])->name('user.kick')->middleware('role:developer'); //ok
 Route::get('/pengguna/api', [RegisterController::class, 'api'])->name('user.api')->middleware('role:developer|manager|supervisor'); //ok
 Route::get('/pengguna/{id}/edit', [UserController::class, 'edit'])->name('user.edit')->middleware('role:developer|manager'); //ok
