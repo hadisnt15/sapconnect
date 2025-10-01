@@ -29,12 +29,13 @@ class PushOrdrToHana extends Command
     {
         $this->info("Push ORDR data from LARAVEL to SAPHANA");
         $user = Auth::user();
-        if ($user->role === 'salesman') {
-            $slpCode = $user->oslpReg->RegSlpCode;
-            $ordrHead = DB::connection('mysql')->table('ordr_local')->where('is_synced',0)->where('is_checked',1)->where('is_deleted', 0)->where('OdrSlpCode',$slpCode)->get();
-        } else {
-            $ordrHead = DB::connection('mysql')->table('ordr_local')->where('is_synced',0)->where('is_checked',1)->where('is_deleted', 0)->get();
-        }
+        // if ($user->role === 'salesman') {
+        //     $slpCode = $user->oslpReg->RegSlpCode;
+        //     $ordrHead = DB::connection('mysql')->table('ordr_local')->where('is_synced',0)->where('is_checked',1)->where('is_deleted', 0)->where('OdrSlpCode',$slpCode)->get();
+        // } else {
+        //     $ordrHead = DB::connection('mysql')->table('ordr_local')->where('is_synced',0)->where('is_checked',1)->where('is_deleted', 0)->get();
+        // }
+        $ordrHead = DB::connection('mysql')->table('ordr_local')->where('is_synced',0)->where('is_checked',1)->where('is_deleted', 0)->get();
          foreach ($ordrHead as $ohead) {
             // Tandai sedang sync
             DB::connection('mysql')->table('ordr_local')
