@@ -310,16 +310,32 @@ class OrdrController extends Controller
     public function updateChecked(Request $request)
     {
         $ids = $request->input('is_checked', []);
+        $user = auth()->user();
+        // dd($ids, $user->role, $user->oslpReg->RegSlpCode);
 
-        // Reset semua dulu (opsional, kalau mau clear dulu)
-        OrdrLocal::query()->update(['is_checked' => 0]);
+        if ($user->role === 'salesman') {
+            // Reset hanya SO milik salesman ini
+            OrdrLocal::where('OdrSlpCode', $user->oslpReg->RegSlpCode)
+                ->update(['is_checked' => 0]);
 
-        // Update yang dicentang jadi 1
-        if (!empty($ids)) {
-            OrdrLocal::whereIn('id', $ids)->update(['is_checked' => 1]);
+            // Update hanya SO yang dicentang & milik salesman ini
+            if (!empty($ids)) {
+                OrdrLocal::whereIn('id', $ids)
+                    ->where('OdrSlpCode', $user->oslpReg->RegSlpCode)
+                    ->update(['is_checked' => 1]);
+            }
+        } else {
+            // Role selain salesman (misal developer, admin)
+            // Reset semua
+            OrdrLocal::query()->update(['is_checked' => 0]);
+
+            // Update yang dicentang
+            if (!empty($ids)) {
+                OrdrLocal::whereIn('id', $ids)->update(['is_checked' => 1]);
+            }
         }
 
-        return redirect()->route('order')->with('success', 'Pengecekan pesanan berhasil diupdate.');
+        return redirect()->route('order')->with('success', 'Pengecekan pesanan berhasil diperbarui.');
     }
 
     public function delete($id)
