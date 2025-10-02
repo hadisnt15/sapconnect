@@ -89,6 +89,7 @@
                                 <tr class="bg-white border-b hover:bg-gray-50">
                                     <td class="px-2 py-2 font-medium text-gray-800">
                                         {{ $o->OdrRefNum }} <br> {{ $o->OdrDocDate->format('d-m-Y') }} <br> 
+                                        <span class="text-xs">{{ $o->order_row_count }} Barang <br> Catatan: {{ $o->note }}</span>
                                     </td>
                                     <td class="px-2 py-2 font-medium text-gray-800">
                                         {{ $o->customer->CardName }} <br> {{ $o->OdrCrdCode }}

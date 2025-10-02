@@ -124,7 +124,8 @@
                                 data-limit="{{ number_format($c->Limit, 0, ',', '.') }}"
                                 data-actbal="{{ number_format($c->ActBal, 0, ',', '.') }}"
                                 data-dlvbal="{{ number_format($c->DlvBal, 0, ',', '.') }}"
-                                data-odrbal="{{ number_format($c->OdrBal, 0, ',', '.') }}">
+                                data-odrbal="{{ number_format($c->OdrBal, 0, ',', '.') }}"
+                                data-piutangjt="{{ number_format($c->piutang_jt, 0, ',', '.') }}">
                                 <span
                                     class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
                                     <i class="ri-eye-fill"></i> Detail
@@ -164,6 +165,7 @@
                     <p>Batas Kredit: <span class="font-medium" id="modalLimit"></span></p>
                 </div>
                 <div class="px-4 md:px-5 py-3 space-y-2 text-sm text-gray-700">
+                    <p>Saldo Piutang JT: <span class="font-medium" id="modalPiutangJT"></span></p>
                     <p>Saldo Piutang: <span class="font-medium" id="modalActBal"></span></p>
                     <p>Saldo Kiriman: <span class="font-medium" id="modalDlvBal"></span></p>
                     <p>Saldo Pesanan: <span class="font-medium" id="modalOdrBal"></span></p>
@@ -192,7 +194,7 @@
 
     // Fungsi buka modal
     function openModalView(CardCode, CardName, Address, City, State, Contact, Phone, Group, Type1, Type2,
-        CreateDate, LastOdrDate, Termin, Limit, ActBal, DlvBal, OdrBal) {
+        CreateDate, LastOdrDate, Termin, Limit, ActBal, DlvBal, OdrBal, PiutangJT) {
         setModalText("modalCardCode", CardCode);
         setModalText("modalCardName", CardName);
         setModalText("modalAddress", Address);
@@ -210,6 +212,7 @@
         setModalText("modalActBal", ActBal);
         setModalText("modalDlvBal", DlvBal);
         setModalText("modalOdrBal", OdrBal);
+        setModalText("modalPiutangJT", PiutangJT);
         document.getElementById('ocrd-view').classList.remove('hidden');
         document.getElementById('ocrd-view').classList.add('flex');
     }
@@ -236,9 +239,10 @@
                 const ActBal = this.getAttribute('data-actbal');
                 const DlvBal = this.getAttribute('data-dlvbal');
                 const OdrBal = this.getAttribute('data-odrbal');
+                const PiutangJT = this.getAttribute('data-piutangjt');
                 openModalView(CardCode, CardName, Address, City, State, Contact, Phone,
                     Group, Type1, Type2, CreateDate, LastOdrDate, Termin, Limit, ActBal,
-                    DlvBal, OdrBal);
+                    DlvBal, OdrBal, PiutangJT);
             });
         });
     });

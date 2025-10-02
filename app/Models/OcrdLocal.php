@@ -13,8 +13,8 @@ class OcrdLocal extends Model
     public $incrementing = false;
     protected $keyType = 'string';//
     protected $fillable = [
-        'CardCode','CardName','Address','City','State','Contact','Phone','Group','Type1',
-        'Type2','CreateDate','LastOdrDate','Termin','Limit','ActBal','DlvBal','OdrBal','created_by','NIK'
+        'CardCode','CardName','Address','City','State','Contact','Phone','Group','Type1','Type2',
+        'CreateDate','LastOdrDate','Termin','Limit','ActBal','DlvBal','OdrBal','created_by','NIK','piutang_jt'
     ];
 
     public function scopeFilter(Builder $query, array $filters)

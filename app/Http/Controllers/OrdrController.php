@@ -26,14 +26,14 @@ class OrdrController extends Controller
         if ($user->role === 'salesman') {
             if ($user->oslpReg) {
                 $slpCode = $user->oslpReg->RegSlpCode;
-                $orders = OrdrLocal::with(['customer','salesman'])->where('is_deleted',0)->where('OdrSlpCode', $slpCode)->filter(request(['search']))->orderBy('OdrDocDate','desc')->orderBy('OdrNum')->paginate(20)->withQueryString();
+                $orders = OrdrLocal::with(['customer','salesman'])->withCount('orderRow')->where('is_deleted',0)->where('OdrSlpCode', $slpCode)->filter(request(['search']))->orderBy('OdrDocDate','desc')->orderBy('OdrNum', 'desc')->paginate(100)->withQueryString();
             } else {
                 // kalau belum ada relasi, return collection kosong
                 $slpCode = optional($user->oslpReg)->RegSlpCode;
-                $orders = OrdrLocal::with(['customer','salesman'])->where('is_deleted',0)->where('OdrSlpCode', $slpCode)->filter(request(['search']))->orderBy('OdrDocDate','desc')->orderBy('OdrNum')->paginate(20)->withQueryString();
+                $orders = OrdrLocal::with(['customer','salesman'])->withCount('orderRow')->where('is_deleted',0)->where('OdrSlpCode', $slpCode)->filter(request(['search']))->orderBy('OdrDocDate','desc')->orderBy('OdrNum', 'desc')->paginate(100)->withQueryString();
             }
         } else {
-            $orders = OrdrLocal::with('customer','salesman')->where('is_deleted',0)->filter(request(['search']))->orderBy('OdrDocDate','desc')->orderBy('OdrNum')->paginate(20)->withQueryString();  
+            $orders = OrdrLocal::with('customer','salesman')->withCount('orderRow')->where('is_deleted',0)->filter(request(['search']))->orderBy('OdrDocDate','desc')->orderBy('OdrNum', 'desc')->paginate(100)->withQueryString();  
         }
         $lastSync = SyncLog::where('name', 'ordr')->orderByDesc('last_sync')->first();
         
@@ -130,6 +130,7 @@ class OrdrController extends Controller
         $nomorInt = OrdrLocal::where('OdrSlpCode', 118)->count() + 1;
         $nomorStr = str_pad($nomorInt, 3, '0', STR_PAD_LEFT);
         $CardCode = $cust->CardCode;
+        $piutangJT = $cust->piutang_jt;
         $romawi = [
             1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV', 5 => 'V', 6 => 'VI', 
             7 => 'VII', 8 => 'VIII', 9 => 'IX', 10 => 'X', 11 => 'XI', 12 => 'XII'
@@ -158,6 +159,7 @@ class OrdrController extends Controller
         $dataOrder['OdrDocDate'] = $tanggal;
         $dataOrder['OdrNum'] = $newNum;
         $dataOrder['OdrRefNum'] = $alias.'/'.$tahun.'/'.$bulanRomawi.'/'.$newNum;
+        $dataOrder['PiutangJT'] = $piutangJT;
         // dd($data);
         return view('ordr.ordr_create', [
             'title' => 'SCKKJ - Buat Pesanan',
@@ -179,6 +181,7 @@ class OrdrController extends Controller
                 'OdrCrdCode' => $request->input('OdrCrdCode'),
                 'OdrSlpCode' => $request->input('OdrSlpCode'),
                 'OdrDocDate' => $request->input('OdrDocDate'),
+                'note' => $request->input('note'),
             ]);
             // dd($head->id);
             foreach($request->items as $item) {

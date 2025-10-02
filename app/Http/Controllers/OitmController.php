@@ -49,7 +49,7 @@ class OitmController extends Controller
     public function api()
     {
         return OitmLocal::select('ItemCode as id', 'ItemCode', 'ItemName', 'HET', 'ProfitCenter', 'Satuan', 'KetHKN', 'KetFG',
-            DB::raw("CONCAT(ItemCode, ' || ', Segment, ' || ', Type, ' || ', Series, ' || ', LEFT(ItemName,100)) as ItemLabel"))->get();
+            DB::raw("CONCAT(ItemCode, ' || ', Segment, ' || ', Type, ' || ', Series, ' || ', LEFT(ItemName,100), ' || ', KetStock) as ItemLabel"))->get();
     }
 
     /**

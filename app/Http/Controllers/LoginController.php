@@ -67,14 +67,14 @@ class LoginController extends Controller
                 'last_active' => now(),
             ]);
         } else {
-            if (Auth::check() && Auth::user()->role === 'salesman') {
-                if ($registeredDevice->device_id != $deviceId) {
-                    Auth::logout();
-                    $request->session()->invalidate();
-                    $request->session()->regenerateToken();
-                    return back()->with('error', 'Perangkat Ini Tidak Terdaftar untuk Akun Anda!');
-                }
-            }
+            // if (Auth::check() && Auth::user()->role === 'salesman') {
+            //     if ($registeredDevice->device_id != $deviceId) {
+            //         Auth::logout();
+            //         $request->session()->invalidate();
+            //         $request->session()->regenerateToken();
+            //         return back()->with('error', 'Perangkat Ini Tidak Terdaftar untuk Akun Anda!');
+            //     }
+            // }
 
             $registeredDevice->update([
                 'session_id' => $sessionId,

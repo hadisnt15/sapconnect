@@ -61,6 +61,14 @@
                             readonly />
                     </div>
                 </div>
+                <div class="mb-2">
+                    <label class="mb-2 text-sm font-medium text-gray-700">Catatan</label>
+                    <input type="text" name="note" value="{{ $head['note'] }}" autocomplete="off"
+                        class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    @error('note')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
 
                 <input type="hidden" name="OdrSlpCode" value="{{ $head['OdrSlpCode'] }}">
                 <input type="hidden" name="OdrNum" value="{{ $head['OdrNum'] }}">
@@ -123,6 +131,7 @@
                                         x-model="item.RdrItemProfitCenter"
                                         class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
                                 </div>
+                            </div>
                                 <div>
                                     <label class="text-xs text-gray-600">Ket HKN</label>
                                     <input type="text" :name="'items[' + index + '][RdrItemKetHKN]'"
@@ -135,7 +144,6 @@
                                         x-model="item.RdrItemKetFG"
                                         class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
                                 </div>
-                            </div>
 
                             <div class="text-right border rounded-lg w-fit bg-gray-500 hover:bg-gray-400 text-white">
                                 <button type="button"

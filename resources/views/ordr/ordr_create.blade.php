@@ -77,6 +77,17 @@
                         @enderror
                     </div>
                 </div>
+                <div class="mb-2">
+                    <label class="mb-2 text-sm font-medium text-gray-700">Catatan</label>
+                    <input type="text" name="note" autocomplete="off"
+                        class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    @error('note')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="text-red-600 font-medium mb-4">
+                    Piutang Jatuh Tempo: {{ number_format($dataOrder['PiutangJT'], 0, ',', '.') }}
+                </div>
 
                 <input type="hidden" name="OdrSlpCode" value="{{ $dataOrder['OdrSlpCode'] }}">
                 <input type="hidden" name="OdrNum" value="{{ $dataOrder['OdrNum'] }}">
