@@ -14,7 +14,7 @@ class OitmLocal extends Model
     protected $keyType = 'string';//
     protected $fillable = [
         'ItemCode','ItemName','FrgnName','ProfitCenter','Brand','Segment','Type','Series',
-        'Satuan','TotalStock','HET','StatusHKN','StatusFG','KetHKN','KetFG','KetStock'
+        'Satuan','TotalStock','HET','StatusHKN','StatusFG','KetHKN','KetFG','KetStock','div_name',
     ];
 
     public function scopeFilter(Builder $query, array $filters)   
@@ -28,11 +28,17 @@ class OitmLocal extends Model
                 ->orWhere('Segment', 'like', '%' . $search . '%')
                 ->orWhere('Type', 'like', '%' . $search . '%')
                 ->orWhere('Series', 'like', '%' . $search . '%')
+                ->orWhere('Brand', 'like', '%' . $search . '%')
         );
     }
 
     public function orderRow(): HasMany
     {
         return $this->hasMany(Rdr1Local::class, 'ItemCode', 'OdrItemCode');
+    }
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class, 'div_name');
     }
 }

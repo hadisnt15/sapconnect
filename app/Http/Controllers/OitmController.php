@@ -16,12 +16,16 @@ class OitmController extends Controller
      */
     public function index(Request $request)
     {   
+        $user = auth()->user();
+        // ambil semua divisi milik user
+        $userDiv = $user->divisions->pluck('div_name');
         $items = OitmLocal::Filter(request(['search']))
+            ->whereIn('div_name',$userDiv)
             ->orderBy('Segment')
             ->orderBy('Type')
             ->orderBy('Series')
             ->orderBy('ItemCode')
-            ->paginate(80)->withQueryString();
+            ->paginate(100)->withQueryString();
         
         $lastSync = SyncLog::where('name', 'oitm')->orderByDesc('last_sync')->first();
 

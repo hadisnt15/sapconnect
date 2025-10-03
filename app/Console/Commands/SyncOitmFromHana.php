@@ -50,7 +50,8 @@ class SyncOitmFromHana extends Command
             "StatusFG"      AS "STATUSFG",
             "KetHKN"        AS "KETHKN",
             "KetFG"        AS "KETFG",
-            "KetStock"        AS "KETSTOCK"
+            "KetStock"        AS "KETSTOCK",
+            "Divisi"        AS "DIVISI"
         FROM LVKKJV_ITEMSIDP;');
         // dd($hanaData[0]);    
         // Hapus data lama
@@ -75,6 +76,7 @@ class SyncOitmFromHana extends Command
                 'KetHKN'        => $row->KETHKN,
                 'KetFG'         => $row->KETFG,
                 'KetStock'      => $row->KETSTOCK = mb_convert_encoding($row->KETSTOCK, 'UTF-8', 'UTF-8'),
+                'div_name'         => $row->DIVISI,
                 'created_at'    => now(),
                 'updated_at'    => now(),
             ]);

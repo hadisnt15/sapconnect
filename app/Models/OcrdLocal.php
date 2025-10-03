@@ -13,7 +13,7 @@ class OcrdLocal extends Model
     public $incrementing = false;
     protected $keyType = 'string';//
     protected $fillable = [
-        'CardCode','CardName','Address','City','State','Contact','Phone','Group','Type1','Type2',
+        'CardCode','CardName','Address','City','State','Contact','Phone','Group','Type1','Type2', 'div_name',
         'CreateDate','LastOdrDate','Termin','Limit','ActBal','DlvBal','OdrBal','created_by','NIK','piutang_jt'
     ];
 
@@ -40,5 +40,10 @@ class OcrdLocal extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class, 'div_name');
     }
 }

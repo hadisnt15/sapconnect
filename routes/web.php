@@ -14,6 +14,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\UserDivisionController;
 
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
@@ -90,7 +92,12 @@ Route::post('/pengguna/{id}/tendang', [UserController::class, 'kickUser'])->name
 Route::get('/pengguna/api', [RegisterController::class, 'api'])->name('user.api')->middleware('role:developer|manager|supervisor'); //ok
 Route::get('/pengguna/{id}/edit', [UserController::class, 'edit'])->name('user.edit')->middleware('role:developer|manager'); //ok
 Route::put('/pengguna/{id}/perbarui', [UserController::class, 'update'])->name('user.update')->middleware('role:developer|manager'); //ok
+Route::get('/pengguna/{id}/divisi', [DivisionController::class, 'editUserDivision'])->name('user.editDivision')->middleware('role:developer|manager');
+Route::post('/pengguna/{id}/divisi', [DivisionController::class, 'updateUserDivision'])->name('user.updateDivision')->middleware('role:developer|manager');
 
+Route::get('/pengguna/apiDiv', [UserController::class, 'api'])->name('user.apiDiv')->middleware('role:developer|manager|supervisor'); //ok
+Route::get('/divisi/apiDiv', [DivisionController::class, 'api'])->name('div.apiDiv')->middleware('role:developer|manager|supervisor'); //ok
+Route::get('/divisi/pendaftaran', [UserDivisionController::class, 'create'])->name('userDiv.registration')->middleware('role:developer|manager|supervisor'); //ok
 
 
 // Route::get('/test-hana', function () {

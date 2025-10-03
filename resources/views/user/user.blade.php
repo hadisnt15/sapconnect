@@ -64,8 +64,8 @@
                 <thead class="text-xs font-bold text-white uppercase bg-red-800">
                     <tr>
                         <th class="px-2 py-2 text-center w-4/12">Nama Lengkap / Nama Pengguna</th>
-                        <th class="px-2 py-2 text-center w-3/12">Email / Telepon</th>
-                        <th class="px-2 py-2 text-center w-1/12">Posisi</th>
+                        <th class="px-2 py-2 text-center w-2/12">Email / Telepon</th>
+                        <th class="px-2 py-2 text-center w-2/12">Posisi / Divisi</th>
                         <th class="px-2 py-2 text-center w-2/12">Dibuat Tanggal</th>
                         <th class="px-2 py-2 text-center w-1/12">Keaktifan</th>
                         <th class="px-2 py-2 text-center w-2/12">Aksi</th>
@@ -90,6 +90,8 @@
                                 @elseif ($u->role === 'developer')
                                     IT
                                 @endif
+                                <br> 
+                                {{ $u->divisions->pluck('div_name')->implode(', ') }}
                             </td>
                             <td class="px-2 py-2 font-medium text-gray-800">
                                 {{ $u->created_at }}
@@ -105,6 +107,10 @@
                                 <a href="{{ route('user.edit', $u->id) }}"
                                     class="block px-2 py-1 text-xs rounded bg-amber-500 hover:bg-amber-400 text-white w-full text-center">
                                     <i class="ri-file-edit-fill"></i> Edit
+                                </a>
+                                <a href="{{ route('user.editDivision', $u->id) }}"
+                                    class="block px-2 py-1 text-xs rounded bg-green-500 hover:bg-green-400 text-white w-full text-center">
+                                    <i class="ri-file-edit-fill"></i> Divisi
                                 </a>
                             </td>
                         </tr>
@@ -134,10 +140,14 @@
                                         Penjual
                                     @elseif ($u->role === 'supervisor')
                                         Admin
+                                    @elseif ($u->role === 'manager')
+                                        Manajer
                                     @elseif ($u->role === 'developer')
                                         IT
                                     @endif
                                 </span><br>
+                                Divisi: <br>
+                                <span class="font-medium mb-3 ms-3">{{ $u->divisions->pluck('div_name')->implode(', ') }}</span> <br>
                                 Keaktifan: <br>
                                 <span class="font-medium mb-3 ms-3">
                                     @if ($u->is_active == '1')

@@ -13,7 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {   
-        $user = User::where('role', '!=', 'developer')->Filter(request(['search']))->paginate(10)->withQueryString();
+        $user = User::where('role', '!=', 'developer')->Filter(request(['search']))->paginate(100)->withQueryString();
         return view('user.user', [
             'title' => 'SCKKJ - Daftar Pengguna',
             'titleHeader' => 'Daftar Pengguna',
@@ -154,5 +154,10 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function api()
+    {
+        return User::all();
     }
 }

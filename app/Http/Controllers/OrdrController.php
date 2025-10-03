@@ -19,32 +19,52 @@ class OrdrController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        
+
+        $query = OrdrLocal::with(['customer','salesman'])
+            ->withCount('orderRow')
+            ->where('is_deleted', 0);
+
+        // 🔹 Filter untuk role salesman
         if ($user->role === 'salesman') {
             if ($user->oslpReg) {
                 $slpCode = $user->oslpReg->RegSlpCode;
-                $orders = OrdrLocal::with(['customer','salesman'])->withCount('orderRow')->where('is_deleted',0)->where('OdrSlpCode', $slpCode)->filter(request(['search']))->orderBy('OdrDocDate','desc')->orderBy('OdrNum', 'desc')->paginate(100)->withQueryString();
+                $query->where('OdrSlpCode', $slpCode);
             } else {
-                // kalau belum ada relasi, return collection kosong
-                $slpCode = optional($user->oslpReg)->RegSlpCode;
-                $orders = OrdrLocal::with(['customer','salesman'])->withCount('orderRow')->where('is_deleted',0)->where('OdrSlpCode', $slpCode)->filter(request(['search']))->orderBy('OdrDocDate','desc')->orderBy('OdrNum', 'desc')->paginate(100)->withQueryString();
+                $query->whereRaw('1=0'); // kosong kalau tidak ada relasi
             }
-        } else {
-            $orders = OrdrLocal::with('customer','salesman')->withCount('orderRow')->where('is_deleted',0)->filter(request(['search']))->orderBy('OdrDocDate','desc')->orderBy('OdrNum', 'desc')->paginate(100)->withQueryString();  
         }
-        $lastSync = SyncLog::where('name', 'ordr')->orderByDesc('last_sync')->first();
-        
-        // $slpCode = $user->oslpReg->RegSlpCode;
-        // $orders = OrdrLocal::get();
+
+        // 🔹 Filter pencarian
+        $query->filter($request->only(['search']));
+
+        // 🔹 Filter checkbox
+        if ($request->has('checked')) {
+            if ($request->checked == '1') {
+                $query->where('is_checked', 1);
+            } elseif ($request->checked == '0') {
+                $query->where('is_checked', 0);
+            }
+        }
+
+        $orders = $query
+            ->orderBy('OdrDocDate','desc')
+            ->orderBy('OdrNum','desc')
+            ->paginate(100)
+            ->withQueryString();
+
+        $lastSync = SyncLog::where('name', 'ordr')
+            ->orderByDesc('last_sync')
+            ->first();
+
         return view('ordr.ordr', [
-            'title' => 'SCKKJ - Daftar Pesanan',
+            'title'       => 'SCKKJ - Daftar Pesanan',
             'titleHeader' => 'Daftar Pesanan',
-            'orders' => $orders,
-            'user' => $user,
-            'lastSync' => $lastSync
+            'orders'      => $orders,
+            'user'        => $user,
+            'lastSync'    => $lastSync
         ]);
     }
 

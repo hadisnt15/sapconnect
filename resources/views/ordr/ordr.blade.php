@@ -67,6 +67,13 @@
             @endif
         </div>
 
+        <form method="GET" action="{{ route('order') }}" class="mb-3">
+            <select name="checked" onchange="this.form.submit()" class="bg-gray-50 border border-gray-300 text-sm rounded-lg text-gray-700 focus:ring focus:ring-indigo-200 p-2.5">
+                <option value="">-- Semua --</option>
+                <option value="1" {{ request('checked') == '1' ? 'selected' : '' }}>Ceklis</option>
+                <option value="0" {{ request('checked') == '0' ? 'selected' : '' }}>Non Ceklis</option>
+            </select>
+        </form>
         <!-- Table -->
         <div class="md:block hidden">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -181,7 +188,8 @@
                             @foreach ($orders as $o)
                                 <tr class="bg-white border-b hover:bg-gray-50">
                                     <td class="text-xs px-2 py-2 font-medium text-gray-800">
-                                        {{ $o->OdrRefNum }} <br> {{ $o->OdrDocDate->format('d-m-Y') }} <br><br>
+                                        {{ $o->OdrRefNum }} <br> {{ $o->OdrDocDate->format('d-m-Y') }} <br>
+                                        <span class="text-xs">{{ $o->order_row_count }} Barang <br> Catatan: {{ $o->note }}</span><br><br>
                                         {{ $o->customer->CardName }} <br> {{ $o->OdrCrdCode }} <br><br>
                                         {{ $o->salesman?->SlpName ?? 'DUMMY' }}
                                     </td>

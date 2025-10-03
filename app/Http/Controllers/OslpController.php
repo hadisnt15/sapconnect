@@ -17,7 +17,7 @@ class OslpController extends Controller
     public function index()
     {
         // $slps = OslpLocal::Filter(request(['search']))->orderBy('SlpName')->paginate(20)->withQueryString();
-        $slps = OslpReg::Filter(request(['search']))->paginate(10)->withQueryString();
+        $slps = OslpReg::Filter(request(['search']))->paginate(100)->withQueryString();
         return view('oslp.oslp', [
             'title' => 'SCKKJ - Daftar Penjual',
             'titleHeader' => 'Daftar Penjual',
