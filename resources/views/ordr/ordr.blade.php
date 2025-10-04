@@ -205,9 +205,9 @@
                                             <span class="text-yellow-600 font-semibold">TERTUNDA</span>
                                         @endif
                                         <div class="mt-2">STATUS SAP:</div>
-                                        @if ($o->ordrStatus->pesanan_status ?? '' === 'PESANAN TERTUNDA')    
+                                        @if (Str::contains(optional($o->ordrStatus)->pesanan_status, 'PESANAN TERTUNDA')) 
                                             <span class="text-yellow-600 font-semibold">{{$o->ordrStatus->pesanan_status ?? ''}}</span>
-                                        @elseif ($o->ordrStatus->pesanan_status ?? '' === 'PESANAN SELESAI')    
+                                        @elseif (Str::contains(optional($o->ordrStatus)->pesanan_status, 'PESANAN SELESAI'))
                                             <span class="text-green-600 font-semibold">{{$o->ordrStatus->pesanan_status ?? ''}}</span>
                                         @elseif ($o->ordrStatus->pesanan_status ?? '' === 'BELUM DIPROSES DI SAP')    
                                             <span class="text-gray-600 font-semibold">{{$o->ordrStatus->pesanan_status ?? ''}}</span>
