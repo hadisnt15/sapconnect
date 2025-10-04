@@ -106,7 +106,7 @@
                                     </td>
                                     <td class="px-2 py-2 text-center">
                                         <input type="checkbox" name="is_checked[]" value="{{ $o->id }}"
-                                            {{ $o->is_checked === 1 ? 'checked' : '' }}
+                                            {{ $o->is_checked === 1 ? 'checked' : '' }} data-sales="{{ $o->OdrSlpCode }}" {{ $o->is_checked === 1 ? 'checked' : '' }}
                                             class="w-4 h-4 text-red-800 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500">
                                     </td>
                                     <td class="px-2 py-2 font-medium">
