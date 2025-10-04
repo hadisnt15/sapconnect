@@ -55,31 +55,33 @@ class SyncOitmFromHana extends Command
         FROM LVKKJV_ITEMSIDP;');
         // dd($hanaData[0]);    
         // Hapus data lama
-        OitmLocal::truncate();
+        // OitmLocal::truncate();
 
         // Insert data baru
         foreach ($hanaData as $row) {
-            OitmLocal::create([
-                'ItemCode'      => $row->ITEMCODE,
-                'ItemName'      => $row->ITEMNAME,
-                'FrgnName'      => $row->FRGNNAME,
-                'ProfitCenter'  => $row->PROFITCENTER,
-                'Brand'         => $row->BRAND,
-                'Segment'       => $row->SEGMENT,
-                'Type'          => $row->TYPE,
-                'Series'        => $row->SERIES,
-                'Satuan'        => $row->SATUAN,
-                'TotalStock'    => $row->TOTALSTOCK,
-                'HET'           => $row->HET,
-                'StatusHKN'     => $row->STATUSHKN,
-                'StatusFG'      => $row->STATUSFG,
-                'KetHKN'        => $row->KETHKN,
-                'KetFG'         => $row->KETFG,
-                'KetStock'      => $row->KETSTOCK = mb_convert_encoding($row->KETSTOCK, 'UTF-8', 'UTF-8'),
-                'div_name'         => $row->DIVISI,
-                'created_at'    => now(),
-                'updated_at'    => now(),
-            ]);
+            DB::table('oitm_local')->updateOrInsert(
+                [ 'ItemCode' => $row->ITEMCODE, ], // key unik
+                [
+                    'ItemName'      => $row->ITEMNAME,
+                    'FrgnName'      => $row->FRGNNAME,
+                    'ProfitCenter'  => $row->PROFITCENTER,
+                    'Brand'         => $row->BRAND,
+                    'Segment'       => $row->SEGMENT,
+                    'Type'          => $row->TYPE,
+                    'Series'        => $row->SERIES,
+                    'Satuan'        => $row->SATUAN,
+                    'TotalStock'    => $row->TOTALSTOCK,
+                    'HET'           => $row->HET,
+                    'StatusHKN'     => $row->STATUSHKN,
+                    'StatusFG'      => $row->STATUSFG,
+                    'KetHKN'        => $row->KETHKN,
+                    'KetFG'         => $row->KETFG,
+                    'KetStock'      => $row->KETSTOCK = mb_convert_encoding($row->KETSTOCK, 'UTF-8', 'UTF-8'),
+                    'div_name'         => $row->DIVISI,
+                    'created_at'    => now(),
+                    'updated_at'    => now(),
+                ]
+            );
         }
 
         $this->info("Sync selesai. Total: " . count($hanaData));

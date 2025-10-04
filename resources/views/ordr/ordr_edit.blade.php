@@ -196,8 +196,11 @@
                         .ItemCode;
                     document.querySelector(`[name="items[${index}][ItemName]"]`).value = selected
                         .ItemName;
-                    document.querySelector(`[name="items[${index}][RdrItemPrice]"]`).value = selected
-                        .HET;
+                    let priceInput = document.querySelector(`[name="items[${index}][RdrItemPrice]"]`);
+                    // ✅ hanya set harga HET kalau masih kosong (tambah barang baru)
+                    if (!priceInput.value || priceInput.value == "0") {
+                        priceInput.value = selected.HET;
+                    }
                     document.querySelector(`[name="items[${index}][RdrItemProfitCenter]"]`).value =
                         selected.ProfitCenter;
                     document.querySelector(`[name="items[${index}][RdrItemSatuan]"]`).value = selected
