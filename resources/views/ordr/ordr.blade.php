@@ -119,9 +119,9 @@
                                         @endif
                                     </td>
                                     <td class="px-2 py-2 font-medium">
-                                        @if (optional($o->ordrStatus)->pesanan_status === 'PESANAN TERTUNDA')
+                                        @if (Str::contains(optional($o->ordrStatus)->pesanan_status, 'PESANAN TERTUNDA'))
                                             <span class="text-yellow-600 font-semibold">{{ optional($o->ordrStatus)->pesanan_status }}</span>
-                                        @elseif (optional($o->ordrStatus)->pesanan_status === 'PESANAN SELESAI')
+                                        @elseif (Str::contains(optional($o->ordrStatus)->pesanan_status, 'PESANAN SELESAI'))
                                             <span class="text-green-600 font-semibold">{{ optional($o->ordrStatus)->pesanan_status }}</span>
                                         @elseif (optional($o->ordrStatus)->pesanan_status === 'BELUM DIPROSES DI SAP')
                                             <span class="text-gray-600 font-semibold">{{ optional($o->ordrStatus)->pesanan_status }}</span>
