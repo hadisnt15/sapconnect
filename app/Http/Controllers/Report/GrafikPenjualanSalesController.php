@@ -47,7 +47,8 @@ class GrafikPenjualanSalesController extends Controller
                 COUNT(*) as total_so
             ')
             ->whereYear('o.OdrDocDate', $tahun)
-            ->whereMonth('o.OdrDocDate', $bulan);
+            ->whereMonth('o.OdrDocDate', $bulan)
+            ->where('o.is_deleted', '=', 0);
 
         // Filter berdasarkan role
         if ($role === 'salesman' && $userSalesCode) {
