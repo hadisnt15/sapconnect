@@ -112,6 +112,10 @@
                                     class="block px-2 py-1 text-xs rounded bg-green-500 hover:bg-green-400 text-white w-full text-center">
                                     <i class="ri-file-edit-fill"></i> Divisi
                                 </a>
+                                <a href="{{ route('user.editReport', $u->id) }}"
+                                    class="block px-2 py-1 text-xs rounded bg-blue-500 hover:bg-blue-400 text-white w-full text-center">
+                                    <i class="ri-file-edit-fill"></i> Report
+                                </a>
                             </td>
                         </tr>
                     @endforeach
@@ -163,6 +167,14 @@
                                 <a href="{{ route('user.edit', $u->id) }}"
                                     class="block px-2 py-1 text-xs rounded bg-amber-500 hover:bg-amber-400 text-white w-full text-center">
                                     <i class="ri-file-edit-fill"></i>
+                                </a>
+                                <a href="{{ route('user.editDivision', $u->id) }}"
+                                    class="block px-2 py-1 text-xs rounded bg-green-500 hover:bg-green-400 text-white w-full text-center">
+                                    <i class="ri-file-edit-fill"></i> 
+                                </a>
+                                <a href="{{ route('user.editReport', $u->id) }}"
+                                    class="block px-2 py-1 text-xs rounded bg-blue-500 hover:bg-blue-400 text-white w-full text-center">
+                                    <i class="ri-file-edit-fill"></i> 
                                 </a>
                             </td>
                         </tr>

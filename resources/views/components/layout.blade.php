@@ -30,8 +30,10 @@
 
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
-
+    <!-- webcam -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
+    <!-- grafik -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 </head>
 
@@ -50,7 +52,7 @@
             <div class="mt-16">
                 <main class="min-h-screen">
                     <!-- <main class="md:bg-[url('/img/bg-kkj-salesorder2.jpg')] bg-[url('/img/bg-kkj-salesorder2-mobile.jpg')] bg-cover bg-center bg-fixed min-h-screen"> -->
-                    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-4">
                         {{ $slot }}
                         {{-- {{ $slotSearch }} --}}
                     </div>

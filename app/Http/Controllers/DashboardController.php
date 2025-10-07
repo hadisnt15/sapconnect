@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Dashboard;
 use App\Models\Dashboard2;
 use App\Models\SyncLog;
+use App\Models\Report;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
 use Carbon\Carbon;
@@ -19,6 +20,10 @@ class DashboardController extends Controller
     {
         // $this->authorize('dashboard.refresh');
         $user = Auth::user();
+        // ambil semua divisi milik user
+        $userRep = $user->reports->pluck('slug');
+
+        $report = Report::whereIn('slug', $userRep)->orderBy('name', 'asc')->get();
 
         if ($user->role === 'salesman') {
             if ($user->oslpReg) {
@@ -66,7 +71,8 @@ class DashboardController extends Controller
             'grouped' => $grouped,
             'dashboard2' => $dashboard2,
             'namaPeriode' => $namaPeriode,
-            'lastSync' => $lastSync
+            'lastSync' => $lastSync,
+            'report' => $report
         ]);
     }
 

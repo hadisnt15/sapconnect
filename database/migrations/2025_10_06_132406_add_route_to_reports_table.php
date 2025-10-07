@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reports', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->string('description')->nullable();
-            $table->timestamps();
+        Schema::table('reports', function (Blueprint $table) {
+            $table->string('route');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reports');
+        Schema::table('reports', function (Blueprint $table) {
+            //
+        });
     }
 };

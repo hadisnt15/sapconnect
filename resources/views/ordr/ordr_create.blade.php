@@ -18,6 +18,7 @@
                         <i class="ri-bill-fill"></i> Daftar Pesanan
                     </a>
                 </li>
+                <li class="inline-flex items-center text-gray-400">&rsaquo;&rsaquo;</li>
                 <li aria-current="page">
                     <div class="flex items-center">
                         <span class="ms-1 text-sm font-medium text-red-800 md:ms-2">

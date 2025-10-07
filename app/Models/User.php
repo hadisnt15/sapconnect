@@ -76,6 +76,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Division::class, 'user_division', 'user_id', 'div_id')->orderBy('div_name');
     }
 
+    public function reports()
+    {
+        return $this->belongsToMany(Report::class, 'user_reports', 'user_id', 'report_id')->orderBy('name');
+    }
+
     public function scopeFilter(Builder $query, array $filters)
     {
         $query->when(

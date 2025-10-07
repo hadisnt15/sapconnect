@@ -15,7 +15,12 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisionController;
-use App\Http\Controllers\UserDivisionController;
+use App\Http\Controllers\ReportController;
+// use App\Http\Controllers\UserDivisionController;
+
+use App\Http\Controllers\Report\PenjualanSprSegmentController;
+use App\Http\Controllers\Report\PenjualanSprSalesController;
+use App\Http\Controllers\Report\GrafikPenjualanSalesController;
 
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
@@ -94,10 +99,23 @@ Route::get('/pengguna/{id}/edit', [UserController::class, 'edit'])->name('user.e
 Route::put('/pengguna/{id}/perbarui', [UserController::class, 'update'])->name('user.update')->middleware('role:developer|manager'); //ok
 Route::get('/pengguna/{id}/divisi', [DivisionController::class, 'editUserDivision'])->name('user.editDivision')->middleware('role:developer|manager');
 Route::post('/pengguna/{id}/divisi', [DivisionController::class, 'updateUserDivision'])->name('user.updateDivision')->middleware('role:developer|manager');
+Route::get('/pengguna/{id}/laporan', [ReportController::class, 'editUserReport'])->name('user.editReport')->middleware('role:developer|manager');
+Route::post('/pengguna/{id}/laporan', [ReportController::class, 'updateUserReport'])->name('user.updateReport')->middleware('role:developer|manager');
 
 Route::get('/pengguna/apiDiv', [UserController::class, 'api'])->name('user.apiDiv')->middleware('role:developer|manager|supervisor'); //ok
 Route::get('/divisi/apiDiv', [DivisionController::class, 'api'])->name('div.apiDiv')->middleware('role:developer|manager|supervisor'); //ok
-Route::get('/divisi/pendaftaran', [UserDivisionController::class, 'create'])->name('userDiv.registration')->middleware('role:developer|manager|supervisor'); //ok
+// Route::get('/divisi/pendaftaran', [UserDivisionController::class, 'create'])->name('userDiv.registration')->middleware('role:developer|manager|supervisor'); //ok
+Route::get('/pengguna/apiRep', [UserController::class, 'api'])->name('user.apiRep')->middleware('role:developer|manager|supervisor'); //ok
+Route::get('/laporan/apiRep', [ReportController::class, 'api'])->name('rep.apiRep')->middleware('role:developer|manager|supervisor'); //ok
+Route::get('/laporan/pendaftaran', [UserReportController::class, 'create'])->name('userRep.registration')->middleware('role:developer|manager|supervisor'); //ok
+
+Route::get('/laporan', [ReportController::class, 'index'])->name('report')->middleware('auth');
+Route::get('/laporan/buat', [ReportController::class, 'create'])->name('report.create')->middleware('role:developer'); //ok
+Route::post('/laporan/simpan', [ReportController::class, 'store'])->name('report.store')->middleware('role:developer');
+Route::get('/laporan/pencapaian-penjualan-sparepart-per-segment', [PenjualanSprSegmentController::class, 'index'])->name('report.pencapaian-penjualan-sparepart-per-segment')->middleware('auth');
+Route::get('/laporan/pencapaian-penjualan-sparepart-per-sales', [PenjualanSprSalesController::class, 'index'])->name('report.pencapaian-penjualan-sparepart-per-sales')->middleware('auth');
+Route::get('/laporan/grafik-penjualan-harian-sales', [GrafikPenjualanSalesController::class, 'index'])->name('report.grafik-penjualan-harian-sales')->middleware('auth');
+Route::get('/laporan/laporan-penjualan-retail-per-segment', [GrafikPenjualanSalesController::class, 'index'])->name('report.laporan-penjualan-retail-per-segment')->middleware('auth');
 
 
 // Route::get('/test-hana', function () {
