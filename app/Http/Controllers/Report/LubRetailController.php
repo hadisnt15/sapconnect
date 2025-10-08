@@ -57,6 +57,7 @@ class LubRetailController extends Controller
                 'tahun' => $tahun,
                 'bulan' => $bulan,
                 'namaPeriode' => '-',
+                'lastSync' => $lastSync,
                 'message' => 'Tidak ada data untuk periode ini.'
             ]);
         }
