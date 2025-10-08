@@ -35,18 +35,6 @@ class LubRetailController extends Controller
             ->orderBy('TYPE2')
             ->get();
 
-        // Jika tidak ada data, tampilkan notifikasi
-        if ($data->isEmpty()) {
-            return view('reports.lub_retail', [
-                'title' => 'SCKKJ - Laporan ' . $report->name,
-                'titleHeader' => $report->name,
-                'data' => collect([]),
-                'tahun' => $tahun,
-                'bulan' => $bulan,
-                'message' => 'Tidak ada data untuk periode ini.'
-            ]);
-        }
-
         $periode = ReportLubRetail::select('tahun', 'bulan')
             ->orderByDesc('tahun')
             ->orderByDesc('bulan')
@@ -59,6 +47,20 @@ class LubRetailController extends Controller
         }
 
         $lastSync = SyncLog::where('name', 'report.penjualan-lub-retail')->orderByDesc('last_sync')->first();
+
+        // Jika tidak ada data, tampilkan notifikasi
+        if ($data->isEmpty()) {
+            return view('reports.penjualan_lub_retail', [
+                'title' => 'SCKKJ - Laporan ' . $report->name,
+                'titleHeader' => $report->name,
+                'data' => collect([]),
+                'tahun' => $tahun,
+                'bulan' => $bulan,
+                'namaPeriode' => '-',
+                'lastSync' => '-',
+                'message' => 'Tidak ada data untuk periode ini.'
+            ]);
+        }
 
         return view('reports.penjualan_lub_retail', [
             'title' => 'SCKKJ - Laporan ' . $report->name,
