@@ -88,8 +88,11 @@
         <!-- Mobile Navbar -->
         <div class="md:hidden flex justify-between items-center h-16">
             <div class="flex items-center space-x-2">
-                <img src="{{ asset('img/kkj.png') }}" class="w-10 h-10 rounded-full bg-white p-1" alt="Logo">
-                <span class="text-white font-semibold text-sm">PT. KAPUAS KENCANA JAYA</span>
+                <a href="https://kapuaskencana.com" target="_blank"
+                       class="flex items-center gap-2 hover:opacity-90 transition">
+                    <img src="{{ asset('img/kkj.png') }}" class="w-10 h-10 rounded-full bg-white p-1" alt="Logo">
+                    <span class="text-white font-semibold text-sm">PT. KAPUAS KENCANA JAYA</span>
+                </a>
             </div>
             <button @click="isOpen = !isOpen" class="p-2 bg-red-700 rounded-md text-white focus:ring-2 focus:ring-white">
                 <svg x-show="!isOpen" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"

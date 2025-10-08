@@ -170,12 +170,14 @@
                             @endforeach
                         </tbody>
                     </table>
+                    @if (in_array($user->role, ['developer', 'salesman']))
                     <div class="flex justify-end mt-4 mb-2 ms-2">
                         <button type="submit"
                             class="px-4 py-2 bg-red-800 hover:bg-red-500 text-white text-xs rounded-lg shadow font-bold">
                             Perbarui Pengecekan
                         </button>
                     </div>
+                    @endif
                 </form>
             </div>
             <div class="mt-5 text-gray-600">
@@ -267,12 +269,14 @@
                             @endforeach
                         </tbody>
                     </table>
+                    @if (in_array($user->role, ['developer', 'salesman']))
                     <div class="flex justify-end mt-4 mb-2 ms-2">
                         <button type="submit"
                             class="px-4 py-2 bg-red-800 hover:bg-red-500 text-white text-xs rounded-lg shadow font-bold">
                             Perbarui Pengecekan
                         </button>
                     </div>
+                    @endif
                 </form>
             </div>
             <div class="mt-5 text-gray-600">

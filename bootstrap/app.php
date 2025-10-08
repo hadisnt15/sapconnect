@@ -25,26 +25,27 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withSchedule(function (Schedule $schedule) {
+
         $schedule->call(function () {
             $startDate = now()->startOfMonth()->format('d.m.Y');
             $endDate   = now()->endOfMonth()->format('d.m.Y');
             $tahun     = now()->year;
             $bulan     = now()->month;
-
             Artisan::call('sync:dashboard', [
                 'startDate' => $startDate,
                 'endDate'   => $endDate,
                 'tahun'     => $tahun,
                 'bulan'     => $bulan,
             ]);
-
-            // simpan log otomatis
             SyncLog::create([
                 'name'      => 'dashboard',
                 'desc'      => 'Otomatis',
                 'last_sync' => now(),
             ]);
-        })->everyThirtyMinutes();
+        })->everyThirtyMinutes()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
+
         $schedule->call(function () {
             Artisan::call('sync:oitm');
             SyncLog::create([
@@ -52,7 +53,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 'desc' => 'Otomatis',
                 'last_sync' => now()
             ]);
-        })->everyThirtyMinutes();
+        })->everyThirtyMinutes()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
+
         $schedule->call(function () {
             Artisan::call('sync:ocrd');
             SyncLog::create([
@@ -60,7 +64,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 'desc' => 'Otomatis',
                 'last_sync' => now()
             ]);
-        })->everyThirtyMinutes();
+        })->everyThirtyMinutes()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
+
         $schedule->call(function () {
             Artisan::call('sync:ordr');
             SyncLog::create([
@@ -68,7 +75,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 'desc' => 'Otomatis',
                 'last_sync' => now()
             ]);
-        })->everyThirtyMinutes();
+        })->everyThirtyMinutes()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
+
         $schedule->call(function () {
             Artisan::call('sync:oslp');
             SyncLog::create([
@@ -77,5 +87,22 @@ return Application::configure(basePath: dirname(__DIR__))
                 'last_sync' => now()
             ]);
         })->daily();
+
+        $schedule->call(function () {
+            Artisan::call('sync:reportLubRetail', [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'tahun' => $tahun,
+                'bulan' => $bulan,
+            ]);
+            SyncLog::create([
+                'name' => 'report.penjualan-lub-retail',
+                'last_sync' => now(),
+                'desc' => 'Otomatis'
+            ]);
+        })->hourly()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
+
     })
     ->create();
