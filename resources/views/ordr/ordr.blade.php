@@ -67,13 +67,39 @@
             @endif
         </div>
 
-        <form method="GET" action="{{ route('order') }}" class="mb-3">
-            <select name="checked" onchange="this.form.submit()" class="bg-gray-50 border border-gray-300 text-sm rounded-lg text-gray-700 focus:ring focus:ring-indigo-200 p-2.5">
-                <option value="">-- Semua --</option>
-                <option value="1" {{ request('checked') == '1' ? 'selected' : '' }}>Ceklis</option>
-                <option value="0" {{ request('checked') == '0' ? 'selected' : '' }}>Non Ceklis</option>
-            </select>
+        <form method="GET" action="{{ route('order') }}" 
+            class="flex flex-col md:flex-row md:justify-start md:items-center gap-2 md:gap-3 mb-3">
+
+            <div class="flex flex-col sm:flex-row gap-1 md:gap-1 items-start md:items-center">
+
+                <!-- 🔹 Select Filter -->
+                <select name="checked" onchange="this.form.submit()" 
+                    class="bg-gray-50 border border-gray-300 text-xs rounded-md text-gray-700 focus:ring focus:ring-indigo-200 py-1 px-2 w-full sm:w-auto">
+                    <option value="">Tanpa Filter</option>
+                    <option value="1" {{ request('checked') == '1' ? 'selected' : '' }}>Ceklis</option>
+                    <option value="0" {{ request('checked') == '0' ? 'selected' : '' }}>Non Ceklis</option>
+                    <option value="2" {{ request('checked') == '2' ? 'selected' : '' }}>Terkirim</option>
+                    <option value="3" {{ request('checked') == '3' ? 'selected' : '' }}>Tertunda</option>
+                </select>
+
+                <!-- 🔹 Date Range -->
+                <input type="date" name="date_from" value="{{ request('date_from') }}"
+                    class="bg-gray-50 border border-gray-300 text-xs rounded-md text-gray-700 focus:ring focus:ring-indigo-200 py-1 px-2 w-full sm:w-auto">
+
+                <input type="date" name="date_to" value="{{ request('date_to') }}"
+                    class="bg-gray-50 border border-gray-300 text-xs rounded-md text-gray-700 focus:ring focus:ring-indigo-200 py-1 px-2 w-full sm:w-auto">
+
+                <!-- 🔹 Filter Button -->
+                <button type="submit"
+                    class="px-3 py-1 bg-red-800 hover:bg-red-500 text-white text-xs rounded-md shadow font-semibold w-full sm:w-auto">
+                    Filter
+                </button>
+            </div>
         </form>
+
+
+
+
         <!-- Table -->
         <div class="md:block hidden">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -287,7 +313,6 @@
 
 
     <!-- Modal -->
-    <!-- Modal -->
     <div id="detailModal" tabindex="-1"
         class="fixed inset-0 z-50 hidden flex items-center justify-center bg-gray-900 bg-opacity-50">
         <div class="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -331,6 +356,7 @@
                                     <th class="border p-2">Kuantitas</th>
                                     <th class="border p-2">Harga</th>
                                     <th class="border p-2">Diskon</th>
+                                    <th class="border p-2">Subtotal</th>
                                 </tr>
                             </thead>
                             <tbody id="detailRows"></tbody>
@@ -381,15 +407,31 @@
                         data.forEach((item, index) => {
                             let no = index + 1; // nomor urut dimulai dari 1
 
+                            // konversi angka dengan fallback 0
+                            let qty = parseFloat(item.RdrItemQuantity) || 0;
+                            let price = parseFloat(item.RdrItemPrice) || 0;
+                            let discPercent = (item.RdrItemDisc === null || item.RdrItemDisc === '' || isNaN(item.RdrItemDisc))
+                                ? 0
+                                : parseFloat(item.RdrItemDisc);
+
+                            // hitung subtotal dengan diskon persen
+                            let subtotal = qty * (price * (1 - discPercent / 100));
+
+                            // Fungsi untuk format angka dengan koma (ribuan)
+                            const formatNumber = (num) => {
+                                return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            };
+
                             // desktop
                             tbody.innerHTML += `
                 <tr>
                     <td class="border p-2 text-center">${no}</td>
                     <td class="border p-2">${item.RdrItemCode}</td>
                     <td class="border p-2">${item.ItemName}</td>
-                    <td class="border p-2">${item.RdrItemQuantity}</td>
-                    <td class="border p-2">${item.RdrItemPrice}</td>
-                    <td class="border p-2">${item.RdrItemDisc}</td>
+                    <td class="border p-2 text-right">${formatNumber(qty)}</td>
+                    <td class="border p-2 text-right">${formatNumber(price)}</td>
+                    <td class="border p-2 text-right">${discPercent ? discPercent + '%' : '-'}</td>
+                    <td class="border p-2 text-right font-semibold">${formatNumber(subtotal)}</td>
                 </tr>`;
 
                             // mobile
@@ -397,9 +439,10 @@
                 <div class="p-3 border rounded-lg bg-gray-50 shadow-sm">
                     <p><b>${no}. ${item.RdrItemCode}</b></p>
                     <p>Deskripsi: ${item.ItemName}</p>
-                    <p>Kuantitas: ${item.RdrItemQuantity}</p>
-                    <p>Harga: ${item.RdrItemPrice}</p>
-                    <p>Diskon: ${item.RdrItemDisc}</p>
+                    <p>Kuantitas: ${formatNumber(qty)}</p>
+                    <p>Harga: ${formatNumber(price)}</p>
+                    <p>Diskon: ${discPercent ? discPercent + '%' : '-'}</p>
+                    <p><b>Subtotal: ${formatNumber(subtotal)}</b></p>
                 </div>`;
                         });
                     });

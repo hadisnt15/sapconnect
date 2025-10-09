@@ -27,15 +27,33 @@ class OrdrController extends Controller
             ->withCount('orderRow')
             ->where('is_deleted', 0);
 
-        // 🔹 Filter untuk role salesman
-        if ($user->role === 'salesman') {
-            if ($user->oslpReg) {
-                $slpCode = $user->oslpReg->RegSlpCode;
-                $query->where('OdrSlpCode', $slpCode);
-            } else {
-                $query->whereRaw('1=0'); // kosong kalau tidak ada relasi
+        // 🔹 Filter berdasarkan role
+            if ($user->role === 'salesman') {
+                // Hanya data milik salesman tersebut
+                if ($user->oslpReg) {
+                    $slpCode = $user->oslpReg->RegSlpCode;
+                    $query->where('OdrSlpCode', $slpCode);
+                } else {
+                    $query->whereRaw('1=0'); // kosong kalau tidak ada relasi
+                }
+
+            } elseif ($user->role === 'supervisor') {
+                // 🔹 Ambil daftar divisi yang dimiliki supervisor
+                $userDivisions = DB::table('user_division')
+                    ->join('division', 'user_division.div_id', '=', 'division.id')
+                    ->where('user_division.user_id', $user->id)
+                    ->pluck('division.div_name')
+                    ->toArray();
+
+                if (!empty($userDivisions)) {
+                    // 🔹 Filter order berdasarkan divisi item (ProfitCenter di OITM)
+                    $query->whereHas('orderRow.orderItem', function ($q) use ($userDivisions) {
+                        $q->whereIn('ProfitCenter', $userDivisions);
+                    });
+                } else {
+                    $query->whereRaw('1=0'); // tidak punya divisi = tidak ada data
+                }
             }
-        }
 
         // 🔹 Filter pencarian
         $query->filter($request->only(['search']));
@@ -46,12 +64,22 @@ class OrdrController extends Controller
                 $query->where('is_checked', 1);
             } elseif ($request->checked == '0') {
                 $query->where('is_checked', 0);
+            } elseif ($request->checked == '2') {
+                $query->where('is_synced', 1);
+            } elseif ($request->checked == '3') {
+                $query->where('is_synced', 0);
             }
+        }
+        // filter tanggal
+        if ($request->filled('date_from')) {
+            $query->whereDate('OdrDocDate', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('OdrDocDate', '<=', $request->date_to);
         }
 
         $orders = $query
-            ->orderBy('OdrDocDate','desc')
-            ->orderBy('OdrNum','desc')
+            ->orderBy('id','desc')
             ->paginate(100)
             ->withQueryString();
 
@@ -85,7 +113,7 @@ class OrdrController extends Controller
         $rows = $order->orderRow->sortBy('id')->map(function ($r) {
             return [
                 'RdrItemCode'     => $r->RdrItemCode,
-                'ItemName'        => $r->orderItem?->ItemName, // ambil langsung
+                'ItemName'        => $r->orderItem?->FrgnName, // ambil langsung
                 'RdrItemQuantity' => $r->RdrItemQuantity,
                 'RdrItemPrice'    => $r->RdrItemPrice,
                 'RdrItemDisc'     => $r->RdrItemDisc,
