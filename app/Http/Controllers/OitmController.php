@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 
 class OitmController extends Controller
 {
@@ -52,8 +53,44 @@ class OitmController extends Controller
 
     public function api()
     {
-        return OitmLocal::select('ItemCode as id', 'ItemCode', 'ItemName', 'HET', 'ProfitCenter', 'Satuan', 'KetHKN', 'KetFG',
-            DB::raw("CONCAT(ItemCode, ' || ', Segment, ' || ', Type, ' || ', Series, ' || ', LEFT(ItemName,100), ' || ', KetStock) as ItemLabel"))->get();
+        // Ambil user yang sedang login
+        $user = Auth::user();
+
+        // Ambil daftar nama divisi user
+        $userDivisions = DB::table('user_division')
+            ->join('division', 'user_division.div_id', '=', 'division.id')
+            ->where('user_division.user_id', $user->id)
+            ->pluck('division.div_name');
+
+        // Query item sesuai divisi user
+        $query = OitmLocal::select(
+            'ItemCode as id',
+            'ItemCode',
+            'FrgnName',
+            'HET',
+            'ProfitCenter',
+            'Satuan',
+            'KetHKN',
+            'KetFG',
+            DB::raw("
+                CASE
+                    WHEN div_name = 'SPR' THEN 
+                        CONCAT(ItemCode, ' || ', Segment, ' || ', Type, ' || ', Series, ' || ', LEFT(FrgnName, 100), ' || ', KetStock)
+                    WHEN div_name IN ('LUB RTL', 'LUB IDS') THEN
+                        CONCAT(ItemCode, ' || ', LEFT(FrgnName, 100), ' || ', KetStock)
+                    ELSE
+                        CONCAT(ItemCode, ' || ', LEFT(FrgnName, 100), ' || ', KetStock)
+                END AS ItemLabel
+            ")
+        );
+
+        // Jika user punya divisi, filter berdasarkan div_name
+        if ($userDivisions->isNotEmpty()) {
+            $query->whereIn('div_name', $userDivisions);
+        }
+
+        // Eksekusi query dan kembalikan hasil
+        return $query->get();
     }
 
     /**

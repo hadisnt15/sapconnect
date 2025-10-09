@@ -187,7 +187,7 @@
         let ts = new TomSelect(select, {
             valueField: 'ItemCode',
             labelField: 'ItemLabel',
-            searchField: ['ItemCode', 'ItemName'],
+            searchField: ['ItemCode', 'FrgnName'],
             options: data,
             placeholder: 'Pilih item...',
             onChange: function(value) {
@@ -196,7 +196,7 @@
                     document.querySelector(`[name="items[${index}][RdrItemCode]"]`).value = selected
                         .ItemCode;
                     document.querySelector(`[name="items[${index}][ItemName]"]`).value = selected
-                        .ItemName;
+                        .FrgnName;
                     let priceInput = document.querySelector(`[name="items[${index}][RdrItemPrice]"]`);
                     // ✅ hanya set harga HET kalau masih kosong (tambah barang baru)
                     if (!priceInput.value || priceInput.value == "0") {

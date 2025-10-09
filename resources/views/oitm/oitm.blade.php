@@ -63,13 +63,17 @@
                     <div class="flex justify-between items-center mb-1 text-gray-500">
                         <span
                             class="text-xs font-bold border border-gray-400 me-2 px-2.5 py-0.5 rounded-lg bg-white text-red-800">
+                            @if ($i->div_name === 'SPR')
                             {{ $i->Segment }} - {{ $i->Type }} - {{ $i->Series }}
+                            @elseif (Str::contains($i->div_name, 'LUB'))
+                            {{ $i->Brand }} - {{ $i->Series }}
+                            @endif
                         </span>
                     </div>
                     <h5 class="font-bold tracking-tight text-gray-800">
                         {{ $i->ItemCode }}</h5>
                     <div class="mb-2 border-b border-gray-300">
-                        <p class="text-sm font-medium text-gray-600">{{ Str::limit($i->ItemName, 30) }}</p>
+                        <p class="text-sm font-medium text-gray-600">{{ Str::limit($i->FrgnName, 30) }}</p>
                     </div>
                     <div class="grid grid-cols-2 text-gray-700 text-sm">
                         <div>
@@ -84,7 +88,7 @@
                     <button data-modal-target="oitm-view" data-modal-toggle="oitm-view" type="button"
                         class="open-modal-oitm-btn flex ml-auto mt-2"
                         data-ItemCode="{{ $i->ItemCode }}"
-                        data-ItemName="{{ $i->ItemName }}"
+                        data-ItemName="{{ $i->FrgnName }}"
                         data-ProfitCenter="{{ $i->ProfitCenter }}"
                         data-Segment="{{ $i->Segment }}"
                         data-Type="{{ $i->Type }}"

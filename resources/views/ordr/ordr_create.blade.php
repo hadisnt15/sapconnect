@@ -208,14 +208,14 @@
         new TomSelect(select, {
             valueField: 'ItemCode',
             labelField: 'ItemLabel',
-            searchField: ['ItemCode', 'ItemName'],
+            searchField: ['ItemCode', 'FrgnName'],
             options: data,
             placeholder: 'Pilih item...',
             onChange: function(value) {
                 let selected = this.options[value];
                 if (selected) {
                     document.querySelector(`[name="items[${index}][ItemName]"]`).value = selected
-                        .ItemName;
+                        .FrgnName;
                     document.querySelector(`[name="items[${index}][RdrItemPrice]"]`).value = selected
                         .HET;
                     document.querySelector(`[name="items[${index}][RdrItemProfitCenter]"]`).value =
