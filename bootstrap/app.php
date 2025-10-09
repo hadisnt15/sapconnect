@@ -89,6 +89,10 @@ return Application::configure(basePath: dirname(__DIR__))
         })->daily();
 
         $schedule->call(function () {
+            $startDate = now()->startOfMonth()->format('d.m.Y');
+            $endDate   = now()->endOfMonth()->format('d.m.Y');
+            $tahun     = now()->year;
+            $bulan     = now()->month;
             Artisan::call('sync:reportLubRetail', [
                 'startDate' => $startDate,
                 'endDate' => $endDate,
