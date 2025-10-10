@@ -65,7 +65,7 @@
                     <tr>
                         <th class="px-2 py-2 text-center w-4/12">Nama Lengkap / Nama Pengguna</th>
                         <th class="px-2 py-2 text-center w-2/12">Email / Telepon</th>
-                        <th class="px-2 py-2 text-center w-2/12">Posisi / Divisi</th>
+                        <th class="px-2 py-2 text-center w-2/12">Posisi / Divisi / Cabang</th>
                         <th class="px-2 py-2 text-center w-2/12">Dibuat Tanggal</th>
                         <th class="px-2 py-2 text-center w-1/12">Keaktifan</th>
                         <th class="px-2 py-2 text-center w-2/12">Aksi</th>
@@ -91,7 +91,9 @@
                                     IT
                                 @endif
                                 <br> 
-                                {{ $u->divisions->pluck('div_name')->implode(', ') }}
+                                Divisi: {{ $u->divisions->pluck('div_name')->implode(', ') }}
+                                <br>
+                                Cabang: {{ $u->branches->pluck('branch_name')->implode(', ') }}
                             </td>
                             <td class="px-2 py-2 font-medium text-gray-800">
                                 {{ $u->created_at }}
@@ -110,11 +112,15 @@
                                 </a>
                                 <a href="{{ route('user.editDivision', $u->id) }}"
                                     class="block px-2 py-1 text-xs rounded bg-green-500 hover:bg-green-400 text-white w-full text-center">
-                                    <i class="ri-file-edit-fill"></i> Divisi
+                                    <i class="ri-flag-fill"></i> Divisi
                                 </a>
                                 <a href="{{ route('user.editReport', $u->id) }}"
                                     class="block px-2 py-1 text-xs rounded bg-blue-500 hover:bg-blue-400 text-white w-full text-center">
-                                    <i class="ri-file-edit-fill"></i> Report
+                                    <i class="ri-folder-6-fill"></i> Laporan
+                                </a>
+                                <a href="{{ route('user.editBranch', $u->id) }}"
+                                    class="block px-2 py-1 text-xs rounded bg-gray-500 hover:bg-gray-400 text-white w-full text-center">
+                                    <i class="ri-map-pin-fill"></i> Cabang
                                 </a>
                             </td>
                         </tr>
@@ -152,6 +158,8 @@
                                 </span><br>
                                 Divisi: <br>
                                 <span class="font-medium mb-3 ms-3">{{ $u->divisions->pluck('div_name')->implode(', ') }}</span> <br>
+                                Cabang: <br>
+                                <span class="font-medium mb-3 ms-3">{{ $u->branches->pluck('branch_name')->implode(', ') }}</span> <br>
                                 Keaktifan: <br>
                                 <span class="font-medium mb-3 ms-3">
                                     @if ($u->is_active == '1')
@@ -170,11 +178,15 @@
                                 </a>
                                 <a href="{{ route('user.editDivision', $u->id) }}"
                                     class="block px-2 py-1 text-xs rounded bg-green-500 hover:bg-green-400 text-white w-full text-center">
-                                    <i class="ri-file-edit-fill"></i> 
+                                    <i class="ri-flag-fill"></i> 
                                 </a>
                                 <a href="{{ route('user.editReport', $u->id) }}"
                                     class="block px-2 py-1 text-xs rounded bg-blue-500 hover:bg-blue-400 text-white w-full text-center">
-                                    <i class="ri-file-edit-fill"></i> 
+                                    <i class="ri-folder-6-fill"></i> 
+                                </a>
+                                <a href="{{ route('user.editBranch', $u->id) }}"
+                                    class="block px-2 py-1 text-xs rounded bg-gray-500 hover:bg-gray-400 text-white w-full text-center">
+                                    <i class="ri-map-pin-fill"></i> 
                                 </a>
                             </td>
                         </tr>

@@ -29,15 +29,49 @@ class PushOrdrToHana extends Command
     public function handle()
     {
         $this->info("Push ORDR data from LARAVEL to SAPHANA");
+
         $user = Auth::user();
-        // if ($user->role === 'salesman') {
-        //     $slpCode = $user->oslpReg->RegSlpCode;
-        //     $ordrHead = DB::connection('mysql')->table('ordr_local')->where('is_synced',0)->where('is_checked',1)->where('is_deleted', 0)->where('OdrSlpCode',$slpCode)->get();
-        // } else {
-        //     $ordrHead = DB::connection('mysql')->table('ordr_local')->where('is_synced',0)->where('is_checked',1)->where('is_deleted', 0)->get();
-        // }
-        $ordrHead = DB::connection('mysql')->table('ordr_local')->where('is_synced',0)->where('is_checked',1)->where('is_deleted', 0)->get();
-         foreach ($ordrHead as $ohead) {
+
+        // ✅ Hanya supervisor yang boleh push
+        if ($user->role !== 'supervisor') {
+            $this->error("Hanya supervisor yang dapat melakukan push data.");
+            return;
+        }
+
+        // 🔹 Ambil daftar divisi
+        $userDivisions = DB::table('user_division')
+            ->join('division', 'user_division.div_id', '=', 'division.id')
+            ->where('user_division.user_id', $user->id)
+            ->pluck('division.div_name')
+            ->toArray();
+
+        // 🔹 Ambil daftar cabang
+        $userBranches = DB::table('user_branch')
+            ->join('branch', 'user_branch.branch_id', '=', 'branch.id')
+            ->where('user_branch.user_id', $user->id)
+            ->pluck('branch.branch_name')
+            ->toArray();
+
+        // 🔹 Ambil order yang sesuai dengan divisi dan cabang user
+        $ordrHead = DB::connection('mysql')->table('ordr_local')
+            ->where('is_synced', 0)
+            ->where('is_checked', 1)
+            ->where('is_deleted', 0)
+            ->whereIn('branch', $userBranches)
+            ->whereExists(function ($query) use ($userDivisions) {
+                $query->select(DB::raw(1))
+                    ->from('rdr1_local')
+                    ->whereRaw('rdr1_local.OdrId = ordr_local.id')
+                    ->whereIn('rdr1_local.RdrItemProfitCenter', $userDivisions);
+            })
+            ->get();
+
+        if ($ordrHead->isEmpty()) {
+            $this->info("Tidak ada data ORDR yang cocok dengan cabang/divisi Anda.");
+            return;
+        }
+
+        foreach ($ordrHead as $ohead) {
             // Tandai sedang sync
             DB::connection('mysql')->table('ordr_local')
                 ->where('id', $ohead->id)
@@ -46,14 +80,9 @@ class PushOrdrToHana extends Command
             try {
                 DB::beginTransaction(); // hanya untuk MySQL
 
-                // CUSTOMER
-                $customer = DB::connection('mysql')->table('ocrd_local')
-                    ->where('CardCode', $ohead->OdrCrdCode)
-                    ->first();
-
                 // ORDER HEAD
                 $orderHeadData = [
-                    'Code' => $ohead->id,   
+                    'Code' => $ohead->id,
                     'Name' => $ohead->OdrRefNum,
                     'U_KKJ_OdrId' => $ohead->id,
                     'U_KKJ_OdrRefNum' => $ohead->OdrRefNum,
@@ -65,16 +94,6 @@ class PushOrdrToHana extends Command
                     'U_KKJ_City' => $ohead->branch,
                 ];
 
-                // if ($customer && $customer->Type1 === 'PELANGGAN BARU') {
-                //     $orderHeadData['U_KKJ_CardName'] = $customer->CardName;
-                //     $orderHeadData['U_KKJ_City'] = $customer->City;
-                //     $orderHeadData['U_KKJ_State'] = $customer->State;
-                //     $orderHeadData['U_KKJ_Contact'] = $customer->Contact;
-                //     $orderHeadData['U_KKJ_Phone'] = $customer->Phone;
-                //     $orderHeadData['U_KKJ_NIK'] = $customer->NIK;
-                // }
-
-                // Insert ke SAP HANA
                 DB::connection('hana')->table('@LVKKJ_ORDR')->insert($orderHeadData);
 
                 // ORDER ROW
@@ -84,7 +103,7 @@ class PushOrdrToHana extends Command
 
                 foreach ($ordrRow as $orow) {
                     DB::connection('hana')->table('@LVKKJ_ORDR1')->insert([
-                        'Code' => $orow->id,   
+                        'Code' => $orow->id,
                         'Name' => $orow->RdrItemCode,
                         'U_KKJ_OdrId' => $orow->OdrId,
                         'U_KKJ_RdrItemCode' => $orow->RdrItemCode,
@@ -108,7 +127,6 @@ class PushOrdrToHana extends Command
             } catch (\Exception $e) {
                 DB::rollback();
 
-                // Tandai gagal
                 DB::connection('mysql')->table('ordr_local')
                     ->where('id', $ohead->id)
                     ->update(['is_synced' => 0]);
@@ -117,7 +135,7 @@ class PushOrdrToHana extends Command
                 $this->error("Gagal push ORDR {$ohead->OdrRefNum}: " . $e->getMessage());
             }
         }
-        $this->info("Berhasil push data");
 
+        $this->info("Selesai push data.");
     }
 }

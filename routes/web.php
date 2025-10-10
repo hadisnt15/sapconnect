@@ -16,6 +16,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\BranchController;
 // use App\Http\Controllers\UserDivisionController;
 
 use App\Http\Controllers\Report\PenjualanSprSegmentController;
@@ -102,6 +103,8 @@ Route::get('/pengguna/{id}/divisi', [DivisionController::class, 'editUserDivisio
 Route::post('/pengguna/{id}/divisi', [DivisionController::class, 'updateUserDivision'])->name('user.updateDivision')->middleware('role:developer|manager');
 Route::get('/pengguna/{id}/laporan', [ReportController::class, 'editUserReport'])->name('user.editReport')->middleware('role:developer|manager');
 Route::post('/pengguna/{id}/laporan', [ReportController::class, 'updateUserReport'])->name('user.updateReport')->middleware('role:developer|manager');
+Route::get('/pengguna/{id}/cabang', [BranchController::class, 'editUserBranch'])->name('user.editBranch')->middleware('role:developer|manager');
+Route::post('/pengguna/{id}/cabang', [BranchController::class, 'updateUserBranch'])->name('user.updateBranch')->middleware('role:developer|manager');
 
 Route::get('/pengguna/apiDiv', [UserController::class, 'api'])->name('user.apiDiv')->middleware('role:developer|manager|supervisor'); //ok
 Route::get('/divisi/apiDiv', [DivisionController::class, 'api'])->name('div.apiDiv')->middleware('role:developer|manager|supervisor'); //ok

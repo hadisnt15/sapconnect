@@ -23,37 +23,52 @@ class OrdrController extends Controller
     {
         $user = Auth::user();
 
-        $query = OrdrLocal::with(['customer','salesman'])
+        $query = OrdrLocal::with(['customer', 'salesman'])
             ->withCount('orderRow')
             ->where('is_deleted', 0);
 
         // 🔹 Filter berdasarkan role
-            if ($user->role === 'salesman') {
-                // Hanya data milik salesman tersebut
-                if ($user->oslpReg) {
-                    $slpCode = $user->oslpReg->RegSlpCode;
-                    $query->where('OdrSlpCode', $slpCode);
-                } else {
-                    $query->whereRaw('1=0'); // kosong kalau tidak ada relasi
+        if ($user->role === 'salesman') {
+            // Hanya data milik salesman tersebut
+            if ($user->oslpReg) {
+                $slpCode = $user->oslpReg->RegSlpCode;
+                $query->where('OdrSlpCode', $slpCode);
+            } else {
+                $query->whereRaw('1=0'); // kosong kalau tidak ada relasi
+            }
+
+        } elseif ($user->role === 'supervisor') {
+           // 🔹 Ambil daftar divisi yang dimiliki supervisor
+            $userDivisions = DB::table('user_division')
+                ->join('division', 'user_division.div_id', '=', 'division.id')
+                ->where('user_division.user_id', $user->id)
+                ->pluck('division.div_name')
+                ->toArray();
+
+            // 🔹 Ambil daftar cabang yang dimiliki supervisor
+            $userBranches = DB::table('user_branch')
+                ->join('branch', 'user_branch.branch_id', '=', 'branch.id')
+                ->where('user_branch.user_id', $user->id)
+                ->pluck('branch.branch_name')
+                ->toArray();
+            // dd($userBranches, $userDivisions);
+            // 🔹 Kalau tidak punya cabang & divisi, kosongkan hasil
+            if (empty($userBranches) && empty($userDivisions)) {
+                $query->whereRaw('1=0');
+            } else {
+                // 🔹 Filter berdasarkan cabang
+                if (!empty($userBranches)) {
+                    $query->whereIn('branch', $userBranches);
                 }
 
-            } elseif ($user->role === 'supervisor') {
-                // 🔹 Ambil daftar divisi yang dimiliki supervisor
-                $userDivisions = DB::table('user_division')
-                    ->join('division', 'user_division.div_id', '=', 'division.id')
-                    ->where('user_division.user_id', $user->id)
-                    ->pluck('division.div_name')
-                    ->toArray();
-
+                // 🔹 Filter berdasarkan divisi (ProfitCenter di OITM)
                 if (!empty($userDivisions)) {
-                    // 🔹 Filter order berdasarkan divisi item (ProfitCenter di OITM)
                     $query->whereHas('orderRow.orderItem', function ($q) use ($userDivisions) {
                         $q->whereIn('ProfitCenter', $userDivisions);
                     });
-                } else {
-                    $query->whereRaw('1=0'); // tidak punya divisi = tidak ada data
                 }
             }
+        }
 
         // 🔹 Filter pencarian
         $query->filter($request->only(['search']));
@@ -70,7 +85,8 @@ class OrdrController extends Controller
                 $query->where('is_synced', 0);
             }
         }
-        // filter tanggal
+
+        // 🔹 Filter tanggal
         if ($request->filled('date_from')) {
             $query->whereDate('OdrDocDate', '>=', $request->date_from);
         }
@@ -79,9 +95,18 @@ class OrdrController extends Controller
         }
 
         $orders = $query
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->paginate(100)
             ->withQueryString();
+        // 🔹 Ambil hanya satu RdrProfitCenter unik per order
+        $orders->getCollection()->transform(function ($order) {
+            $order->profit_center = $order->orderRow
+                ->pluck('orderItem.ProfitCenter')
+                ->filter() // hapus null
+                ->unique()
+                ->first(); // ambil satu saja
+            return $order;
+        });
 
         $lastSync = SyncLog::where('name', 'ordr')
             ->orderByDesc('last_sync')
@@ -95,6 +120,7 @@ class OrdrController extends Controller
             'lastSync'    => $lastSync
         ]);
     }
+
 
     public function refresh()
     {

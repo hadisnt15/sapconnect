@@ -29,20 +29,20 @@
             </ol>
         </nav>
 
-        <div class="mx-auto w-full md:w-3/4 bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-            <h2 class="text-sm font-medium text-gray-700 mb-3">Kelola Laporan untuk {{ $user->name }}</h2>
+        <div class="mx-auto w-full md:w-1/2 bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+            <h2 class="text-sm font-medium text-gray-700 mb-3">Kelola Cabang untuk {{ $user->name }}</h2>
             <!-- Form -->
-            <form action="{{ route('user.updateReport', $user->id) }}" method="POST">
+            <form action="{{ route('user.updateBranch', $user->id) }}" method="POST">
                 @csrf
 
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Laporan:</label>
-                    @foreach ($reports as $report)
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Cabang:</label>
+                    @foreach ($branches as $branch)
                         <div class="flex items-center mb-2">
-                            <input type="checkbox" name="reports[]" value="{{ $report->id }}"
-                                {{ $user->reports->contains($report->id) ? 'checked' : '' }}
+                            <input type="checkbox" name="branches[]" value="{{ $branch->id }}"
+                                {{ $user->branches->contains($branch->id) ? 'checked' : '' }}
                                 class="w-4 h-4 text-red-800 rounded border-gray-300 focus:ring-red-500">
-                            <label class="ml-2 text-sm text-gray-700">{{ $report->name }} - {{ $report->description }}</label>
+                            <label class="ml-2 text-sm text-gray-700">{{ $branch->branch_name }} - {{ $branch->branch_desc }}</label>
                         </div>
                     @endforeach
                 </div>

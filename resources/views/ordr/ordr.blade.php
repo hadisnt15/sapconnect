@@ -122,7 +122,9 @@
                                 <tr class="bg-white border-b hover:bg-gray-50">
                                     <td class="px-2 py-2 font-medium text-gray-800">
                                         {{ $o->OdrRefNum }} <br> {{ $o->OdrDocDate->format('d-m-Y') }} <br> 
-                                        <span class="text-xs">{{ $o->order_row_count }} Barang <br> Catatan: {{ $o->note }}</span>
+                                        <span class="text-xs">{{ $o->order_row_count }} Barang 
+                                        <br> Cabang: {{ $o->branch }} <br> Divisi: {{ $o->profit_center }}</span>
+                                        <br> Catatan: {{ $o->note }}</span>
                                     </td>
                                     <td class="px-2 py-2 font-medium text-gray-800">
                                         {{ $o->customer->CardName }} <br> {{ $o->OdrCrdCode }}
@@ -230,7 +232,9 @@
                                 <tr class="bg-white border-b hover:bg-gray-50">
                                     <td class="text-xs px-2 py-2 font-medium text-gray-800">
                                         {{ $o->OdrRefNum }} <br> {{ $o->OdrDocDate->format('d-m-Y') }} <br>
-                                        <span class="text-xs">{{ $o->order_row_count }} Barang <br> Catatan: {{ $o->note }}</span><br><br>
+                                        <span class="text-xs">{{ $o->order_row_count }} Barang 
+                                        <br> Cabang: {{ $o->branch }}</span>
+                                        <br> Catatan: {{ $o->note }}</span><br><br>
                                         {{ $o->customer->CardName }} <br> {{ $o->OdrCrdCode }} <br><br>
                                         {{ $o->salesman?->SlpName ?? 'DUMMY' }}
                                     </td>

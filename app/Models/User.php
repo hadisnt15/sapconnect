@@ -75,6 +75,11 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Division::class, 'user_division', 'user_id', 'div_id')->orderBy('div_name');
     }
+    
+    public function branches()
+    {
+        return $this->belongsToMany(Branch::class, 'user_branch', 'user_id', 'branch_id')->orderBy('branch_name');
+    }
 
     public function reports()
     {
