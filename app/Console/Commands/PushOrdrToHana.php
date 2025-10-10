@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PushOrdrToHana extends Command
 {
@@ -60,17 +61,18 @@ class PushOrdrToHana extends Command
                     'U_KKJ_OdrOcrCode' => $ohead->OdrCrdCode,
                     'U_KKJ_OdrSlpCode' => $ohead->OdrSlpCode,
                     'U_KKJ_OdrDocDate' => $ohead->OdrDocDate,
+                    'U_KKJ_Address' => $ohead->note,
+                    'U_KKJ_City' => $ohead->branch,
                 ];
 
-                if ($customer && $customer->Type1 === 'PELANGGAN BARU') {
-                    $orderHeadData['U_KKJ_CardName'] = $customer->CardName;
-                    $orderHeadData['U_KKJ_Address'] = $customer->Address;
-                    $orderHeadData['U_KKJ_City'] = $customer->City;
-                    $orderHeadData['U_KKJ_State'] = $customer->State;
-                    $orderHeadData['U_KKJ_Contact'] = $customer->Contact;
-                    $orderHeadData['U_KKJ_Phone'] = $customer->Phone;
-                    $orderHeadData['U_KKJ_NIK'] = $customer->NIK;
-                }
+                // if ($customer && $customer->Type1 === 'PELANGGAN BARU') {
+                //     $orderHeadData['U_KKJ_CardName'] = $customer->CardName;
+                //     $orderHeadData['U_KKJ_City'] = $customer->City;
+                //     $orderHeadData['U_KKJ_State'] = $customer->State;
+                //     $orderHeadData['U_KKJ_Contact'] = $customer->Contact;
+                //     $orderHeadData['U_KKJ_Phone'] = $customer->Phone;
+                //     $orderHeadData['U_KKJ_NIK'] = $customer->NIK;
+                // }
 
                 // Insert ke SAP HANA
                 DB::connection('hana')->table('@LVKKJ_ORDR')->insert($orderHeadData);

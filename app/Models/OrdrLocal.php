@@ -19,7 +19,7 @@ class OrdrLocal extends Model
     // public $incrementing = false;
     protected $keyType = 'string';//
     protected $fillable = [
-        'OdrRefNum','OdrNum','OdrCrdCode','OdrSlpCode','OdrDocDate','is_synced','is_checked','is_deleted','note'
+        'OdrRefNum','OdrNum','OdrCrdCode','OdrSlpCode','OdrDocDate','is_synced','is_checked','is_deleted','note','branch'
     ];
     protected $casts = [
         'OdrDocDate' => 'datetime',

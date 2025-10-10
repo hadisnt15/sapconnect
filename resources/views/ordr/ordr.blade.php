@@ -173,6 +173,7 @@
                                             data-OdrCardCode="{{ $o->OdrCrdCode }}"
                                             data-OdrCardName="{{ $o->customer->CardName }}"
                                             data-OdrSlpName="{{ $o->salesman?->SlpName ?? 'DUMMY' }}"
+                                            data-branch="{{ $o->branch }}" data-note="{{ $o->note }}"
                                             data-modal-target="detailModal" data-modal-toggle="detailModal"
                                             class="btn-detail open-modal-ordr-btn block px-2 py-1 text-xs rounded bg-red-800 hover:bg-red-500 w-full text-white">
                                             <i class="ri-eye-fill"></i> Detail
@@ -272,6 +273,7 @@
                                             data-OdrCardCode="{{ $o->OdrCrdCode }}"
                                             data-OdrCardName="{{ $o->customer->CardName }}"
                                             data-OdrSlpName="{{ $o->salesman?->SlpName ?? 'DUMMY' }}"
+                                            data-branch="{{ $o->branch }}" data-note="{{ $o->note }}"
                                             data-modal-target="detailModal" data-modal-toggle="detailModal"
                                             class="btn-detail open-modal-ordr-btn block px-2 py-1 text-xs rounded bg-red-800 hover:bg-red-500 w-full text-white">
                                             <i class="ri-eye-fill"></i>
@@ -335,8 +337,9 @@
                         <p><span class="font-medium">Tanggal Pesanan:</span> <span id="modalOdrDocDate"></span></p>
                         <p><span class="font-medium">Kode Pelanggan:</span> <span id="modalOdrCardCode"></span></p>
                         <p><span class="font-medium">Nama Pelanggan:</span> <span id="modalOdrCardName"></span></p>
-                        <p class="sm:col-span-2"><span class="font-medium">Nama Penjual:</span> <span
-                                id="modalOdrSlpName"></span></p>
+                        <p><span class="font-medium">Cabang Pelanggan:</span> <span id="modalbranch"></span></p>
+                        <p><span class="font-medium">Nama Penjual:</span> <span id="modalOdrSlpName"></span></p>
+                        <p class="sm:col-span-2"><span class="font-medium">Catatan:</span> <span id="modalnote"></span></p>
                     </div>
 
                     <!-- Detail Barang -->
@@ -380,6 +383,8 @@
                 const OdrCardCode = this.getAttribute('data-OdrCardCode');
                 const OdrCardName = this.getAttribute('data-OdrCardName');
                 const OdrSlpName = this.getAttribute('data-OdrSlpName');
+                const branch = this.getAttribute('data-branch');
+                const note = this.getAttribute('data-note');
 
                 // set header info
                 document.getElementById("modalOdrRefNum").innerText = OdrRefNum;
@@ -387,6 +392,8 @@
                 document.getElementById("modalOdrCardCode").innerText = OdrCardCode;
                 document.getElementById("modalOdrCardName").innerText = OdrCardName;
                 document.getElementById("modalOdrSlpName").innerText = OdrSlpName;
+                document.getElementById("modalbranch").innerText = branch;
+                document.getElementById("modalnote").innerText = note;
 
                 const modal = document.getElementById('detailModal');
                 modal.classList.remove('hidden');

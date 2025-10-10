@@ -222,6 +222,13 @@ class OrdrController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'branch' => 'required|in:HO,BJN,BTL,SPT,PLB,PLK',
+        ], [
+            'branch.required' => 'Cabang harus dipilih.',
+            'branch.in' => 'Cabang yang dipilih tidak valid.',
+        ]);
+        
         DB::transaction(function () use ($request) {
             $head = OrdrLocal::create([
                 'OdrRefNum' => $request->input('OdrRefNum'),
@@ -230,6 +237,7 @@ class OrdrController extends Controller
                 'OdrSlpCode' => $request->input('OdrSlpCode'),
                 'OdrDocDate' => $request->input('OdrDocDate'),
                 'note' => $request->input('note'),
+                'branch' => $request->input('branch'),
             ]);
             // dd($head->id);
             foreach($request->items as $item) {
@@ -328,9 +336,22 @@ class OrdrController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'branch' => 'required|in:HO,BJN,BTL,SPT,PLB,PLK',
+        ], [
+            'branch.required' => 'Cabang harus dipilih.',
+            'branch.in' => 'Cabang yang dipilih tidak valid.',
+        ]);
         DB::beginTransaction();
         try {
             $head = OrdrLocal::findOrFail($id);
+
+            // 🔹 Update data header (termasuk cabang)
+            $head->update([
+                'branch' => $request->input('branch'),
+                'note' => $request->input('note'),
+                // tambahkan field header lain di sini bila diperlukan
+            ]);
 
             // hapus semua detail lama
             $head->orderRow()->delete();

@@ -36,7 +36,7 @@
                 <!-- Customer Info -->
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="mb-2">
-                        <label for="OdrCrdCode" class="mb-2 text-sm font-medium text-gray-700">Customer Code</label>
+                        <label for="OdrCrdCode" class="mb-2 text-sm font-medium text-gray-700">Kode Pelanggan</label>
                         <input type="text" id="OdrCrdCode" name="OdrCrdCode"
                             value="{{ old('OdrCrdCode', $dataOrder['OdrCrdCode']) }}" autocomplete="off"
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
@@ -46,7 +46,7 @@
                         @enderror
                     </div>
                     <div class="mb-2">
-                        <label class="mb-2 text-sm font-medium text-gray-700">Customer Name</label>
+                        <label class="mb-2 text-sm font-medium text-gray-700">Nama Pelanggan</label>
                         <input type="text" value="{{ old('CstName', $cust->CardName) }}" autocomplete="off"
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                             readonly />
@@ -78,16 +78,48 @@
                         @enderror
                     </div>
                 </div>
+                <div class="grid md:grid-cols-2 md:gap-6">
+                    <div class="mb-2">
+                        <label for="branch" class="mb-2 text-sm font-medium text-gray-700">Cabang</label>
+                        <select id="branch" name="branch"
+                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">Pilih Cabang</option>
+                            @foreach (['HO', 'BJN', 'BTL', 'SPT', 'PLB', 'PLK'] as $b)
+                                <option value="{{ $b }}"
+                                    {{ old('branch', $dataOrder['branch'] ?? '') == $b ? 'selected' : '' }}>
+                                    {{ $b }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('branch')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="mb-2">
+                        <label class="mb-2 text-sm font-medium text-gray-700">Piutang JT</label>
+                        @php
+                            $piutangJT = $dataOrder['PiutangJT'] ?? 0;
+                            $piutangClass = $piutangJT > 0
+                                ? 'border-red-500 bg-red-100 text-red-700 font-semibold'
+                                : 'border-gray-300 text-gray-700';
+                        @endphp
+                        <input type="text"
+                            value="{{ number_format($piutangJT, 0, '.', ',') }}"
+                            autocomplete="off"
+                            class="bg-gray-50 {{ $piutangClass }} border rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+                            readonly />
+                        @error('CstName')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
                 <div class="mb-2">
                     <label class="mb-2 text-sm font-medium text-gray-700">Catatan</label>
-                    <input type="text" name="note" autocomplete="off"
+                    <input type="text" name="note" autocomplete="off" value="{{ old('note') }}"
                         class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
                     @error('note')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
-                </div>
-                <div class="text-red-600 font-medium mb-4">
-                    Piutang Jatuh Tempo: {{ number_format($dataOrder['PiutangJT'], 0, ',', '.') }}
                 </div>
 
                 <input type="hidden" name="OdrSlpCode" value="{{ $dataOrder['OdrSlpCode'] }}">
