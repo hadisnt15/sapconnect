@@ -81,7 +81,7 @@
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="mb-2">
                         <label for="branch" class="mb-2 text-sm font-medium text-gray-700">Cabang</label>
-                        <select id="branch" name="branch"
+                        <select id="branch" name="branch" required
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
                             <option value="">Pilih Cabang</option>
                             @foreach (['HO', 'BJN', 'BTL', 'SPT', 'PLB', 'PLK'] as $b)
@@ -115,7 +115,7 @@
                 </div>
                 <div class="mb-2">
                     <label class="mb-2 text-sm font-medium text-gray-700">Catatan</label>
-                    <input type="text" name="note" autocomplete="off" value="{{ old('note') }}"
+                    <input type="text" name="note" autocomplete="off" value="{{ old('note') }}" 
                         class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
                     @error('note')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>

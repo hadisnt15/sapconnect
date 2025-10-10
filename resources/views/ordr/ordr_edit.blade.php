@@ -65,7 +65,7 @@
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="mb-2">
                         <label for="branch" class="mb-2 text-sm font-medium text-gray-700">Cabang</label>
-                        <select id="branch" name="branch"
+                        <select id="branch" name="branch" required
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
                             @php
                                 $branches = ['HO', 'BJN', 'BTL', 'SPT', 'PLB', 'PLK'];
