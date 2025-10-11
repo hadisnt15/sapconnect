@@ -360,9 +360,9 @@
                                     <th class="border p-2">No</th>
                                     <th class="border p-2">Kode Barang</th>
                                     <th class="border p-2">Deskripsi Barang</th>
-                                    <th class="border p-2">Kuantitas</th>
                                     <th class="border p-2">Harga</th>
                                     <th class="border p-2">Diskon</th>
+                                    <th class="border p-2">Kuantitas</th>
                                     <th class="border p-2">Subtotal</th>
                                 </tr>
                             </thead>
@@ -415,6 +415,10 @@
                         let mobileList = document.getElementById('detailRowsMobile');
                         mobileList.innerHTML = "";
 
+                        // 🔹 Variabel untuk total
+                        let totalQty = 0;
+                        let totalSubtotal = 0;
+
                         data.forEach((item, index) => {
                             let no = index + 1; // nomor urut dimulai dari 1
 
@@ -428,6 +432,10 @@
                             // hitung subtotal dengan diskon persen
                             let subtotal = qty * (price * (1 - discPercent / 100));
 
+                            // 🔹 Tambahkan ke total
+                            totalQty += qty;
+                            totalSubtotal += subtotal;
+
                             // Fungsi untuk format angka dengan koma (ribuan)
                             const formatNumber = (num) => {
                                 return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -435,27 +443,46 @@
 
                             // desktop
                             tbody.innerHTML += `
-                <tr>
-                    <td class="border p-2 text-center">${no}</td>
-                    <td class="border p-2">${item.RdrItemCode}</td>
-                    <td class="border p-2">${item.ItemName}</td>
-                    <td class="border p-2 text-right">${formatNumber(qty)}</td>
-                    <td class="border p-2 text-right">${formatNumber(price)}</td>
-                    <td class="border p-2 text-right">${discPercent ? discPercent + '%' : '-'}</td>
-                    <td class="border p-2 text-right font-semibold">${formatNumber(subtotal)}</td>
-                </tr>`;
+                            <tr>
+                                <td class="border p-2 text-center">${no}</td>
+                                <td class="border p-2">${item.RdrItemCode}</td>
+                                <td class="border p-2">${item.ItemName}</td>
+                                <td class="border p-2 text-right">${formatNumber(price)}</td>
+                                <td class="border p-2 text-right">${discPercent ? discPercent + '%' : '-'}</td>
+                                <td class="border p-2 text-right">${formatNumber(qty)}</td>
+                                <td class="border p-2 text-right font-semibold">${formatNumber(subtotal)}</td>
+                            </tr>`;
 
                             // mobile
                             mobileList.innerHTML += `
-                <div class="p-3 border rounded-lg bg-gray-50 shadow-sm">
-                    <p><b>${no}. ${item.RdrItemCode}</b></p>
-                    <p>Deskripsi: ${item.ItemName}</p>
-                    <p>Kuantitas: ${formatNumber(qty)}</p>
-                    <p>Harga: ${formatNumber(price)}</p>
-                    <p>Diskon: ${discPercent ? discPercent + '%' : '-'}</p>
-                    <p><b>Subtotal: ${formatNumber(subtotal)}</b></p>
-                </div>`;
+                            <div class="p-3 border rounded-lg bg-gray-50 shadow-sm">
+                                <p><b>${no}. ${item.RdrItemCode}</b></p>
+                                <p>Deskripsi: ${item.ItemName}</p>
+                                <p>Harga: ${formatNumber(price)}</p>
+                                <p>Diskon: ${discPercent ? discPercent + '%' : '-'}</p>
+                                <p>Kuantitas: ${formatNumber(qty)}</p>
+                                <p><b>Subtotal: ${formatNumber(subtotal)}</b></p>
+                            </div>`;
                         });
+
+                        // 🔹 Tambahkan Grand Total ke bawah tabel
+                        const formatNumber = (num) => Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                        tbody.innerHTML += `
+                            <tr class="bg-gray-100 font-bold">
+                                <td colspan="5" class="border p-2 text-right">Grand Total</td>
+                                <td class="border p-2 text-right">${formatNumber(totalQty)}</td>
+                                <td class="border p-2 text-right">${formatNumber(totalSubtotal)}</td>
+                            </tr>
+                        `;
+
+                        // 🔹 Untuk versi mobile, juga tampilkan total di bawah
+                        mobileList.innerHTML += `
+                            <div class="p-3 mt-3 border-t font-bold text-right bg-gray-100 rounded-lg">
+                                Total Kuantitas: ${formatNumber(totalQty)} <br>
+                                Total Subtotal: ${formatNumber(totalSubtotal)}
+                            </div>
+                        `;
                     });
 
             });

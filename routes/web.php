@@ -23,6 +23,7 @@ use App\Http\Controllers\Report\PenjualanSprSegmentController;
 use App\Http\Controllers\Report\PenjualanSprSalesController;
 use App\Http\Controllers\Report\GrafikPenjualanSalesController;
 use App\Http\Controllers\Report\LubRetailController;
+use App\Http\Controllers\Report\Top10LubRtlController;
 
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
@@ -121,6 +122,8 @@ Route::get('/laporan/pencapaian-penjualan-sparepart-per-sales', [PenjualanSprSal
 Route::get('/laporan/grafik-penjualan-harian-sales', [GrafikPenjualanSalesController::class, 'index'])->name('report.grafik-penjualan-harian-sales')->middleware('auth');
 Route::get('/laporan/penjualan-lub-retail', [LubRetailController::class, 'index'])->name('report.penjualan-lub-retail')->middleware('auth');
 Route::post('/laporan/sinkron/penjualan-lub-retail', [LubRetailController::class, 'refresh'])->name('report.refresh.penjualan-lub-retail')->middleware('can:dashboard.refresh'); //ok
+Route::get('/laporan/top-10-lub-retail', [Top10LubRtlController::class, 'index'])->name('report.top-10-lub-retail')->middleware('auth');
+Route::post('/laporan/sinkron/top-10-lub-retail', [Top10LubRtlController::class, 'refresh'])->name('report.refresh.top-10-lub-retail')->middleware('can:dashboard.refresh'); //ok
 
 
 // Route::get('/test-hana', function () {
