@@ -77,7 +77,7 @@ class OitmController extends Controller
                     WHEN div_name = 'SPR' THEN 
                         CONCAT(ItemCode, ' || ', Segment, ' || ', Type, ' || ', Series, ' || ', LEFT(FrgnName, 100), ' || ', KetStock)
                     WHEN div_name IN ('LUB RTL', 'LUB IDS') THEN
-                        CONCAT(ItemCode, ' || ', LEFT(FrgnName, 100), ' || ', KetStock)
+                        CONCAT(LEFT(FrgnName, 100), ' || ', KetStock)
                     ELSE
                         CONCAT(ItemCode, ' || ', LEFT(FrgnName, 100), ' || ', KetStock)
                 END AS ItemLabel
