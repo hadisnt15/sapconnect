@@ -377,72 +377,73 @@
 </x-layout>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const buttonsView = document.querySelectorAll('.open-modal-ordr-btn');
+document.addEventListener('DOMContentLoaded', function() {
+    // Ambil role & daftar divisi user dari backend
+    const userRole = @json($user->role ?? '');
+    const userDivisions = @json($user->divisions->pluck('div_name') ?? []);
 
-        buttonsView.forEach(button => {
-            button.addEventListener('click', function() {
-                const OdrRefNum = this.getAttribute('data-OdrRefNum');
-                const OdrDocDate = this.getAttribute('data-OdrDocDate');
-                const OdrCardCode = this.getAttribute('data-OdrCardCode');
-                const OdrCardName = this.getAttribute('data-OdrCardName');
-                const OdrSlpName = this.getAttribute('data-OdrSlpName');
-                const branch = this.getAttribute('data-branch');
-                const note = this.getAttribute('data-note');
+    // Divisi yang tidak boleh lihat kode barang di mobile
+    const restrictedDivisions = ['LUB IDS', 'LUB RTL'];
 
-                // set header info
-                document.getElementById("modalOdrRefNum").innerText = OdrRefNum;
-                document.getElementById("modalOdrDocDate").innerText = OdrDocDate;
-                document.getElementById("modalOdrCardCode").innerText = OdrCardCode;
-                document.getElementById("modalOdrCardName").innerText = OdrCardName;
-                document.getElementById("modalOdrSlpName").innerText = OdrSlpName;
-                document.getElementById("modalbranch").innerText = branch;
-                document.getElementById("modalnote").innerText = note;
+    // Tentukan apakah user termasuk yang dibatasi
+    const hideItemCodeMobile = (
+        userRole === 'salesman' &&
+        userDivisions.some(div => restrictedDivisions.includes(div))
+    );
 
-                const modal = document.getElementById('detailModal');
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
+    const buttonsView = document.querySelectorAll('.open-modal-ordr-btn');
 
-                // fetch detail item
-                let id = this.getAttribute('data-id');
-                fetch(`/pesanan/${id}/detail`)
-                    .then(res => res.json())
-                    .then(data => {
-                        // isi desktop table
-                        let tbody = document.getElementById('detailRows');
-                        tbody.innerHTML = "";
-                        // isi mobile card
-                        let mobileList = document.getElementById('detailRowsMobile');
-                        mobileList.innerHTML = "";
+    buttonsView.forEach(button => {
+        button.addEventListener('click', function() {
+            const OdrRefNum = this.getAttribute('data-OdrRefNum');
+            const OdrDocDate = this.getAttribute('data-OdrDocDate');
+            const OdrCardCode = this.getAttribute('data-OdrCardCode');
+            const OdrCardName = this.getAttribute('data-OdrCardName');
+            const OdrSlpName = this.getAttribute('data-OdrSlpName');
+            const branch = this.getAttribute('data-branch');
+            const note = this.getAttribute('data-note');
 
-                        // 🔹 Variabel untuk total
-                        let totalQty = 0;
-                        let totalSubtotal = 0;
+            // Set data header modal
+            document.getElementById("modalOdrRefNum").innerText = OdrRefNum;
+            document.getElementById("modalOdrDocDate").innerText = OdrDocDate;
+            document.getElementById("modalOdrCardCode").innerText = OdrCardCode;
+            document.getElementById("modalOdrCardName").innerText = OdrCardName;
+            document.getElementById("modalOdrSlpName").innerText = OdrSlpName;
+            document.getElementById("modalbranch").innerText = branch;
+            document.getElementById("modalnote").innerText = note;
 
-                        data.forEach((item, index) => {
-                            let no = index + 1; // nomor urut dimulai dari 1
+            const modal = document.getElementById('detailModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
 
-                            // konversi angka dengan fallback 0
-                            let qty = parseFloat(item.RdrItemQuantity) || 0;
-                            let price = parseFloat(item.RdrItemPrice) || 0;
-                            let discPercent = (item.RdrItemDisc === null || item.RdrItemDisc === '' || isNaN(item.RdrItemDisc))
-                                ? 0
-                                : parseFloat(item.RdrItemDisc);
+            // Ambil data detail order
+            const id = this.getAttribute('data-id');
+            fetch(`/pesanan/${id}/detail`)
+                .then(res => res.json())
+                .then(data => {
+                    const tbody = document.getElementById('detailRows');
+                    const mobileList = document.getElementById('detailRowsMobile');
+                    tbody.innerHTML = "";
+                    mobileList.innerHTML = "";
 
-                            // hitung subtotal dengan diskon persen
-                            let subtotal = qty * (price * (1 - discPercent / 100));
+                    let totalQty = 0;
+                    let totalSubtotal = 0;
 
-                            // 🔹 Tambahkan ke total
-                            totalQty += qty;
-                            totalSubtotal += subtotal;
+                    // Fungsi format angka
+                    const formatNumber = (num) => Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-                            // Fungsi untuk format angka dengan koma (ribuan)
-                            const formatNumber = (num) => {
-                                return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                            };
+                    data.forEach((item, index) => {
+                        const no = index + 1;
+                        const qty = parseFloat(item.RdrItemQuantity) || 0;
+                        const price = parseFloat(item.RdrItemPrice) || 0;
+                        const discPercent = isNaN(parseFloat(item.RdrItemDisc)) ? 0 : parseFloat(item.RdrItemDisc);
+                        const subtotal = qty * (price * (1 - discPercent / 100));
 
-                            // desktop
-                            tbody.innerHTML += `
+                        totalQty += qty;
+                        totalSubtotal += subtotal;
+
+                        // ✅ Desktop view (selalu tampil lengkap)
+                        tbody.innerHTML += `
                             <tr>
                                 <td class="border p-2 text-center">${no}</td>
                                 <td class="border p-2">${item.RdrItemCode}</td>
@@ -451,50 +452,49 @@
                                 <td class="border p-2 text-right">${discPercent ? discPercent + '%' : '-'}</td>
                                 <td class="border p-2 text-right">${formatNumber(qty)}</td>
                                 <td class="border p-2 text-right font-semibold">${formatNumber(subtotal)}</td>
-                            </tr>`;
+                            </tr>
+                        `;
 
-                            // mobile
-                            mobileList.innerHTML += `
+                        // ✅ Mobile view (kode barang bisa disembunyikan)
+                        mobileList.innerHTML += `
                             <div class="p-3 border rounded-lg bg-gray-50 shadow-sm">
-                                <p><b>${no}. ${item.RdrItemCode}</b></p>
-                                <p>Deskripsi: ${item.ItemName}</p>
+                                <p><b>${no}. ${!hideItemCodeMobile ? item.RdrItemCode + ' - ' : ''}${item.ItemName}</b></p>
                                 <p>Harga: ${formatNumber(price)}</p>
                                 <p>Diskon: ${discPercent ? discPercent + '%' : '-'}</p>
                                 <p>Kuantitas: ${formatNumber(qty)}</p>
                                 <p><b>Subtotal: ${formatNumber(subtotal)}</b></p>
-                            </div>`;
-                        });
-
-                        // 🔹 Tambahkan Grand Total ke bawah tabel
-                        const formatNumber = (num) => Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-                        tbody.innerHTML += `
-                            <tr class="bg-gray-100 font-bold">
-                                <td colspan="5" class="border p-2 text-right">Grand Total</td>
-                                <td class="border p-2 text-right">${formatNumber(totalQty)}</td>
-                                <td class="border p-2 text-right">${formatNumber(totalSubtotal)}</td>
-                            </tr>
-                        `;
-
-                        // 🔹 Untuk versi mobile, juga tampilkan total di bawah
-                        mobileList.innerHTML += `
-                            <div class="p-3 mt-3 border-t font-bold text-right bg-gray-100 rounded-lg">
-                                Total Kuantitas: ${formatNumber(totalQty)} <br>
-                                Total Subtotal: ${formatNumber(totalSubtotal)}
                             </div>
                         `;
                     });
 
-            });
-        });
+                    // ✅ Tambahkan grand total
+                    tbody.innerHTML += `
+                        <tr class="bg-gray-100 font-bold">
+                            <td colspan="5" class="border p-2 text-right">Grand Total</td>
+                            <td class="border p-2 text-right">${formatNumber(totalQty)}</td>
+                            <td class="border p-2 text-right">${formatNumber(totalSubtotal)}</td>
+                        </tr>
+                    `;
 
-        // tombol close
-        document.querySelectorAll("[data-modal-hide]").forEach(btn => {
-            btn.addEventListener("click", function() {
-                const modal = document.getElementById(this.getAttribute("data-modal-hide"));
-                modal.classList.add("hidden");
-                modal.classList.remove("flex");
-            });
+                    mobileList.innerHTML += `
+                        <div class="p-3 mt-3 border-t font-bold text-right bg-gray-100 rounded-lg">
+                            Total Kuantitas: ${formatNumber(totalQty)} <br>
+                            Total Subtotal: ${formatNumber(totalSubtotal)}
+                        </div>
+                    `;
+                });
         });
     });
+
+    // Tutup modal
+    document.querySelectorAll("[data-modal-hide]").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const modal = document.getElementById(this.getAttribute("data-modal-hide"));
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        });
+    });
+});
 </script>
+
+
