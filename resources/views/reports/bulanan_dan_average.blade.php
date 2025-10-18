@@ -128,7 +128,9 @@
                 </table>
             </div>
             <div class="mt-4">
-                {{ $customers->appends(request()->query())->links('pagination::tailwind') }}
+                @if ($customers instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                    {{ $customers->appends(request()->query())->links('pagination::tailwind') }}
+                @endif
             </div>
         </div>
         
@@ -164,7 +166,9 @@
                 </table>
             </div>
             <div class="mt-4">
-                {{ $customers->appends(request()->query())->links('pagination::tailwind') }}
+                @if ($customers instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                    {{ $customers->appends(request()->query())->links('pagination::tailwind') }}
+                @endif
             </div>
         </div>
     </div>
