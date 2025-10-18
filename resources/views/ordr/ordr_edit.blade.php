@@ -120,7 +120,7 @@
                         <div class="border border-gray-200 bg-white rounded-lg p-3 shadow-sm space-y-2">
                             <div>
                                 <label class="text-xs text-gray-600">Kode Barang</label>
-                                <select :id="'itemSelect' + index" :name="'items[' + index + '][RdrItemCode]'"
+                                <select :id="'itemSelect' + index" :name="'items[' + index + '][RdrItemCode]'" requiered
                                     class="border border-gray-300 bg-gray-50 rounded-md w-full text-sm p-2"
                                     x-model="item.RdrItemCode" x-init="$nextTick(() => initSelect(index, item.RdrItemCode))"
                                     @change="
@@ -184,17 +184,22 @@
                                         class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
                                 </div>
 
-                            <div class="text-right border rounded-lg w-fit bg-gray-500 hover:bg-gray-400 text-white">
-                                <button type="button"
-                                    @click="
-                                        if (items.length > 1) {
-                                            items.splice(index, 1);
-                                        } else {
-                                            alert('Minimal harus ada 1 barang dalam pesanan!');
-                                        }
-                                    "
-                                    class="text-sm px-2 py-1 rounded p-2"><i class="ri-close-circle-fill"></i> Hapus Barang</button>
-                            </div>
+                                <div class="flex justify-end mt-2">
+                                    <div class="text-right border rounded-lg bg-gray-500 hover:bg-gray-400 text-white w-fit">
+                                        <button type="button"
+                                            @click="
+                                                if (items.length > 1) {
+                                                    items.splice(index, 1);
+                                                } else {
+                                                    alert('Minimal harus ada 1 barang dalam pesanan!');
+                                                }
+                                            "
+                                            class="text-sm px-3 py-1.5 rounded flex items-center gap-1">
+                                            <i class="ri-close-circle-fill"></i> Hapus Barang
+                                        </button>
+                                    </div>
+                                </div>
+
                         </div>
                     </template>
 

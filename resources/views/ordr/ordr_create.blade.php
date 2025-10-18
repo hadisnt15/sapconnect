@@ -136,7 +136,7 @@
                             <!-- Pilih kode barang -->
                             <div>
                                 <label class="text-xs text-gray-600">Kode Barang</label>
-                                <select :id="'itemSelect' + index" :name="'items[' + index + '][RdrItemCode]'"
+                                <select :id="'itemSelect' + index" :name="'items[' + index + '][RdrItemCode]'" required
                                     class="border border-gray-300 bg-gray-50 rounded-md w-full md:text-sm text-xs p-2"
                                     x-model="item.RdrItemCode" @change="
                                         let exists = items.some((i, idx) => i.RdrItemCode === item.RdrItemCode && idx !== index);
@@ -200,14 +200,16 @@
                                 </div>
 
                             <!-- Tombol hapus -->
-                            <div class="text-right border rounded-lg w-fit bg-gray-500 hover:bg-gray-400 text-white">
-                                <button type="button" @click="
-                                        if (items.length > 1) {
-                                            items.splice(index, 1);
-                                        } else {
-                                            alert('Minimal harus ada 1 barang dalam pesanan!');
-                                        }"
-                                    class="text-sm px-2 py-1 rounded p-2"><i class="ri-close-circle-fill"></i> Hapus Barang</button>
+                            <div class="flex justify-end mt-2">
+                                <div class="text-right border rounded-lg bg-gray-500 hover:bg-gray-400 text-white w-fit">
+                                    <button type="button" @click="
+                                            if (items.length > 1) {
+                                                items.splice(index, 1);
+                                            } else {
+                                                alert('Minimal harus ada 1 barang dalam pesanan!');
+                                            }"
+                                        class="text-sm px-3 py-1.5 rounded flex items-center gap-1"><i class="ri-close-circle-fill"></i> Hapus Barang</button>
+                                </div>
                             </div>
                         </div>
                     </template>
