@@ -20,7 +20,7 @@
             <h1 class="md:hidden block">Selamat Datang di SAP Connect <br> PT KAPUAS KENCANA JAYA</h1>
         </div>
         <div class="px-2 pb-4 text-gray-800 text-xs md:text-sm font-semibold pt-1">
-            <p>Platform terintegrasi untuk menghubungkan data bisnis dengan SAP Business One.</p>
+            <p>Platform terintegrasi untuk menghubungkan pengguna internal perusahaan dengan SAP Business One.</p>
         </div>
         
         <div id="accordion-collapse" data-accordion="collapse"
@@ -158,7 +158,8 @@
             </h2>
             <div id="accordion-body-4" class="hidden bg-white rounded-b-xl">
                 <div class="p-5 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
-                    <p>Silakan unduh dan pelajari dokumen di bawah ini untuk panduan penggunaan website SAP Connect.</p>
+                    <p class="mb-3">Silakan unduh dan pelajari dokumen di bawah ini untuk panduan penggunaan website SAP Connect.</p>
+                    <p>Lagi proses bikin🙏</p>
                 </div>
             </div>
         </div>
