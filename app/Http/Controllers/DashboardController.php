@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Dashboard;
-use App\Models\Dashboard2;
-use App\Models\SyncLog;
-use App\Models\Report;
+use App\Models\OrdrLocal;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
 use Carbon\Carbon;
@@ -21,58 +18,70 @@ class DashboardController extends Controller
         // $this->authorize('dashboard.refresh');
         $user = Auth::user();
         // ambil semua divisi milik user
-        $userRep = $user->reports->pluck('slug');
+        $userDiv = $user->divisions->pluck('div_name');
+        $userCab = $user->branches->pluck('branch_name');
+        $date = now()->ToDateString();
+        $month = now()->month;
+        // dd($userDiv, $userCab);
 
-        $report = Report::whereIn('slug', $userRep)->orderBy('name', 'asc')->get();
+        // $report = Report::whereIn('slug', $userRep)->orderBy('name', 'asc')->get();
 
         if ($user->role === 'salesman') {
             if ($user->oslpReg) {
                 $slpCode = $user->oslpReg->RegSlpCode;
-                $dashboard = Dashboard::where('KODESALES', $slpCode)
-                    ->orderBy('NAMASALES')
-                    ->orderBy('DOCENTRY')
-                    ->orderBy('KEY3')
-                    ->orderBy('TYPE')
-                    ->get();
+                $dailyOrder = OrdrLocal::where('is_deleted', 0)->where('OdrSlpCode', $slpCode)->whereDate('OdrDocDate', $date)->count();
+                $dailyOrderSynced = OrdrLocal::where('is_deleted', 0)->where('is_synced', 1)->where('OdrSlpCode', $slpCode)->whereDate('OdrDocDate', $date)->count();
+                $dailyOrderNotSyncedUncheck = OrdrLocal::where('is_deleted', 0)->where('is_checked', 0)->where('is_synced', 0)->where('OdrSlpCode', $slpCode)->whereDate('OdrDocDate', $date)->count();
+                $monthlyOrder = OrdrLocal::where('is_deleted', 0)->where('OdrSlpCode', $slpCode)->whereMonth('OdrDocDate', $month)->count();
+                $monthlyOrderSynced = OrdrLocal::where('is_deleted', 0)->where('is_synced', 1)->where('OdrSlpCode', $slpCode)->whereMonth('OdrDocDate', $month)->count();
+                $monthlyOrderNotSyncedUncheck = OrdrLocal::where('is_deleted', 0)->where('is_checked', 0)->where('is_synced', 0)->where('OdrSlpCode', $slpCode)->whereMonth('OdrDocDate', $month)->count();
             } else {
                 // kalau belum ada relasi, return collection kosong
-                $dashboard = collect();
+                $dailyOrder = collect();
+                $dailyOrderSynced = collect();
+                $dailyOrderNotSyncedUncheck = collect();
+                $monthlyOrder = collect();
+                $monthlyOrderSynced = collect();
+                $monthlyOrderNotSyncedUncheck = collect();
             }
         } else {
-            $dashboard = Dashboard::orderBy('NAMASALES')->orderBy('DOCENTRY')->orderBy('KEY3')->orderBy('TYPE')->get();
+            $dailyOrder = OrdrLocal::where('is_deleted', 0)->whereIn('branch', $userCab)->whereDate('OdrDocDate', $date)
+                        ->whereHas('orderRow', function($query) use($userDiv){
+                            $query->whereIn('RdrItemProfitCenter', $userDiv);
+                        })->count();
+            $dailyOrderSynced = OrdrLocal::where('is_deleted', 0)->where('is_synced', 1)->whereIn('branch', $userCab)->whereDate('OdrDocDate', $date)
+                        ->whereHas('orderRow', function($query) use($userDiv){
+                            $query->whereIn('RdrItemProfitCenter', $userDiv);
+                        })->count();
+            $dailyOrderNotSyncedUncheck = OrdrLocal::where('is_deleted', 0)->where('is_checked', 0)->where('is_synced', 1)->whereIn('branch', $userCab)
+                        ->whereDate('OdrDocDate', $date)->whereHas('orderRow', function($query) use($userDiv){
+                            $query->whereIn('RdrItemProfitCenter', $userDiv);
+                        })->count();
+            $monthlyOrder = OrdrLocal::where('is_deleted', 0)->whereIn('branch', $userCab)->whereMonth('OdrDocDate', $month)
+                        ->whereHas('orderRow', function($query) use($userDiv){
+                            $query->whereIn('RdrItemProfitCenter', $userDiv);
+                        })->count();
+            $monthlyOrderSynced = OrdrLocal::where('is_deleted', 0)->where('is_synced', 1)->whereIn('branch', $userCab)->whereMonth('OdrDocDate', $month)
+                        ->whereHas('orderRow', function($query) use($userDiv){
+                            $query->whereIn('RdrItemProfitCenter', $userDiv);
+                        })->count();
+            $monthlyOrderNotSyncedUncheck = OrdrLocal::where('is_deleted', 0)->where('is_checked', 0)->where('is_synced', 1)->whereIn('branch', $userCab)
+                        ->whereMonth('OdrDocDate', $month)->whereHas('orderRow', function($query) use($userDiv){
+                            $query->whereIn('RdrItemProfitCenter', $userDiv);
+                        })->count();
         }
-        $grouped = $dashboard->groupBy('NAMASALES')->map(function ($salesData) {
-            return $salesData->groupBy('KEY3')->map(function ($segmentData) {
-                return [
-                    'rows' => $segmentData,
-                    'sum_target' => $segmentData->sum('TARGET'),
-                    'sum_capai' => $segmentData->sum('CAPAI'),
-                    'sum_persentase' => $segmentData->avg('PERSENTASE'),
-                ];
-            });
-        });
-        $dashboard2 = Dashboard2::orderBy('KEYPROFITCENTER')->get();
-        $periode = Dashboard::select('tahun', 'bulan')
-            ->orderByDesc('tahun')
-            ->orderByDesc('bulan')
-            ->first();
-        $namaPeriode = null;
-        if ($periode) {
-            $namaPeriode = Carbon::createFromDate($periode->tahun, $periode->bulan, 1, 'Asia/Jakarta')
-                ->locale('id')
-                ->translatedFormat('F Y');
-        }
-
-        $lastSync = SyncLog::where('name', 'dashboard')->orderByDesc('last_sync')->first();
+        // dd($dailyOrder, $monthlyOrder);
         
         return view('dashboard.dashboard', [
             'title' => 'SCKKJ - Dasbor',
             'titleHeader' => 'Dasbor',
-            'grouped' => $grouped,
-            'dashboard2' => $dashboard2,
-            'namaPeriode' => $namaPeriode,
-            'lastSync' => $lastSync,
-            'report' => $report
+            'dailyOrder' => $dailyOrder,
+            'dailyOrderSynced' => $dailyOrderSynced,
+            'dailyOrderNotSyncedUncheck' => $dailyOrderNotSyncedUncheck,
+            'monthlyOrder' => $monthlyOrder,
+            'monthlyOrderSynced' => $monthlyOrderSynced,
+            'monthlyOrderNotSyncedUncheck' => $monthlyOrderNotSyncedUncheck,
+            'user' => $user
         ]);
     }
 

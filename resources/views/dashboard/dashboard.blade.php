@@ -15,171 +15,176 @@
                 </li>
             </ol>
         </nav>
+        <div class="px-2 py-2 text-gray-800 text-md font-bold">
+            <h1 class="md:block hidden">Selamat Datang di SAP Connect PT KAPUAS KENCANA JAYA</h1>
+            <h1 class="md:hidden block">Selamat Datang di SAP Connect <br> PT KAPUAS KENCANA JAYA</h1>
+        </div>
+        <div class="px-2 pb-4 text-gray-800 text-xs md:text-sm font-semibold pt-1">
+            <p>Platform terintegrasi untuk menghubungkan data bisnis dengan SAP Business One.</p>
+        </div>
+        
+        <div id="accordion-collapse" data-accordion="collapse"
+            class="rounded-xl overflow-hidden shadow-md border border-gray-300">
 
-        @can('dashboard.refresh')
-        <!-- Filter Bulan -->
-        <div class="flex flex-col md:flex-row md:items-center md:justify-end mb-4 gap-2">
-            <form method="POST" action="{{ route('dashboard.refresh') }}" 
-                class="mb-4 flex flex-col md:flex-row items-stretch md:items-center gap-2 w-full md:w-auto">
-                @csrf
-                <div class="flex flex-col md:flex-row md:items-center gap-2 w-full md:w-auto">
-                    <label for="month" class="text-xs font-medium text-gray-600">Pilih Bulan:</label>
-                    <input 
-                        type="month" 
-                        id="month" 
-                        name="month" 
-                        value="{{ request('month', now()->format('Y-m')) }}"
-                        class="border rounded-lg p-2 text-xs font-medium text-gray-700 border-gray-300 focus:ring focus:ring-red-200 w-full md:w-auto"
-                    >
-                </div>
-                <button type="submit" 
-                    class="text-xs w-full md:w-auto flex-shrink-0 rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
-                    <i class="ri-refresh-fill"></i> Sinkronkan dengan SAP
+            <!-- ITEM 1: Pemberitahuan -->
+            <h2 id="accordion-heading-1">
+                <button type="button"
+                    class="accordion-btn flex items-center justify-between w-full p-5 font-semibold text-red-800 bg-gray-50 border-b border-gray-300 hover:bg-red-800 hover:text-white transition-colors duration-200"
+                    data-target="#accordion-body-1" aria-expanded="false">
+                    <span class="text-xs md:text-sm"><i class="ri-notification-4-fill"></i> Pemberitahuan</span>
+                    <svg class="w-4 h-4 rotate-0 shrink-0 transition-transform duration-200"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5 5 1 1 5" />
+                    </svg>
                 </button>
-            </form>
-        </div>
-        @endcan
-        <div class="text-sm font-bold text-gray-500 mb-2">
-            @if ($lastSync)
-                Terakhir Disinkronkan: 
-                {{ \Carbon\Carbon::parse($lastSync->last_sync)->timezone('Asia/Makassar')->format('d-m-Y H:i:s') }} WITA 
-                ({{ $lastSync->desc }})
-            @else
-                Belum pernah disinkronkan
-            @endif
-        </div> 
-        <!-- Dashboard 2 -->
-        @if(in_array(auth()->user()->role, ['developer', 'supervisor', 'manager']))
-        <div class="p-2 border border-gray-200 mt-4 rounded-lg bg-white">
-            <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Pencapaian Penjualan per Segmen periode {{ $namaPeriode }}</h5></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ">
-                @foreach($dashboard2 as $db2)
-                    <article class="p-3 hover:bg-gray-50 border border-gray-200 rounded-lg shadow-sm bg-white transition">
-                        <div class="mb-1 text-gray-500">
-                            <span
-                                class="text-sm font-semibold border border-gray-300 me-2 px-2.5 py-0.5 rounded-lg bg-gray-50 text-gray-700">
-                                {{ $db2->KEYPROFITCENTER }}
-                            </span>
-                        </div>
-                        <h1 class="text-2xl font-bold text-red-900 text-right">
-                            {{ number_format($db2->VALUE) }}
-                        </h1>
-                    </article>
-                @endforeach
+            </h2>
+            <div id="accordion-body-1" class="hidden bg-white">
+                <div class="p-5 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
+                    @if( $user->role === 'salesman')
+                        <h2 class="mb-2 text-md font-semibold">Aktivitas Harian</h2>
+                        <ul class="ms-2 space-y-1 list-inside">
+                            <li>
+                                <i class="ri-checkbox-multiple-blank-fill"></i> Hari ini Anda telah membuat sebanyak {{ $dailyOrder }} pesanan.
+                            </li>
+                            <li>
+                                <i class="ri-checkbox-multiple-blank-fill"></i> Sebanyak {{ $dailyOrderSynced }} pesanan sudah berhasil dikirim ke SAP hari ini.
+                            </li>
+                            <li>
+                                <i class="ri-checkbox-multiple-blank-fill"></i> Terdapat {{ $dailyOrderNotSyncedUncheck }} pesanan hari ini yang belum diceklis, mohon diperiksa terlebih dahulu.
+                            </li>
+                        </ul>
+                        <h2 class="mt-4 mb-2 text-md font-semibold">Aktivitas Bulanan</h2>
+                        <ul class="ms-2 space-y-1 list-none list-inside">
+                            <li>
+                                <i class="ri-checkbox-multiple-blank-fill"></i> Bulan ini Anda telah membuat sebanyak {{ $monthlyOrder }} pesanan.
+                            </li>
+                            <li>
+                                <i class="ri-checkbox-multiple-blank-fill"></i> Sebanyak {{ $monthlyOrderSynced }} pesanan sudah berhasil dikirim ke SAP bulan ini.
+                            </li>
+                            <li>
+                                <i class="ri-checkbox-multiple-blank-fill"></i> Terdapat {{ $monthlyOrderNotSyncedUncheck }} pesanan bulan ini yang belum diceklis, mohon diperiksa terlebih dahulu.
+                            </li>
+                        </ul>
+                    @else
+                        <h2 class="mb-2 text-md font-semibold">Aktivitas Harian</h2>
+                        <ul class="ms-2 space-y-1 list-inside">
+                            <li>
+                                <i class="ri-checkbox-multiple-blank-fill"></i> Hari ini terdapat total {{ $dailyOrder }} pesanan dari cabang dan divisi Anda.
+                            </li>
+                            <li>
+                                <i class="ri-checkbox-multiple-blank-fill"></i> Sebanyak {{ $dailyOrderSynced }} pesanan sudah berhasil dikirim ke SAP hari ini.
+                            </li>
+                            <li>
+                                <i class="ri-checkbox-multiple-blank-fill"></i> Terdapat {{ $dailyOrderNotSyncedUncheck }} pesanan hari ini yang belum diceklis, masih menunggu pemeriksaan dari Sales terlebih dahulu.
+                            </li>
+                        </ul>
+                        <h2 class="mt-4 mb-2 text-md font-semibold">Aktivitas Bulanan</h2>
+                        <ul class="ms-2 space-y-1 list-none list-inside">
+                            <li>
+                                <i class="ri-checkbox-multiple-blank-fill"></i> Hari ini terdapat total {{ $monthlyOrder }} pesanan dari cabang dan divisi anda.
+                            </li>
+                            <li>
+                                <i class="ri-checkbox-multiple-blank-fill"></i> Sebanyak {{ $monthlyOrderSynced }} pesanan sudah berhasil dikirim ke SAP bulan ini.
+                            </li>
+                            <li>
+                                <i class="ri-checkbox-multiple-blank-fill"></i> Terdapat {{ $monthlyOrderNotSyncedUncheck }} pesanan bulan ini yang belum diceklis, masih menunggu pemeriksaan dari Sales terlebih dahulu.
+                            </li>
+                        </ul>
+                    @endif
+                </div>
             </div>
-        </div>
-        @endif
 
-        <!-- Dashboard per Sales -->
-        <div class="md:block hidden p-2 border border-gray-200 mt-4 rounded-lg bg-white">
-            <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Pencapaian Penjualan per Penjual periode {{ $namaPeriode }}</h5></div>
-            <div class="grid md:grid-cols-2 gap-3">
-                @foreach ($grouped as $salesName => $segments)
-                    <div class="mb-2 border border-gray-200 rounded-lg overflow-x-auto bg-white">
-                        <div class="relative overflow-x-auto shadow-sm sm:rounded-lg">
-                            <table class="table-auto w-full text-sm text-left rtl:text-right text-gray-600">
-                                <thead class="text-xs font-bold text-white uppercase bg-red-800">
-                                    <tr>
-                                        <td colspan="4" class="text-center py-2">{{ $salesName }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="px-2 py-2 text-center">TIPE</th>
-                                        <th class="px-2 py-2 text-center">TARGET</th>
-                                        <th class="px-2 py-2 text-center">CAPAI</th>
-                                        <th class="px-2 py-2 text-center">PERSENTASE</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($segments as $segmentName => $segment)
-                                        <tr class="text-center bg-gray-100 text-gray-800 font-semibold">
-                                            <td colspan="4">{{ $segmentName }}</td>
-                                        </tr>
-                                        @foreach ($segment['rows'] as $row)
-                                            <tr class="hover:bg-gray-50 border-t">
-                                                <td class="px-2 py-2 font-medium text-gray-700">{{ $row->TYPE }}</td>
-                                                <td class="px-2 py-2 text-right font-medium text-gray-700">{{ number_format($row->TARGET) }}</td>
-                                                <td class="px-2 py-2 text-right font-medium text-gray-700">{{ number_format($row->CAPAI) }}</td>
-                                                <td class="px-2 py-2 text-right font-medium text-gray-700">{{ $row->PERSENTASE }}%</td>
-                                            </tr>
-                                        @endforeach
-                                        <tr class="bg-gray-50 font-bold text-gray-800">
-                                            <td class="px-2 py-2 border-t">Total {{ $segmentName }}</td>
-                                            <td class="px-2 py-2 text-right border-t">{{ number_format($segment['sum_target'], 0, ',', '.') }}</td>
-                                            <td class="px-2 py-2 text-right border-t">{{ number_format($segment['sum_capai'], 0, ',', '.') }}</td>
-                                            <td class="px-2 py-2 border-t"></td>
-                                        </tr>
-                                    @endforeach
-                                    @php
-                                        $firstRow = $segments->flatten()->first();
-                                    @endphp
-                                    <tr class="bg-indigo-50 font-bold text-red-900">
-                                        <td class="px-2 py-2 border-t">TOTAL SEMUA</td>
-                                        <td class="px-2 py-2 text-right border-t">{{ number_format($firstRow->SUMTARGETSPR ?? 0, 0, ',', '.') }}</td>
-                                        <td class="px-2 py-2 text-right border-t">{{ number_format($firstRow->SUMCAPAISPR ?? 0, 0, ',', '.') }}</td>
-                                        <td class="px-2 py-2 text-right border-t">{{ $firstRow->SUMPERSENTASE }}%</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                @endforeach
+            <!-- ITEM 2: Tentang SAP Business One -->
+            <h2 id="accordion-heading-2">
+                <button type="button"
+                    class="accordion-btn flex items-center justify-between w-full p-5 font-semibold text-red-800 bg-gray-50 border-t border-b border-gray-300 hover:bg-red-800 hover:text-white transition-colors duration-200"
+                    data-target="#accordion-body-2" aria-expanded="false">
+                    <span class="text-xs md:text-sm"><i class="ri-database-2-fill"></i> Tentang SAP Business One</span>
+                    <svg class="w-4 h-4 rotate-0 shrink-0 transition-transform duration-200"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5 5 1 1 5" />
+                    </svg>
+                </button>
+            </h2>
+            <div id="accordion-body-2" class="hidden bg-white">
+                <div class="p-5 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
+                    <p class="mb-3">
+                        SAP Business One adalah sistem yang membantu perusahaan mengelola berbagai kegiatan bisnis — seperti penjualan, pembelian, keuangan, dan persediaan — dalam satu aplikasi terpadu.
+                    </p>
+                    <p>
+                        Dengan SAP Business One, setiap bagian perusahaan dapat bekerja lebih teratur dan efisien. Data dari berbagai departemen diolah menjadi informasi yang jelas dan mudah dipahami, sehingga memudahkan manajemen dalam mengambil keputusan yang tepat dan cepat.
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div class="block md:hidden p-2 border border-gray-200 mt-4 rounded-lg bg-white">
-            <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Pencapaian Penjualan per Penjual periode {{ $namaPeriode }}</h5></div>
-            <div class="">
-                @foreach ($grouped as $salesName => $segments)
-                    <div class=" mb-2 border border-gray-200 rounded-lg overflow-x-auto bg-white">
-                        <div class="relative overflow-x-auto shadow-sm sm:rounded-lg">
-                            <table class="table w-full text-xs text-left rtl:text-right text-gray-600">
-                                <thead class="text-xs font-bold text-white uppercase bg-red-800">
-                                    <tr>
-                                        <td colspan="3" class="text-center py-2">{{ $salesName }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="px-2 py-2 text-center">KET</th>
-                                        <th class="px-2 py-2 text-center">CAPAI/TARGET</th>
-                                        <th class="px-2 py-2 text-center">PERSENTASE</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($segments as $segmentName => $segment)
-                                        <tr class="text-center bg-gray-100 text-gray-800 font-semibold">
-                                            <td colspan="3">{{ $segmentName }}</td>
-                                        </tr>
-                                        @foreach ($segment['rows'] as $row)
-                                            <tr class=" bg-gray-100 text-gray-800 font-semibold">
-                                                <td colspan="3" class="font-medium text-gray-700">TIPE: {{ $row->TYPE }}</td>
-                                            </tr>
-                                            <tr class="hover:bg-gray-50 border-t">
-                                                <td class="px-2 py-2 font-medium text-gray-700">CAPAI <br> TARGET</td>
-                                                <td class="px-2 py-2 text-right font-medium text-gray-700">{{ number_format($row->CAPAI) }} <br> {{ number_format($row->TARGET) }}</td>
-                                                <td class="px-2 py-2 text-right font-medium text-gray-700">{{ $row->PERSENTASE }}%</td>
-                                            </tr>
-                                        @endforeach
-                                        <tr class="bg-gray-50 font-bold text-gray-800">
-                                            <td class="px-2 py-2 border-t">Total {{ $segmentName }}</td>
-                                            <td class="px-2 py-2 text-right border-t">{{ number_format($segment['sum_capai'], 0, ',', '.') }}<br>{{ number_format($segment['sum_target'], 0, ',', '.') }}</td>
-                                            
-                                            <td class="px-2 py-2 border-t"></td>
-                                        </tr>
-                                    @endforeach
-                                    @php
-                                        $firstRow = $segments->flatten()->first();
-                                    @endphp
-                                    <tr class="bg-indigo-50 font-bold text-red-900">
-                                        <td class="px-2 py-2 border-t">TOTAL SEMUA</td>
-                                        <td class="px-2 py-2 text-right border-t">{{ number_format($firstRow->SUMCAPAISPR ?? 0, 0, ',', '.') }}<br>{{ number_format($firstRow->SUMTARGETSPR ?? 0, 0, ',', '.') }}</td>
-                                        
-                                        <td class="px-2 py-2 text-right border-t">{{ $firstRow->SUMPERSENTASE }}%</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                @endforeach
+            <!-- ITEM 3: Hubungan dengan SAP Connect -->
+            <h2 id="accordion-heading-3">
+                <button type="button"
+                    class="accordion-btn flex items-center justify-between w-full p-5 font-semibold text-red-800 bg-gray-50 border-t border-b border-gray-300 hover:bg-red-800 hover:text-white transition-colors duration-200"
+                    data-target="#accordion-body-3" aria-expanded="false">
+                    <span class="text-xs md:text-sm"><i class="ri-code-box-fill"></i> Hubungan dengan SAP Connect</span>
+                    <svg class="w-4 h-4 rotate-0 shrink-0 transition-transform duration-200"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5 5 1 1 5" />
+                    </svg>
+                </button>
+            </h2>
+            <div id="accordion-body-3" class="hidden bg-white">
+                <div class="p-5 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
+                    <p class="mb-3">
+                        SAP Connect PT Kapuas Kencana Jaya dikembangkan sebagai jembatan antara sistem SAP Business One dan pengguna internal perusahaan. Website ini menyajikan data dan laporan penting yang telah diproses dari sistem SAP, agar bisa diakses dengan lebih mudah, cepat, dan terjadwal.
+                    </p>
+                    <p>
+                        Dengan demikian, setiap pengguna dapat memperoleh informasi penting tanpa harus langsung masuk ke dalam sistem SAP, membuat proses kerja menjadi lebih efisien dan praktis.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ITEM 4: Panduan Menggunakan SAP Connect -->
+            <h2 id="accordion-heading-4">
+                <button type="button"
+                    class="accordion-btn flex items-center justify-between w-full p-5 font-semibold text-red-800 bg-gray-50 border-t border-gray-300 hover:bg-red-800 hover:text-white rounded-b-xl transition-colors duration-200"
+                    data-target="#accordion-body-4" aria-expanded="false">
+                    <span class="text-xs md:text-sm"><i class="ri-book-open-fill"></i> Panduan Menggunakan SAP Connect</span>
+                    <svg class="w-4 h-4 rotate-0 shrink-0 transition-transform duration-200"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5 5 1 1 5" />
+                    </svg>
+                </button>
+            </h2>
+            <div id="accordion-body-4" class="hidden bg-white rounded-b-xl">
+                <div class="p-5 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
+                    <p>Silakan unduh dan pelajari dokumen di bawah ini untuk panduan penggunaan website SAP Connect.</p>
+                </div>
             </div>
         </div>
     </div>
 </x-layout>
+<script>
+    document.querySelectorAll('.accordion-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = document.querySelector(btn.dataset.target);
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+
+            // Tutup semua item lain
+            document.querySelectorAll('.accordion-btn').forEach(b => {
+                b.classList.remove('bg-white');
+                b.classList.add('bg-gray-50', 'text-red-800');
+                b.setAttribute('aria-expanded', 'false');
+                document.querySelector(b.dataset.target).classList.add('hidden');
+            });
+
+            // Jika belum terbuka, buka item ini
+            if (!expanded) {
+                btn.classList.remove('bg-gray-50');
+                btn.classList.add('bg-white', 'text-red-800');
+                btn.setAttribute('aria-expanded', 'true');
+                target.classList.remove('hidden');
+            }
+        });
+    });
+</script>
