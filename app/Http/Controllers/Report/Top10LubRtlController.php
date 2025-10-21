@@ -35,10 +35,10 @@ class Top10LubRtlController extends Controller
         // dd($data);
         // Jika tidak ada data, tampilkan notifikasi
         if ($data->isEmpty()) {
-            return view('reports.top_10_lub_rtl', [
+            return view('reports.penjualan_lub_retail', [
                 'title' => 'SCKKJ - Laporan ' . $report->name,
                 'titleHeader' => $report->name,
-                'data' => collect([]),
+                'data2' => collect([]),
                 'tahun' => $tahun,
                 'bulan' => $bulan,
                 'namaPeriode' => $namaPeriode,
@@ -47,10 +47,10 @@ class Top10LubRtlController extends Controller
             ]);
         }
 
-        return view('reports.top_10_lub_rtl', [
+        return view('reports.penjualan_lub_retail', [
             'title' => 'SCKKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
-            'data' => $data,
+            'data2' => $data,
             'tahun' => $tahun,
             'bulan' => $bulan,
             'namaPeriode' => $namaPeriode,

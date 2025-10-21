@@ -109,8 +109,6 @@
                 <p class="text-gray-500 text-center py-4">Tidak ada data ditemukan</p>
             @endif
         </div>
-
-
         @endif
     </div>
 </x-layout>

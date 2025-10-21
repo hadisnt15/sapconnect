@@ -28,11 +28,12 @@ class LubRetailController extends Controller
 
         // Ambil data dari tabel lokal hasil sync
         $data = DB::table('report_lub_retail')
-            ->select('TYPE', 'TYPE2', 'LITER')
+            ->select('TYPE', 'TYPE2', 'TYPE3', 'LITER')
             ->where('TAHUN', $tahun)
             ->where('BULAN', $bulan)
             ->orderBy('TYPE')
             ->orderBy('TYPE2')
+            ->orderBy('TYPE3')
             ->get();
 
         $periode = ReportLubRetail::select('tahun', 'bulan')
@@ -48,12 +49,20 @@ class LubRetailController extends Controller
 
         $lastSync = SyncLog::where('name', 'report.penjualan-lub-retail')->orderByDesc('last_sync')->first();
 
+        // Ambil data2 dari tabel lokal hasil sync
+        $data2 = DB::table('report_top_10_lub_rtl')
+            ->select('type', 'cardcode', 'cardname', 'liter')
+            ->orderBy('type')
+            ->orderByDesc('liter')
+            ->get();
+        // dd($data2);
         // Jika tidak ada data, tampilkan notifikasi
         if ($data->isEmpty()) {
             return view('reports.penjualan_lub_retail', [
                 'title' => 'SCKKJ - Laporan ' . $report->name,
                 'titleHeader' => $report->name,
                 'data' => collect([]),
+                'data2' => collect([]),
                 'tahun' => $tahun,
                 'bulan' => $bulan,
                 'namaPeriode' => '-',
@@ -66,6 +75,7 @@ class LubRetailController extends Controller
             'title' => 'SCKKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data' => $data,
+            'data2' => $data2,
             'tahun' => $tahun,
             'bulan' => $bulan,
             'namaPeriode' => $namaPeriode,

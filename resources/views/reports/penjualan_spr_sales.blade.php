@@ -22,6 +22,15 @@
                 </li>
             </ol>
         </nav>
+        <div class="text-sm font-bold text-gray-500 mb-2">
+            @if ($lastSync)
+                Terakhir Disinkronkan: 
+                {{ \Carbon\Carbon::parse($lastSync->last_sync)->timezone('Asia/Makassar')->format('d-m-Y H:i:s') }} WITA 
+                ({{ $lastSync->desc }})
+            @else
+                Belum pernah disinkronkan
+            @endif
+        </div> 
         <div class="md:block hidden p-2 border border-gray-200 mt-4 rounded-lg bg-white">
             <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Pencapaian Penjualan per Penjual periode {{ $namaPeriode }}</h5></div>
             <div class="grid md:grid-cols-2 gap-3">

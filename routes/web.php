@@ -123,8 +123,8 @@ Route::get('/laporan/pencapaian-penjualan-sparepart-per-sales', [PenjualanSprSal
 Route::get('/laporan/grafik-penjualan-harian-sales', [GrafikPenjualanSalesController::class, 'index'])->name('report.grafik-penjualan-harian-sales')->middleware('auth');
 Route::get('/laporan/penjualan-lub-retail', [LubRetailController::class, 'index'])->name('report.penjualan-lub-retail')->middleware('auth');
 Route::post('/laporan/sinkron/penjualan-lub-retail', [LubRetailController::class, 'refresh'])->name('report.refresh.penjualan-lub-retail')->middleware('can:dashboard.refresh'); //ok
-Route::get('/laporan/top-10-lub-retail', [Top10LubRtlController::class, 'index'])->name('report.top-10-lub-retail')->middleware('auth');
-Route::post('/laporan/sinkron/top-10-lub-retail', [Top10LubRtlController::class, 'refresh'])->name('report.refresh.top-10-lub-retail')->middleware('can:dashboard.refresh'); //ok
+// Route::get('/laporan/top-10-lub-retail', [Top10LubRtlController::class, 'index'])->name('report.top-10-lub-retail')->middleware('auth');
+// Route::post('/laporan/sinkron/top-10-lub-retail', [Top10LubRtlController::class, 'refresh'])->name('report.refresh.top-10-lub-retail')->middleware('can:dashboard.refresh'); //ok
 Route::get('/laporan/bulanan-dan-average', [BulananAverageController::class, 'index'])->name('report.bulanan-dan-average')->middleware('auth');
 Route::post('/laporan/sinkron/bulanan-dan-average', [BulananAverageController::class, 'refresh'])->name('report.refresh.bulanan-dan-average')->middleware('can:dashboard.refresh'); //ok
 

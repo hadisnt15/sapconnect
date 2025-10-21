@@ -99,20 +99,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 'tahun' => $tahun,
                 'bulan' => $bulan,
             ]);
-            SyncLog::create([
-                'name' => 'report.penjualan-lub-retail',
-                'last_sync' => now(),
-                'desc' => 'Otomatis'
-            ]);
-        })->everyTwoHours()->when(function () {
-            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
-        });
-
-        $schedule->call(function () {
-            $startDate = now()->startOfMonth()->format('d.m.Y');
-            $endDate   = now()->endOfMonth()->format('d.m.Y');
-            $tahun     = now()->year;
-            $bulan     = now()->month;
             Artisan::call('sync:reportTop10LubRetail', [
                 'startDate' => $startDate,
                 'endDate' => $endDate,
@@ -120,7 +106,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 'bulan' => $bulan,
             ]);
             SyncLog::create([
-                'name' => 'report.top-10-lub-retail',
+                'name' => 'report.penjualan-lub-retail',
                 'last_sync' => now(),
                 'desc' => 'Otomatis'
             ]);

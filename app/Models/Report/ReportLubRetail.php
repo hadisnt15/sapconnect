@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class ReportLubRetail extends Model
 {
     protected $table = 'report_lub_retail';
-    protected $fillable = ['TYPE', 'TYPE2', 'LITER', 'TAHUN', 'BULAN'];
+    protected $fillable = ['TYPE', 'TYPE2', 'TYPE3', 'LITER', 'TAHUN', 'BULAN'];
 }

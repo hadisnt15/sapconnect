@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Report\ReportLubRetail;
+use App\Models\Report\ReportTop10LubRtl;
 use App\Models\SyncLog;
 
 class SyncReportLubRetailFromHana extends Command
@@ -45,18 +46,33 @@ class SyncReportLubRetailFromHana extends Command
             $hanaData = DB::connection('hana')->select(
                 "SELECT * FROM LVKKJ_REP_LUBRTL('{$startDate}', '{$endDate}')"
             );
+            $hanaData2 = DB::connection('hana')->select(
+                "SELECT * FROM LVKKJ_REP_TOP10LUBRTL ('{$startDate}', '{$endDate}')"
+            );
 
             // Kosongkan tabel
             ReportLubRetail::truncate();
+            ReportTop10LubRtl::truncate();
 
             // Insert data Dashboard
             foreach ($hanaData as $row) {
                 ReportLubRetail::create([
                     'TYPE' => $row->TYPE,
                     'TYPE2' => $row->TYPE2,
+                    'TYPE3' => $row->TYPE3,
                     'LITER' => $row->LITER,
                     'TAHUN' => $tahun,
                     'BULAN' => $bulan,
+                ]);
+            }
+
+            // Insert data Dashboard
+            foreach ($hanaData2 as $row) {
+                ReportTop10LubRtl::create([
+                    'type' => $row->TYPE,
+                    'cardcode' => $row->CARDCODE,
+                    'cardname' => $row->CARDNAME,
+                    'liter' => $row->LITER,
                 ]);
             }
 
