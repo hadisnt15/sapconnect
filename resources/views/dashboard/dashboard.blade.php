@@ -9,7 +9,7 @@
                 <li aria-current="page">
                     <div class="flex items-center">
                         <span class="ms-1 text-sm font-medium text-red-800 md:ms-2">
-                            <i class="ri-layout-grid-fill"></i> {{ $titleHeader }}
+                            <i class="ri-home-office-fill"></i> {{ $titleHeader }}
                         </span>
                     </div>
                 </li>

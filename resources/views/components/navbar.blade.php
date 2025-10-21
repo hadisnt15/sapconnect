@@ -17,7 +17,7 @@
                 <div class="flex justify-center space-x-1">
                     @auth
                         <x-nav-link href="/" :active="request()->is('/')">
-                            <i class="ri-layout-grid-fill"></i> Dasbor
+                            <i class="ri-home-office-fill"></i> Beranda
                         </x-nav-link>
                         <x-nav-link href="{{ route('report') }}"
                             class="{{ Route::is('report', 'report.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} px-3 py-2 rounded-md text-sm font-medium">
@@ -109,7 +109,7 @@
     <div x-show="isOpen" x-transition 
          class="md:hidden bg-red-900 text-white space-y-1 px-3 pb-3 rounded-b-lg">
         @auth
-            <x-nav-link href="/" class="block p-2 hover:bg-red-700" :active="request()->is('/')"><i class="ri-layout-grid-fill"></i> Dasbor</x-nav-link>
+            <x-nav-link href="/" class="block p-2 hover:bg-red-700" :active="request()->is('/')"><i class="ri-home-office-fill"></i> Beranda</x-nav-link>
             <x-nav-link href="{{ route('report') }}" class="block p-2 hover:bg-red-700 {{ Route::is('report','report.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }}"><i class="ri-folder-6-fill"></i> Laporan</x-nav-link>
             <x-nav-link href="{{ route('order') }}" class="block p-2 hover:bg-red-700 {{ Route::is('order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }}"><i class="ri-bill-fill"></i> Pesanan</x-nav-link>
             <x-nav-link href="{{ route('item') }}" class="block p-2 hover:bg-red-700 {{ Route::is('item') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }}"><i class="ri-settings-4-fill"></i> Barang</x-nav-link>

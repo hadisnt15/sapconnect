@@ -53,7 +53,7 @@ class DashboardController extends Controller
                         ->whereHas('orderRow', function($query) use($userDiv){
                             $query->whereIn('RdrItemProfitCenter', $userDiv);
                         })->count();
-            $dailyOrderNotSyncedUncheck = OrdrLocal::where('is_deleted', 0)->where('is_checked', 0)->where('is_synced', 1)->whereIn('branch', $userCab)
+            $dailyOrderNotSyncedUncheck = OrdrLocal::where('is_deleted', 0)->where('is_checked', 0)->where('is_synced', 0)->whereIn('branch', $userCab)
                         ->whereDate('OdrDocDate', $date)->whereHas('orderRow', function($query) use($userDiv){
                             $query->whereIn('RdrItemProfitCenter', $userDiv);
                         })->count();
@@ -65,7 +65,7 @@ class DashboardController extends Controller
                         ->whereHas('orderRow', function($query) use($userDiv){
                             $query->whereIn('RdrItemProfitCenter', $userDiv);
                         })->count();
-            $monthlyOrderNotSyncedUncheck = OrdrLocal::where('is_deleted', 0)->where('is_checked', 0)->where('is_synced', 1)->whereIn('branch', $userCab)
+            $monthlyOrderNotSyncedUncheck = OrdrLocal::where('is_deleted', 0)->where('is_checked', 0)->where('is_synced', 0)->whereIn('branch', $userCab)
                         ->whereMonth('OdrDocDate', $month)->whereHas('orderRow', function($query) use($userDiv){
                             $query->whereIn('RdrItemProfitCenter', $userDiv);
                         })->count();
@@ -73,8 +73,8 @@ class DashboardController extends Controller
         // dd($dailyOrder, $monthlyOrder);
         
         return view('dashboard.dashboard', [
-            'title' => 'SCKKJ - Dasbor',
-            'titleHeader' => 'Dasbor',
+            'title' => 'SCKKJ - Beranda',
+            'titleHeader' => 'Beranda',
             'dailyOrder' => $dailyOrder,
             'dailyOrderSynced' => $dailyOrderSynced,
             'dailyOrderNotSyncedUncheck' => $dailyOrderNotSyncedUncheck,
