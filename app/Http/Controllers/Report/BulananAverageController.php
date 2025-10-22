@@ -53,6 +53,7 @@ class BulananAverageController extends Controller
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
                 $q->where('NAMACUSTOMER', 'like', "%{$search}%")
+                ->orWhere('KODECUSTOMER', 'like', "%{$search}%")
                 ->orWhere('NAMASALES', 'like', "%{$search}%")
                 ->orWhere('KOTA', 'like', "%{$search}%")
                 ->orWhere('PROVINSI', 'like', "%{$search}%");
