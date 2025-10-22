@@ -21,6 +21,7 @@ class BulananAverageController extends Controller
         $report = Report::where('slug', 'bulanan-dan-average')->first();
         $monthInput = $request->input('month', now()->format('Y-m'));
         $segmentFilter = $request->input('segment'); // 🔹 Tambah filter segment
+        $search = $request->input('search');
 
         // Pisahkan tahun dan bulan
         [$tahun, $bulan] = explode('-', $monthInput);
@@ -46,6 +47,16 @@ class BulananAverageController extends Controller
         // 🔹 Filter berdasarkan segment (jika dipilih dari dropdown)
         if (!empty($segmentFilter)) {
             $query->where('SEGMENT', $segmentFilter);
+        }
+
+        // 🔹 Filter berdasarkan pencarian (search)
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('NAMACUSTOMER', 'like', "%{$search}%")
+                ->orWhere('NAMASALES', 'like', "%{$search}%")
+                ->orWhere('KOTA', 'like', "%{$search}%")
+                ->orWhere('PROVINSI', 'like', "%{$search}%");
+            });
         }
 
         // 🔹 Urutan data
