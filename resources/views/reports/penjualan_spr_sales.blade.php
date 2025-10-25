@@ -64,8 +64,8 @@
                                         @endforeach
                                         <tr class="bg-gray-50 font-bold text-gray-800">
                                             <td class="px-2 py-2 border-t">Total {{ $segmentName }}</td>
-                                            <td class="px-2 py-2 text-right border-t">{{ number_format($segment['sum_target'], 0, ',', '.') }}</td>
-                                            <td class="px-2 py-2 text-right border-t">{{ number_format($segment['sum_capai'], 0, ',', '.') }}</td>
+                                            <td class="px-2 py-2 text-right border-t">{{ number_format($segment['sum_target'], 0, '.', ',') }}</td>
+                                            <td class="px-2 py-2 text-right border-t">{{ number_format($segment['sum_capai'], 0, '.', ',') }}</td>
                                             <td class="px-2 py-2 border-t"></td>
                                         </tr>
                                     @endforeach
@@ -74,8 +74,8 @@
                                     @endphp
                                     <tr class="bg-indigo-50 font-bold text-red-900">
                                         <td class="px-2 py-2 border-t">TOTAL SEMUA</td>
-                                        <td class="px-2 py-2 text-right border-t">{{ number_format($firstRow->SUMTARGETSPR ?? 0, 0, ',', '.') }}</td>
-                                        <td class="px-2 py-2 text-right border-t">{{ number_format($firstRow->SUMCAPAISPR ?? 0, 0, ',', '.') }}</td>
+                                        <td class="px-2 py-2 text-right border-t">{{ number_format($firstRow->SUMTARGETSPR ?? 0, 0, '.', ',') }}</td>
+                                        <td class="px-2 py-2 text-right border-t">{{ number_format($firstRow->SUMCAPAISPR ?? 0, 0, '.', ',') }}</td>
                                         <td class="px-2 py-2 text-right border-t">{{ $firstRow->SUMPERSENTASE }}%</td>
                                     </tr>
                                 </tbody>

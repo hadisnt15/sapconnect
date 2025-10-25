@@ -119,6 +119,26 @@ return Application::configure(basePath: dirname(__DIR__))
             $endDate   = now()->endOfMonth()->format('d.m.Y');
             $tahun     = now()->year;
             $bulan     = now()->month;
+            Artisan::call('sync:reportProgRtl', [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'tahun' => $tahun,
+                'bulan' => $bulan,
+            ]);
+            SyncLog::create([
+                'name' => 'report.program-retail',
+                'last_sync' => now(),
+                'desc' => 'Otomatis'
+            ]);
+        })->everyTwoHours()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
+
+        $schedule->call(function () {
+            $startDate = now()->startOfMonth()->format('d.m.Y');
+            $endDate   = now()->endOfMonth()->format('d.m.Y');
+            $tahun     = now()->year;
+            $bulan     = now()->month;
             Artisan::call('sync:reportBulananAverage', [
                 'startDate' => $startDate,
                 'endDate' => $endDate,

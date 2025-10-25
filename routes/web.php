@@ -25,6 +25,7 @@ use App\Http\Controllers\Report\GrafikPenjualanSalesController;
 use App\Http\Controllers\Report\LubRetailController;
 use App\Http\Controllers\Report\Top10LubRtlController;
 use App\Http\Controllers\Report\BulananAverageController;
+use App\Http\Controllers\Report\ProgRtlController;
 
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
@@ -127,6 +128,8 @@ Route::post('/laporan/sinkron/penjualan-lub-retail', [LubRetailController::class
 // Route::post('/laporan/sinkron/top-10-lub-retail', [Top10LubRtlController::class, 'refresh'])->name('report.refresh.top-10-lub-retail')->middleware('can:dashboard.refresh'); //ok
 Route::get('/laporan/bulanan-dan-average', [BulananAverageController::class, 'index'])->name('report.bulanan-dan-average')->middleware('auth');
 Route::post('/laporan/sinkron/bulanan-dan-average', [BulananAverageController::class, 'refresh'])->name('report.refresh.bulanan-dan-average')->middleware('can:dashboard.refresh'); //ok
+Route::get('/laporan/program-retail', [ProgRtlController::class, 'index'])->name('report.program-retail')->middleware('auth');
+Route::post('/laporan/sinkron/program-retail', [ProgRtlController::class, 'refresh'])->name('report.refresh.program-retail')->middleware('can:dashboard.refresh'); //ok
 
 
 // Route::get('/test-hana', function () {
