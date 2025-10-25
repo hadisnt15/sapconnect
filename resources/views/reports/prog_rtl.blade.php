@@ -123,9 +123,9 @@
                                                 @foreach ($prog['details'] as $detail)
                                                     <tr class="hover:bg-gray-50">
                                                         <td class="border px-2 py-1">{{ $detail['segment'] }}</td>
-                                                        <td class="border px-2 py-1 text-right">{{ number_format((float) $detail['target'], 2, '.', ',') }}</td>
-                                                        <td class="border px-2 py-1 text-right">{{ number_format((float) $detail['liter'] ?? 0, 2, '.', ',') }}</td>
-                                                        <td class="border px-2 py-1 text-right">{{ number_format((float) $detail['sisa'] ?? 0, 2, '.', ',') }}</td>
+                                                        <td class="border px-2 py-1 text-right">{{ number_format((float) $detail['target'], 1, '.', ',') }}</td>
+                                                        <td class="border px-2 py-1 text-right">{{ number_format((float) $detail['liter'] ?? 0, 1, '.', ',') }}</td>
+                                                        <td class="border px-2 py-1 text-right">{{ number_format((float) $detail['sisa'] ?? 0, 1, '.', ',') }}</td>
                                                         <td class="border px-2 py-1 text-right">{{ $detail['persentase'] }}%</td>
                                                         <td class="border px-2 py-1">{{ $detail['target'] === '0.00' ? 'TIDAK TERDAFTAR' : ($detail['keterangan'] ?? '-') }}</td>
                                                     </tr>
@@ -173,9 +173,9 @@
                                                 <tr class="hover:bg-gray-50">
                                                     <td class="border px-2 py-1">TARGET <br> CAPAI <hr> SISA</td>
                                                     <td class="border px-2 py-1 text-right">
-                                                        {{ number_format((float) $detail['target'], 2, '.', ',') }} <br>
-                                                        {{ number_format((float) $detail['liter'], 2, '.', ',') }} <hr>
-                                                        {{ number_format((float) $detail['sisa'], 2, '.', ',') }} <br>
+                                                        {{ number_format((float) $detail['target'], 1, '.', ',') }} <br>
+                                                        {{ number_format((float) $detail['liter'], 1, '.', ',') }} <hr>
+                                                        {{ number_format((float) $detail['sisa'], 1, '.', ',') }} <br>
                                                     </td>
                                                     <td class="border px-2 py-1 text-right">{{ $detail['persentase'] }}%</td>
                                                 </tr>

@@ -51,7 +51,7 @@ class ProgRtlController extends Controller
                     $firstProg = $progData->first();
                     return [
                         'status' => $firstProg->STATUS,
-                        'details' => $progData->map(function ($item) {
+                        'details' => $progData->sortBy('SEGMENT')->map(function ($item) {
                             return [
                                 'segment' => $item->SEGMENT,
                                 'target' => $item->TARGET,
