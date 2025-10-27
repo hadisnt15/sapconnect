@@ -36,9 +36,22 @@ class ViewOrdrProgress extends Command
         DB::beginTransaction();
         try {
             // Ambil data dari HANA
-            $sql = 'SELECT * FROM "LVKKJ_PROSESPENJUALAN2"(' . $id . ')';
+            $sql = 'SELECT 
+                        "NO_URUT",
+                        "KETERANGAN",
+                        "WEB_REF_NUM",
+                        "WEB_ORDER_ID",
+                        "WEB_DOCDATE",
+                        "WEB_CARDCODE",
+                        "WEB_CARDNAME",
+                        "WEB_ITEMCODE",
+                        "WEB_ITEMNAME",
+                        "WEB_QTY",
+                        CAST("WEB_ITEMROW" AS NVARCHAR(200)) AS "WEB_ITEMROW",
+                        CAST("PROSES" AS NVARCHAR) AS "PROSES"
+                 FROM "LVKKJ_PROSESPENJUALAN2"(' . $id . ')';
             $progress = DB::connection('hana')->select($sql);
-
+            
             if (empty($progress)) {
                 $this->warn("Pesanan Belum Diproses di SAP");
                 return;
