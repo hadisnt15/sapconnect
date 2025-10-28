@@ -129,10 +129,12 @@ class BulananAverageController extends Controller
 
         // 🔹 Ambil periode & sinkronisasi terakhir
         $periode = ReportBulananAverage::select('tahun', 'bulan')
+            ->whereNotIn('tahun', [9999])
+            ->whereNotIn('bulan', [99])
             ->orderByDesc('tahun')
-            ->orderByDesc('bulan')
+            ->orderByDesc(DB::raw('CAST(bulan AS UNSIGNED)'))
             ->first();
-
+        // dd($periode);
         $namaPeriode = $periode
             ? Carbon::createFromDate($periode->tahun, $periode->bulan, 1, 'Asia/Jakarta')
                 ->locale('id')

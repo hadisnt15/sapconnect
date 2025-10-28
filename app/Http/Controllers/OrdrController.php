@@ -23,46 +23,50 @@ class OrdrController extends Controller
     {
         $user = Auth::user();
 
-        $query = OrdrLocal::with(['customer', 'salesman'])
-            ->withCount('orderRow')
-            ->where('is_deleted', 0);
+        // ✅ Eager load semua relasi yang sesuai dengan definisi model kamu
+        $query = OrdrLocal::with([
+            'customer:CardCode,CardName', // pakai CardCode karena ocrd_local tidak punya id
+            'salesman:SlpCode,SlpName',
+            'orderRow:id,OdrId,RdrItemCode,RdrItemQuantity,RdrItemPrice,RdrItemDisc',
+            'orderRow.orderItem:ItemCode,ItemName,ProfitCenter',
+            'ordrStatus:ref_num,pesanan_status',
+        ])
+        ->withCount('orderRow')
+        ->where('is_deleted', 0);
 
-        // 🔹 Filter berdasarkan role
+        // 🔹 Filter berdasarkan role user
         if ($user->role === 'salesman') {
-            // Hanya data milik salesman tersebut
             if ($user->oslpReg) {
                 $slpCode = $user->oslpReg->RegSlpCode;
                 $query->where('OdrSlpCode', $slpCode);
             } else {
-                $query->whereRaw('1=0'); // kosong kalau tidak ada relasi
+                $query->whereRaw('1=0'); // tidak punya sales code
             }
 
         } elseif ($user->role === 'supervisor') {
-           // 🔹 Ambil daftar divisi yang dimiliki supervisor
+            // 🔹 Ambil divisi supervisor
             $userDivisions = DB::table('user_division')
                 ->join('division', 'user_division.div_id', '=', 'division.id')
                 ->where('user_division.user_id', $user->id)
                 ->pluck('division.div_name')
                 ->toArray();
 
-            // 🔹 Ambil daftar cabang yang dimiliki supervisor
+            // 🔹 Ambil cabang supervisor
             $userBranches = DB::table('user_branch')
                 ->join('branch', 'user_branch.branch_id', '=', 'branch.id')
                 ->where('user_branch.user_id', $user->id)
                 ->pluck('branch.branch_name')
                 ->toArray();
-            // dd($userBranches, $userDivisions);
-            // 🔹 Kalau tidak punya cabang & divisi, kosongkan hasil
+
             if (empty($userBranches) && empty($userDivisions)) {
                 $query->whereRaw('1=0');
             } else {
-                // 🔹 Filter berdasarkan cabang
                 if (!empty($userBranches)) {
                     $query->whereIn('branch', $userBranches);
                 }
 
-                // 🔹 Filter berdasarkan divisi (ProfitCenter di OITM)
                 if (!empty($userDivisions)) {
+                    // ✅ whereHas aman karena orderRow & orderItem sudah di-relasikan
                     $query->whereHas('orderRow.orderItem', function ($q) use ($userDivisions) {
                         $q->whereIn('ProfitCenter', $userDivisions);
                     });
@@ -70,19 +74,16 @@ class OrdrController extends Controller
             }
         }
 
-        // 🔹 Filter pencarian
+        // 🔹 Filter pencarian (jika ada scopeFilter)
         $query->filter($request->only(['search']));
 
-        // 🔹 Filter checkbox
+        // 🔹 Filter status checkbox
         if ($request->has('checked')) {
-            if ($request->checked == '1') {
-                $query->where('is_checked', 1);
-            } elseif ($request->checked == '0') {
-                $query->where('is_checked', 0);
-            } elseif ($request->checked == '2') {
-                $query->where('is_synced', 1);
-            } elseif ($request->checked == '3') {
-                $query->where('is_synced', 0);
+            switch ($request->checked) {
+                case '1': $query->where('is_checked', 1); break;
+                case '0': $query->where('is_checked', 0); break;
+                case '2': $query->where('is_synced', 1); break;
+                case '3': $query->where('is_synced', 0); break;
             }
         }
 
@@ -94,30 +95,28 @@ class OrdrController extends Controller
             $query->whereDate('OdrDocDate', '<=', $request->date_to);
         }
 
-        $orders = $query
-            ->orderBy('id', 'desc')
-            ->paginate(100)
-            ->withQueryString();
-        // 🔹 Ambil hanya satu RdrProfitCenter unik per order
+        // ✅ Pagination
+        $orders = $query->orderByDesc('id')->paginate(100)->withQueryString();
+
+        // ✅ Tambahkan field profit_center hasil gabungan orderRow → orderItem
         $orders->getCollection()->transform(function ($order) {
             $order->profit_center = $order->orderRow
                 ->pluck('orderItem.ProfitCenter')
-                ->filter() // hapus null
+                ->filter()
                 ->unique()
-                ->first(); // ambil satu saja
+                ->first();
             return $order;
         });
 
-        $lastSync = SyncLog::where('name', 'ordr')
-            ->orderByDesc('last_sync')
-            ->first();
+        // ✅ Ambil data last sync
+        $lastSync = SyncLog::where('name', 'ordr')->latest('last_sync')->first();
 
         return view('ordr.ordr', [
             'title'       => 'SCKKJ - Daftar Pesanan',
             'titleHeader' => 'Daftar Pesanan',
             'orders'      => $orders,
             'user'        => $user,
-            'lastSync'    => $lastSync
+            'lastSync'    => $lastSync,
         ]);
     }
 

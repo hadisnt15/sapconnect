@@ -90,6 +90,7 @@
             @endif
         </div> 
         <div class="md:block hidden">
+            <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Pencapaian Program Pertamina Retail per Pelanggan periode {{ $namaPeriode }}</h5></div>
             <div class="grid grid-cols-2 gap-3">
                 @foreach ($grouped as $uuid => $cust)
                     <div class="mb-6 border rounded-lg shadow-sm bg-white">

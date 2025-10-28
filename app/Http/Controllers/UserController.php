@@ -13,7 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {   
-        $user = User::where('role', '!=', 'developer')->Filter(request(['search']))->paginate(100)->withQueryString();
+        $user = User::with(['divisions','branches'])->where('role', '!=', 'developer')->Filter(request(['search']))->paginate(100)->withQueryString();
         return view('user.user', [
             'title' => 'SCKKJ - Daftar Pengguna',
             'titleHeader' => 'Daftar Pengguna',

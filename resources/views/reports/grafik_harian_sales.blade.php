@@ -40,7 +40,7 @@
                 <button type="submit" class="bg-red-800 text-white px-4 py-2 rounded-md text-xs hover:bg-red-600">Tampilkan</button>
             </form>
         </div>
-
+        <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Grafik Jumlah Pesanan Harian</h5></div>
         <div class="p-5 bg-white rounded-lg shadow">
             <div id="chart"></div>
         </div>
