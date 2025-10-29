@@ -126,11 +126,11 @@
                                 <ul class="px-4 py-2">
                                     @foreach($segment['details'] as $detail)
                                         <li class="text-sm">
-                                            {{ $detail['keterangan'] }}: <strong>{{ $detail['jumlah'] }}</strong>
+                                            {{ $detail['keterangan'] }}: <strong>{{ number_format((float) $detail['jumlah'], 1, '.', ',') }}</strong>
                                         </li>
                                     @endforeach
                                     <li class="text-sm font-bold border-t mt-2 pt-1">
-                                        Total: {{ $segment['total'] }}
+                                        Total: {{ number_format((float) $segment['total'], 1, '.', ',') }}
                                     </li>
                                 </ul>
                             </div>

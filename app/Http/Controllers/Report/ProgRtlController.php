@@ -85,7 +85,7 @@ class ProgRtlController extends Controller
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
-        $summary = ReportProgRtl::select('PROGRAM', 'SEGMENT', 'KETERANGAN', DB::raw('COUNT(*) AS JUMLAH'))
+        $summary = ReportProgRtl::select('PROGRAM', 'SEGMENT', 'KETERANGAN', DB::raw('SUM(LITER) AS JUMLAH'))
                         ->groupBy('PROGRAM', 'SEGMENT', 'KETERANGAN')
                         ->orderBy('PROGRAM')
                         ->orderBy('SEGMENT')
