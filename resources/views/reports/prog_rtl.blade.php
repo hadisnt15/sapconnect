@@ -50,8 +50,9 @@
                         <!--  -->
                         <option value="">SEMUA</option>
                         <option value="TERCAPAI" {{ $filter == 'TERCAPAI' ? 'selected' : '' }}>TERCAPAI</option>
+                        <option value="TARGET TIDAK ADA" {{ $filter == 'TARGET TIDAK ADA' ? 'selected' : '' }}>TARGET TIDAK ADA</option>
                         <option value="BELUM TERCAPAI" {{ $filter == 'BELUM TERCAPAI' ? 'selected' : '' }}>BELUM TERCAPAI</option>
-                        <option value="TIDAK TERDAFTAR" {{ $filter == 'TIDAK TERDAFTAR' ? 'selected' : '' }}>TIDAK TERDAFTAR</option>
+                        <option value="BELUM TERDAFTAR" {{ $filter == 'BELUM TERDAFTAR' ? 'selected' : '' }}>BELUM TERDAFTAR</option>
                     </select>
                     <button type="submit"
                         class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white w-full md:w-auto">
@@ -89,20 +90,120 @@
                 Belum pernah disinkronkan
             @endif
         </div> 
-        <div class="md:block hidden">
-            <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Pencapaian Program Pertamina Retail per Pelanggan periode {{ $namaPeriode }}</h5></div>
-            <div class="grid grid-cols-2 gap-3">
+        <div class="py-2 px-2 border rounded-lg">
+            <div>
+                <h5 class="text-gray-800 font-bold ms-4 mb-2">Rekap Pencapaian Program Pertamina Retail periode {{ $namaPeriode }}</h5>
+            </div>
+            @foreach($groupedSum as $program)
+                <div class="border rounded-lg shadow-sm bg-white mb-4">
+                    <div class="bg-gray-100 rounded-t-lg border-b">
+                        <h3 class="font-bold text-gray-700 px-4 py-2">
+                            {{ $program['headerProg'] }}
+                        </h3>
+                    </div>
+                    @php
+                        $data = $countSegment->firstWhere('program', $program['headerProg']);
+                        $jumlah = $data['jumlah_segment'] ?? 1;
+                        $isGenap = $jumlah % 2 === 0;
+
+                        // Tentukan jumlah kolom grid
+                        if ($jumlah >= 4 && $isGenap) {
+                            $cols = 4;
+                        } elseif ($jumlah >= 3 && !$isGenap) {
+                            $cols = 3;
+                        } else {
+                            $cols = max(1, $jumlah);
+                        }
+                    @endphp
+                    <div class="grid grid-cols-{{ $cols }} gap-3 px-2 py-2">
+                        @foreach($program['segment'] as $segment)
+                            <div class="border rounded-lg">
+                                <div class="border-b">
+                                    <h3 class="font-bold bg-gray-200 text-red-800 px-2 py-1">
+                                        {{ $segment['details']->first()['segment'] }} 
+                                    </h3>
+                                </div>
+                                <ul class="px-4 py-2">
+                                    @foreach($segment['details'] as $detail)
+                                        <li class="text-sm">
+                                            {{ $detail['keterangan'] }}: <strong>{{ $detail['jumlah'] }}</strong>
+                                        </li>
+                                    @endforeach
+                                    <li class="text-sm font-bold border-t mt-2 pt-1">
+                                        Total: {{ $segment['total'] }}
+                                    </li>
+                                </ul>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        <!-- <div class="border-b mt-4 border-red-800"></div> -->
+        <div class="py-2 px-2 border rounded-lg mt-4">
+            <div class="md:block hidden">
+                <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Pencapaian Program Pertamina Retail per Pelanggan periode {{ $namaPeriode }}</h5></div>
+                <div class="grid grid-cols-2 gap-3">
+                    @foreach ($grouped as $uuid => $cust)
+                        <div class="mb-6 border rounded-lg shadow-sm bg-white">
+                            <div class="bg-gray-100 rounded-t-lg border-b px-4 py-2">
+                                <span class="font-bold text-red-800">{{ $cust['header'] }}</span>
+                                <span class="font-semibold text-red-800">{{ $cust['header2'] }}</span>
+                            </div>
+                                @foreach ($cust['programs'] as $progName => $prog)
+                                    <div class="p-4 border-b last:border-none">
+                                        <h3 class="text-sm font-semibold text-gray-800 mb-2">
+                                            {{ $progName }} 
+                                            <span class="text-xs px-2 py-1 rounded {{ strtoupper($prog['status']) === 'TERDAFTAR' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                {{ strtoupper($prog['status']) }}
+                                            </span>
+                                        </h3>
+
+                                        {{-- Tabel Program Detail --}}
+                                        <div class="overflow-x-auto">
+                                            <table class="w-full text-xs border border-gray-300">
+                                                <thead class="bg-gray-200 text-gray-700 text-center">
+                                                    <tr>
+                                                        <th class="border px-2 py-1 w-1/6">SEGMENT</th>
+                                                        <th class="border px-2 py-1 w-1/6">TARGET</th>
+                                                        <th class="border px-2 py-1 w-1/6">CAPAI</th>
+                                                        <th class="border px-2 py-1 w-1/6">SISA</th>
+                                                        <th class="border px-2 py-1 w-1/6">PERSEN</th>
+                                                        <th class="border px-2 py-1 w-1/6">KETERANGAN</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($prog['details'] as $detail)
+                                                        <tr class="hover:bg-gray-50">
+                                                            <td class="border px-2 py-1">{{ $detail['segment'] }}</td>
+                                                            <td class="border px-2 py-1 text-right">{{ number_format((float) $detail['target'], 1, '.', ',') }}</td>
+                                                            <td class="border px-2 py-1 text-right">{{ number_format((float) $detail['liter'] ?? 0, 1, '.', ',') }}</td>
+                                                            <td class="border px-2 py-1 text-right">{{ number_format((float) $detail['sisa'] ?? 0, 1, '.', ',') }}</td>
+                                                            <td class="border px-2 py-1 text-right">{{ $detail['persentase'] }}%</td>
+                                                            <td class="border px-2 py-1">{{ $detail['keterangan'] ?? '-' }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                @endforeach
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="md:hidden block">
                 @foreach ($grouped as $uuid => $cust)
                     <div class="mb-6 border rounded-lg shadow-sm bg-white">
                         <div class="bg-gray-100 rounded-t-lg border-b px-4 py-2">
-                            <span class="font-bold text-red-800">{{ $cust['header'] }}</span>
+                            <span class="font-bold text-red-800">{{ $cust['header'] }}</span> <br>
                             <span class="font-semibold text-red-800">{{ $cust['header2'] }}</span>
                         </div>
                             @foreach ($cust['programs'] as $progName => $prog)
                                 <div class="p-4 border-b last:border-none">
-                                    <h3 class="text-sm font-semibold text-gray-800 mb-2">
+                                    <h3 class="text-sm font-bold text-gray-800 mb-1">
                                         {{ $progName }} 
-                                        <span class="text-xs px-2 py-1 rounded {{ strtoupper($prog['status']) === 'TERDAFTAR' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        <span class="text-xs font-semibold px-1 py-1 rounded {{ strtoupper($prog['status']) === 'TERDAFTAR' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                             {{ strtoupper($prog['status']) }}
                                         </span>
                                     </h3>
@@ -112,23 +213,24 @@
                                         <table class="w-full text-xs border border-gray-300">
                                             <thead class="bg-gray-200 text-gray-700 text-center">
                                                 <tr>
-                                                    <th class="border px-2 py-1 w-1/6">SEGMENT</th>
-                                                    <th class="border px-2 py-1 w-1/6">TARGET</th>
-                                                    <th class="border px-2 py-1 w-1/6">CAPAI</th>
-                                                    <th class="border px-2 py-1 w-1/6">SISA</th>
-                                                    <th class="border px-2 py-1 w-1/6">PERSEN</th>
-                                                    <th class="border px-2 py-1 w-1/6">KETERANGAN</th>
+                                                    <th class="border px-2 py-1 w-3/6">KET</th>
+                                                    <th class="border px-2 py-1 w-3/6">LITER</th>
+                                                    <th class="border px-2 py-1 w-2/6">PERSEN</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($prog['details'] as $detail)
+                                                    <tr>
+                                                        <td colspan="3"><span class="px-1 font-semibold">{{ $detail['segment'] }} ({{ $detail['keterangan'] ?? '-' }})</span></td>
+                                                    </tr>
                                                     <tr class="hover:bg-gray-50">
-                                                        <td class="border px-2 py-1">{{ $detail['segment'] }}</td>
-                                                        <td class="border px-2 py-1 text-right">{{ number_format((float) $detail['target'], 1, '.', ',') }}</td>
-                                                        <td class="border px-2 py-1 text-right">{{ number_format((float) $detail['liter'] ?? 0, 1, '.', ',') }}</td>
-                                                        <td class="border px-2 py-1 text-right">{{ number_format((float) $detail['sisa'] ?? 0, 1, '.', ',') }}</td>
+                                                        <td class="border px-2 py-1">TARGET <br> CAPAI <hr> SISA</td>
+                                                        <td class="border px-2 py-1 text-right">
+                                                            {{ number_format((float) $detail['target'], 1, '.', ',') }} <br>
+                                                            {{ number_format((float) $detail['liter'], 1, '.', ',') }} <hr>
+                                                            {{ number_format((float) $detail['sisa'], 1, '.', ',') }} <br>
+                                                        </td>
                                                         <td class="border px-2 py-1 text-right">{{ $detail['persentase'] }}%</td>
-                                                        <td class="border px-2 py-1">{{ $detail['target'] === '0.00' ? 'TIDAK TERDAFTAR' : ($detail['keterangan'] ?? '-') }}</td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -139,58 +241,9 @@
                     </div>
                 @endforeach
             </div>
-        </div>
-        <div class="md:hidden block">
-            @foreach ($grouped as $uuid => $cust)
-                <div class="mb-6 border rounded-lg shadow-sm bg-white">
-                    <div class="bg-gray-100 rounded-t-lg border-b px-4 py-2">
-                        <span class="font-bold text-red-800">{{ $cust['header'] }}</span> <br>
-                        <span class="font-semibold text-red-800">{{ $cust['header2'] }}</span>
-                    </div>
-                        @foreach ($cust['programs'] as $progName => $prog)
-                            <div class="p-4 border-b last:border-none">
-                                <h3 class="text-sm font-bold text-gray-800 mb-1">
-                                    {{ $progName }} 
-                                    <span class="text-xs font-semibold px-1 py-1 rounded {{ strtoupper($prog['status']) === 'TERDAFTAR' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                        {{ strtoupper($prog['status']) }}
-                                    </span>
-                                </h3>
-
-                                {{-- Tabel Program Detail --}}
-                                <div class="overflow-x-auto">
-                                    <table class="w-full text-xs border border-gray-300">
-                                        <thead class="bg-gray-200 text-gray-700 text-center">
-                                            <tr>
-                                                <th class="border px-2 py-1 w-3/6">KET</th>
-                                                <th class="border px-2 py-1 w-3/6">LITER</th>
-                                                <th class="border px-2 py-1 w-2/6">PERSEN</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($prog['details'] as $detail)
-                                                <tr>
-                                                    <td colspan="3"><span class="px-1 font-semibold">{{ $detail['segment'] }} ({{ $detail['target'] === '0.00' ? 'TIDAK TERDAFTAR' : ($detail['keterangan'] ?? '-') }})</span></td>
-                                                </tr>
-                                                <tr class="hover:bg-gray-50">
-                                                    <td class="border px-2 py-1">TARGET <br> CAPAI <hr> SISA</td>
-                                                    <td class="border px-2 py-1 text-right">
-                                                        {{ number_format((float) $detail['target'], 1, '.', ',') }} <br>
-                                                        {{ number_format((float) $detail['liter'], 1, '.', ',') }} <hr>
-                                                        {{ number_format((float) $detail['sisa'], 1, '.', ',') }} <br>
-                                                    </td>
-                                                    <td class="border px-2 py-1 text-right">{{ $detail['persentase'] }}%</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        @endforeach
-                </div>
-            @endforeach
-        </div>
-        <div class="mt-4">
-            {{ $grouped->links('pagination::tailwind') }}
+            <div class="mt-4">
+                {{ $grouped->links('pagination::tailwind') }}
+            </div>
         </div>
     </div>
 </x-layout>

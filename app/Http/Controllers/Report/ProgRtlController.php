@@ -32,6 +32,7 @@ class ProgRtlController extends Controller
                 $q->where('DMS', 'like', "%{$search}%")
                 ->orWhere('KODECUSTOMER', 'like', "%{$search}%")
                 ->orWhere('NAMACUSTOMER', 'like', "%{$search}%")
+                ->orWhere('SEGMENT', 'like', "%{$search}%")
                 ->orWhere('PROGRAM', 'like', "%{$search}%");
             });
         })
@@ -84,6 +85,48 @@ class ProgRtlController extends Controller
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
+        $summary = ReportProgRtl::select('PROGRAM', 'SEGMENT', 'KETERANGAN', DB::raw('COUNT(*) AS JUMLAH'))
+                        ->groupBy('PROGRAM', 'SEGMENT', 'KETERANGAN')
+                        ->orderBy('PROGRAM')
+                        ->orderBy('SEGMENT')
+                        ->orderByRaw("FIELD(KETERANGAN, 'TERCAPAI', 'BELUM TERCAPAI', 'TARGET TIDAK ADA', 'BELUM TERDAFTAR')")
+                        ->get();
+        
+        $groupedSum = $summary->groupBy('PROGRAM')->map(function ($program) {
+            $firstProgram = $program->first();
+            $order = ['TERCAPAI', 'BELUM TERCAPAI', 'TARGET TIDAK ADA', 'BELUM TERDAFTAR'];
+            return [
+                'headerProg' => "{$firstProgram->PROGRAM}",
+                'segment' => $program->groupBy('SEGMENT')->map(function ($segment) use ($order) {
+                    $details = $segment->sortBy(function ($row) use ($order) {
+                    return array_search(strtoupper($row->KETERANGAN), $order);
+                    })->map(function ($ket) {
+                        return [
+                            'segment' => $ket->SEGMENT,
+                            'keterangan' => $ket->KETERANGAN,
+                            'jumlah' => $ket->JUMLAH,
+                        ];
+                    });
+                    // total jumlah semua keterangan di segment tsb
+                    $totalSegment = $details->sum('jumlah');
+
+                    return [
+                        'details' => $details,
+                        'total' => $totalSegment,
+                    ];
+                }),
+            ];
+        });
+
+        $programSegment = ReportProgRtl::select('PROGRAM','SEGMENT')->distinct()->orderBy('PROGRAM')->orderBy('SEGMENT')->get();
+        $countSegment = $programSegment->groupBy('PROGRAM')->map(function ($segments, $program) {
+            return [
+                'program' => $program,
+                'jumlah_segment' => $segments->count(),
+                'segments' => $segments->pluck('SEGMENT'), // untuk isi grid
+            ];
+        });
+
         $periode = ReportProgRtl::select('tahun', 'bulan')
             ->orderByDesc('tahun')
             ->orderByDesc('bulan')
@@ -105,6 +148,8 @@ class ProgRtlController extends Controller
             'filter' => $filter,
             'namaPeriode' => $namaPeriode,
             'lastSync' => $lastSync,
+            'groupedSum' => $groupedSum,
+            'countSegment' => $countSegment,
         ]);
     }
 
