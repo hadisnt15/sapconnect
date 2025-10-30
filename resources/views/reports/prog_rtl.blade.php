@@ -115,7 +115,7 @@
                             $cols = max(1, $jumlah);
                         }
                     @endphp
-                    <div class="grid grid-cols-{{ $cols }} gap-3 px-2 py-2">
+                    <div class="grid md:grid-cols-{{ $cols }} gap-3 px-2 py-2">
                         @foreach($program['segment'] as $segment)
                             <div class="border rounded-lg">
                                 <div class="border-b">
