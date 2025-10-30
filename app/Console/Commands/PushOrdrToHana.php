@@ -33,8 +33,8 @@ class PushOrdrToHana extends Command
         $user = Auth::user();
 
         // ✅ Hanya supervisor yang boleh push
-        if ($user->role !== 'supervisor') {
-            $this->error("Hanya supervisor yang dapat melakukan push data.");
+        if (!in_array($user->role, ['supervisor', 'developer'])) {
+            $this->error("Hanya supervisor atau developer yang dapat melakukan push data.");
             return;
         }
 
