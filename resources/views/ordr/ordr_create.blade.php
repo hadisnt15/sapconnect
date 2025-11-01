@@ -129,63 +129,89 @@
                 <h3 class="text-base font-semibold mb-2 text-gray-800">Detail Barang</h3>
 
                 <div x-data="{
-                    items: [{ RdrItemCode: '', ItemName: '', RdrItemQuantity: 1, RdrItemPrice: 0, RdrItemSatuan: '', RdrItemProfitCenter: '', RdrItemKetHKN: '', RdrItemKetFG: '' }]
-                }" class="space-y-3">
+                        items: [{
+                            RdrItemCode: '', ItemName: '', RdrItemQuantity: 1, RdrItemPrice: 0,
+                            RdrItemSatuan: '', RdrItemProfitCenter: '', RdrItemKetHKN: '', RdrItemKetFG: '', open: true
+                        }]
+                    }" class="space-y-3">
                     <template x-for="(item, index) in items" :key="index">
-                        <div class="border border-gray-200 bg-white rounded-lg p-3 shadow-sm space-y-2">
-                            <!-- Pilih kode barang -->
-                            <div>
-                                <label class="text-xs text-gray-600">Kode Barang</label>
-                                <select :id="'itemSelect' + index" :name="'items[' + index + '][RdrItemCode]'" required
-                                    class="border border-gray-300 bg-gray-50 rounded-md w-full md:text-sm text-xs p-2"
-                                    x-model="item.RdrItemCode" @change="
-                                        let exists = items.some((i, idx) => i.RdrItemCode === item.RdrItemCode && idx !== index);
-                                        if (exists) {
-                                            alert('Barang sudah dipilih di baris lain!');
-                                            item.RdrItemCode = '';
-                                            $nextTick(() => initSelect(index, ''));
-                                        }
-                                    "></select>
+                        <div class="border border-gray-200 bg-white rounded-lg shadow-sm">
+                            <!-- Header item -->
+                            <div class="flex justify-between items-center p-3 bg-gray-100 rounded-t-lg cursor-pointer"
+                                @click="item.open = !item.open">
+                                <div>
+                                    <span class="font-semibold text-gray-800 text-sm mr-2" x-text="'#' + (index + 1)"></span>
+                                    <span class="text-xs text-gray-500">
+                                        <span x-text="'Kode: ' + (item.RdrItemCode || 'Kode Barang')"></span>
+                                    </span> <br>
+                                    <span class="text-xs text-gray-500">
+                                        <span x-text="'Qty: ' + (item.RdrItemQuantity || 0) + ' - Harga: ' + (item.RdrItemPrice || 0) + ' - Disc: ' + (item.RdrItemDisc || 0)"></span>
+                                    </span> <br>
+                                    <span class="text-sm font-semibold text-gray-700" x-show="item.ItemName">
+                                        (<span x-text="item.ItemName"></span>)
+                                    </span>
+                                </div>
+                                <button type="button" class="text-gray-600 hover:text-red-800 text-lg">
+                                    <i :class="item.open ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"></i>
+                                </button>
                             </div>
 
-                            <!-- Input lainnya -->
-                            <div class="grid grid-cols-2 gap-2">
+                            <!-- Isi form item -->
+                            <div x-show="item.open" x-collapse class="p-3 space-y-2">
+                                <!-- Pilih kode barang -->
                                 <div>
-                                    <label class="text-xs text-gray-600">Deskripsi</label>
-                                    <input type="text" :name="'items[' + index + '][ItemName]'" x-model="item.ItemName"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
+                                    <label class="text-xs text-gray-600">Kode Barang</label>
+                                    <select :id="'itemSelect' + index" :name="'items[' + index + '][RdrItemCode]'" required
+                                        class="border border-gray-300 bg-gray-50 rounded-md w-full md:text-sm text-xs p-2"
+                                        x-model="item.RdrItemCode" @change="
+                                            let exists = items.some((i, idx) => i.RdrItemCode === item.RdrItemCode && idx !== index);
+                                            if (exists) {
+                                                alert('Barang sudah dipilih di baris lain!');
+                                                item.RdrItemCode = '';
+                                                $nextTick(() => initSelect(index, ''));
+                                            }
+                                        "></select>
                                 </div>
-                                <div>
-                                    <label class="text-xs text-gray-600">Qty</label>
-                                    <input type="number" :name="'items[' + index + '][RdrItemQuantity]'"
-                                        x-model="item.RdrItemQuantity"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
+
+                                <!-- Input lainnya -->
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="text-xs text-gray-600">Deskripsi</label>
+                                        <input type="text" :name="'items[' + index + '][ItemName]'" x-model="item.ItemName"
+                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-gray-600">Qty</label>
+                                        <input type="number" :name="'items[' + index + '][RdrItemQuantity]'"
+                                            x-model="item.RdrItemQuantity"
+                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-gray-600">Harga</label>
+                                        <input type="number" step="0.01" :name="'items[' + index + '][RdrItemPrice]'"
+                                            x-model="item.RdrItemPrice"
+                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-gray-600">Diskon</label>
+                                        <input type="number" step="0.01" :name="'items[' + index + '][RdrItemDisc]'"
+                                            x-model="item.RdrItemDisc" value="0"
+                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-gray-600">Satuan</label>
+                                        <input type="text" :name="'items[' + index + '][RdrItemSatuan]'"
+                                            x-model="item.RdrItemSatuan"
+                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-gray-600">Profit Center</label>
+                                        <input type="text" :name="'items[' + index + '][RdrItemProfitCenter]'"
+                                            x-model="item.RdrItemProfitCenter"
+                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="text-xs text-gray-600">Harga</label>
-                                    <input type="number" step="0.01" :name="'items[' + index + '][RdrItemPrice]'"
-                                        x-model="item.RdrItemPrice"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
-                                </div>
-                                <div>
-                                    <label class="text-xs text-gray-600">Diskon</label>
-                                    <input type="number" step="0.01" :name="'items[' + index + '][RdrItemDisc]'"
-                                        x-model="item.RdrItemDisc" value="0"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
-                                </div>
-                                <div>
-                                    <label class="text-xs text-gray-600">Satuan</label>
-                                    <input type="text" :name="'items[' + index + '][RdrItemSatuan]'"
-                                        x-model="item.RdrItemSatuan"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
-                                </div>
-                                <div>
-                                    <label class="text-xs text-gray-600">Profit Center</label>
-                                    <input type="text" :name="'items[' + index + '][RdrItemProfitCenter]'"
-                                        x-model="item.RdrItemProfitCenter"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
-                                </div>
-                            </div>
+
                                 <div>
                                     <label class="text-xs text-gray-600">Ket HKN</label>
                                     <input type="text" :name="'items[' + index + '][RdrItemKetHKN]'"
@@ -199,24 +225,31 @@
                                         class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
                                 </div>
 
-                            <!-- Tombol hapus -->
-                            <div class="flex justify-end mt-2">
-                                <div class="text-right border rounded-lg bg-gray-500 hover:bg-gray-400 text-white w-fit">
-                                    <button type="button" @click="
+                                <!-- Tombol hapus -->
+                                <div class="flex justify-end mt-2">
+                                    <div class="text-right border rounded-lg bg-gray-500 hover:bg-gray-400 text-white w-fit">
+                                        <button type="button" @click="
                                             if (items.length > 1) {
                                                 items.splice(index, 1);
                                             } else {
                                                 alert('Minimal harus ada 1 barang dalam pesanan!');
                                             }"
-                                        class="text-sm px-3 py-1.5 rounded flex items-center gap-1"><i class="ri-close-circle-fill"></i> Hapus Barang</button>
+                                            class="text-sm px-3 py-1.5 rounded flex items-center gap-1">
+                                            <i class="ri-close-circle-fill"></i> Hapus Barang
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </template>
 
+
                     <!-- Tombol tambah item -->
                     <button type="button"
-                        @click="items.push({RdrItemCode:'', ItemName:'', RdrItemQuantity:1, RdrItemPrice:0, RdrItemSatuan:'', RdrItemProfitCenter:'', RdrItemKetHKN:'', RdrItemKetFG:''}); 
+                        @click="items.push({
+                            RdrItemCode:'', ItemName:'', RdrItemQuantity:1, RdrItemPrice:0,
+                            RdrItemSatuan:'', RdrItemProfitCenter:'', RdrItemKetHKN:'', RdrItemKetFG:'', open:true
+                        });
                         $nextTick(() => initSelect(items.length-1))"
                         class="w-fit p-2 bg-green-600 hover:bg-green-400 text-white py-2 rounded-lg text-sm">
                         <i class="ri-add-circle-fill"></i> Tambah Barang
@@ -248,18 +281,26 @@
             onChange: function(value) {
                 let selected = this.options[value];
                 if (selected) {
-                    document.querySelector(`[name="items[${index}][ItemName]"]`).value = selected
-                        .FrgnName;
-                    document.querySelector(`[name="items[${index}][RdrItemPrice]"]`).value = selected
-                        .HET;
-                    document.querySelector(`[name="items[${index}][RdrItemProfitCenter]"]`).value =
-                        selected.ProfitCenter;
-                    document.querySelector(`[name="items[${index}][RdrItemSatuan]"]`).value = selected
-                        .Satuan;
-                    document.querySelector(`[name="items[${index}][RdrItemKetHKN]"]`).value = selected
-                        .KetHKN;
-                    document.querySelector(`[name="items[${index}][RdrItemKetFG]"]`).value = selected
-                        .KetFG;
+                    document.querySelector(`[name="items[${index}][ItemName]"]`).value = selected.FrgnName;
+                    document.querySelector(`[name="items[${index}][RdrItemPrice]"]`).value = selected.HET;
+                    document.querySelector(`[name="items[${index}][RdrItemProfitCenter]"]`).value = selected.ProfitCenter;
+                    document.querySelector(`[name="items[${index}][RdrItemSatuan]"]`).value = selected.Satuan;
+                    document.querySelector(`[name="items[${index}][RdrItemKetHKN]"]`).value = selected.KetHKN;
+                    document.querySelector(`[name="items[${index}][RdrItemKetFG]"]`).value = selected.KetFG;
+
+                    // 🔁 Tambahkan sinkronisasi ke Alpine reaktif
+                    let alpineScope = document.querySelector(`#itemSelect${index}`).closest('[x-data]');
+                    let item = Alpine.$data(alpineScope).items[index];
+                    item.ItemName = selected.FrgnName;
+                    item.RdrItemPrice = selected.HET;
+                    item.RdrItemProfitCenter = selected.ProfitCenter;
+                    item.RdrItemSatuan = selected.Satuan;
+                    item.RdrItemKetHKN = selected.KetHKN;
+                    item.RdrItemKetFG = selected.KetFG;
+
+                    // Trigger update untuk input
+                    let el = document.querySelector(`#itemSelect${index}`);
+                    el.dispatchEvent(new Event('input'));
                 }
             }
         });
