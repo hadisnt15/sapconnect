@@ -86,9 +86,9 @@ Route::put('/pesanan/{id}/lenyapkan', [OrdrController::class, 'destroy'])->name(
 Route::get('/pesanan/{id}/detail', [OrdrController::class, 'detail'])->name('order.detail')->middleware('auth'); //ok
 Route::get('/pesanan/{id}/prosesPesanan/', [OrdrController::class, 'progress'])->name('order.progress');
 Route::get('/pesanan/sinkron', [OrdrController::class, 'refresh'])->name('order.refresh')->middleware('role:developer|manager|supervisor'); //ok
-Route::get('/pesanan/ekspor', function () {
-    return Excel::download(new OrdrCombinedExport, 'ORDR_COMBINED.xlsx');
-})->name('order.export')->middleware('role:developer|supervisor'); //ok
+// Route::get('/pesanan/ekspor', function () {
+//     return Excel::download(new OrdrCombinedExport, 'ORDR_COMBINED.xlsx');
+// })->name('order.export')->middleware('role:developer|supervisor'); //ok
 
 Route::get('/kunjungan', [VisitController::class, 'index'])->name('visit')->middleware('auth');
 Route::post('/kunjungan/unggah', [VisitController::class, 'store'])->name('visit.store');
