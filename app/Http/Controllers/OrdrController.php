@@ -73,7 +73,6 @@ class OrdrController extends Controller
                 }
             }
         }
-
         // 🔹 Filter pencarian (jika ada scopeFilter)
         $query->filter($request->only(['search']));
 
@@ -246,12 +245,17 @@ class OrdrController extends Controller
         $dataOrder['OdrNum'] = $newNum;
         $dataOrder['OdrRefNum'] = $alias.'/'.$tahun.'/'.$bulanRomawi.'/'.$newNum;
         $dataOrder['PiutangJT'] = $piutangJT;
-        // dd($data);
+        $userBranches = DB::table('user_branch')
+                ->join('branch', 'user_branch.branch_id', '=', 'branch.id')
+                ->where('user_branch.user_id', $user->id)
+                ->pluck('branch.branch_name')
+                ->toArray();
         return view('ordr.ordr_create', [
             'title' => 'SCKKJ - Buat Pesanan',
             'titleHeader' => 'Buat Pesanan',
             'cust' => $cust,
-            'dataOrder' => $dataOrder
+            'dataOrder' => $dataOrder,
+            'userBranches' => $userBranches
         ]);
     }
 
@@ -315,6 +319,7 @@ class OrdrController extends Controller
      */
     public function edit(string $id)
     {
+        $user = Auth::user();
         $order = OrdrLocal::findOrFail($id);
         // dd($order->is_synced);
         if ($order->is_synced === 1) {
@@ -359,6 +364,12 @@ class OrdrController extends Controller
             'KetFG'
         ])->get();
 
+        $userBranches = DB::table('user_branch')
+                ->join('branch', 'user_branch.branch_id', '=', 'branch.id')
+                ->where('user_branch.user_id', $user->id)
+                ->pluck('branch.branch_name')
+                ->toArray();
+
         return view('ordr.ordr_edit', [
             'title' => 'SCKKJ - Perbarui Pesanan',
             'titleHeader' => 'Perbarui Pesanan',
@@ -366,7 +377,8 @@ class OrdrController extends Controller
             'rows' => $rows,
             'items' => $items,
             'cust' => $cust,
-            'OdrDocDate' => $OdrDocDate
+            'OdrDocDate' => $OdrDocDate,
+            'userBranches' => $userBranches
         ]);
     }
 

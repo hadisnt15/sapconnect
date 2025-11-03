@@ -1,19 +1,29 @@
-<x-layout>
-    <x-slot:title>{{ $title }}</x-slot:title>
-    <x-slot:titleHeader>{{ $titleHeader }}</x-slot:titleHeader>
+<?php if (isset($component)) { $__componentOriginal23a33f287873b564aaf305a1526eada4 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal23a33f287873b564aaf305a1526eada4 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> <?php echo e($title); ?> <?php $__env->endSlot(); ?>
+     <?php $__env->slot('titleHeader', null, []); ?> <?php echo e($titleHeader); ?> <?php $__env->endSlot(); ?>
 
-    @if (session()->has('success'))
+    <?php if(session()->has('success')): ?>
         <div class="p-4 mb-4 text-sm text-green-700 rounded-lg bg-green-50 border border-green-200">
-            {{ session('success') }}
+            <?php echo e(session('success')); ?>
+
         </div>
-    @endif
+    <?php endif; ?>
 
     <div class="relative overflow-x-auto shadow-md rounded-lg border border-gray-200 py-2 px-2 bg-white">
         <!-- Breadcrumb -->
         <nav class=" flex mb-4 px-5 py-3 border rounded-lg bg-gray-50 border-gray-200" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                 <li class="inline-flex items-center">
-                    <a href="{{ route('order') }}"
+                    <a href="<?php echo e(route('order')); ?>"
                         class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-red-800">
                         <i class="ri-bill-fill"></i> Daftar Pesanan
                     </a>
@@ -22,7 +32,8 @@
                 <li aria-current="page">
                     <div class="flex items-center">
                         <span class="ms-1 text-sm font-medium text-red-800 md:ms-2">
-                            <i class="ri-add-box-fill text-red-800"></i> {{ $titleHeader }}
+                            <i class="ri-add-box-fill text-red-800"></i> <?php echo e($titleHeader); ?>
+
                         </span>
                     </div>
                 </li>
@@ -30,29 +41,43 @@
         </nav>
 
         <!-- Form -->
-        <form class="mx-auto" action="{{ route('order.store') }}" method="post">
-            @csrf
+        <form class="mx-auto" action="<?php echo e(route('order.store')); ?>" method="post">
+            <?php echo csrf_field(); ?>
             <div class="">
                 <!-- Customer Info -->
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="mb-2">
                         <label for="OdrCrdCode" class="mb-2 text-sm font-medium text-gray-700">Kode Pelanggan</label>
                         <input type="text" id="OdrCrdCode" name="OdrCrdCode"
-                            value="{{ old('OdrCrdCode', $dataOrder['OdrCrdCode']) }}" autocomplete="off"
+                            value="<?php echo e(old('OdrCrdCode', $dataOrder['OdrCrdCode'])); ?>" autocomplete="off"
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                             readonly />
-                        @error('OdrCrdCode')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        <?php $__errorArgs = ['OdrCrdCode'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="mt-2 text-sm text-red-600"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="mb-2">
                         <label class="mb-2 text-sm font-medium text-gray-700">Nama Pelanggan</label>
-                        <input type="text" value="{{ old('CstName', $cust->CardName) }}" autocomplete="off"
+                        <input type="text" value="<?php echo e(old('CstName', $cust->CardName)); ?>" autocomplete="off"
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                             readonly />
-                        @error('CstName')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        <?php $__errorArgs = ['CstName'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="mt-2 text-sm text-red-600"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                 </div>
 
@@ -60,22 +85,36 @@
                     <div class="mb-2">
                         <label for="OdrRefNum" class="mb-2 text-sm font-medium text-gray-700">No Ref SO</label>
                         <input type="text" id="OdrRefNum" name="OdrRefNum"
-                            value="{{ old('OdrRefNum', $dataOrder['OdrRefNum']) }}" autocomplete="off"
+                            value="<?php echo e(old('OdrRefNum', $dataOrder['OdrRefNum'])); ?>" autocomplete="off"
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                             readonly />
-                        @error('OdrRefNum')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        <?php $__errorArgs = ['OdrRefNum'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="mt-2 text-sm text-red-600"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="mb-2">
                         <label class="mb-2 text-sm font-medium text-gray-700">Tanggal SO</label>
                         <input type="date" name="OdrDocDate"
-                            value="{{ old('OdrDocDate', $dataOrder['OdrDocDate']) }}" autocomplete="off"
+                            value="<?php echo e(old('OdrDocDate', $dataOrder['OdrDocDate'])); ?>" autocomplete="off"
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                             readonly />
-                        @error('OdrDocDate')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        <?php $__errorArgs = ['OdrDocDate'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="mt-2 text-sm text-red-600"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                 </div>
                 <div class="grid md:grid-cols-2 md:gap-6">
@@ -84,46 +123,68 @@
                         <select id="branch" name="branch" required
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
                             <option value="">Pilih Cabang</option>
-                            @foreach ($userBranches as $branch)
-                                <option value="{{ $branch }}"
-                                    {{ old('branch', $branch ?? '') == $branch ? 'selected' : '' }}>
-                                    {{ $branch }}
+                            <?php $__currentLoopData = $userBranches; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $branch): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($branch); ?>"
+                                    <?php echo e(old('branch', $branch ?? '') == $branch ? 'selected' : ''); ?>>
+                                    <?php echo e($branch); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
-                        @error('branch')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        <?php $__errorArgs = ['branch'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="mt-2 text-sm text-red-600"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                     <div class="mb-2">
                         <label class="mb-2 text-sm font-medium text-gray-700">Piutang JT</label>
-                        @php
+                        <?php
                             $piutangJT = $dataOrder['PiutangJT'] ?? 0;
                             $piutangClass = $piutangJT > 0
                                 ? 'border-red-500 bg-red-100 text-red-700 font-semibold'
                                 : 'border-gray-300 text-gray-700';
-                        @endphp
+                        ?>
                         <input type="text"
-                            value="{{ number_format($piutangJT, 0, '.', ',') }}"
+                            value="<?php echo e(number_format($piutangJT, 0, '.', ',')); ?>"
                             autocomplete="off"
-                            class="bg-gray-50 {{ $piutangClass }} border rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+                            class="bg-gray-50 <?php echo e($piutangClass); ?> border rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                             readonly />
-                        @error('CstName')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        <?php $__errorArgs = ['CstName'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="mt-2 text-sm text-red-600"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
                 </div>
                 <div class="mb-2">
                     <label class="mb-2 text-sm font-medium text-gray-700">Catatan</label>
-                    <input type="text" name="note" autocomplete="off" value="{{ old('note') }}" 
+                    <input type="text" name="note" autocomplete="off" value="<?php echo e(old('note')); ?>" 
                         class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                    @error('note')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['note'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="mt-2 text-sm text-red-600"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
-                <input type="hidden" name="OdrSlpCode" value="{{ $dataOrder['OdrSlpCode'] }}">
-                <input type="hidden" name="OdrNum" value="{{ $dataOrder['OdrNum'] }}">
+                <input type="hidden" name="OdrSlpCode" value="<?php echo e($dataOrder['OdrSlpCode']); ?>">
+                <input type="hidden" name="OdrNum" value="<?php echo e($dataOrder['OdrNum']); ?>">
 
                 <!-- Detail Barang -->
                 <h3 class="text-base font-semibold mb-2 text-gray-800">Detail Barang</h3>
@@ -264,7 +325,16 @@
             </div>
         </form>
     </div>
-</x-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal23a33f287873b564aaf305a1526eada4)): ?>
+<?php $attributes = $__attributesOriginal23a33f287873b564aaf305a1526eada4; ?>
+<?php unset($__attributesOriginal23a33f287873b564aaf305a1526eada4); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal23a33f287873b564aaf305a1526eada4)): ?>
+<?php $component = $__componentOriginal23a33f287873b564aaf305a1526eada4; ?>
+<?php unset($__componentOriginal23a33f287873b564aaf305a1526eada4); ?>
+<?php endif; ?>
 <script>
     async function initSelect(index) {
         let response = await fetch('/barang/api');
@@ -310,3 +380,4 @@
         initSelect(0);
     });
 </script>
+<?php /**PATH C:\laragon\www\sapconnect\resources\views/ordr/ordr_create.blade.php ENDPATH**/ ?>
