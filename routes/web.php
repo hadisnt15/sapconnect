@@ -18,6 +18,8 @@ use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\BranchController;
 // use App\Http\Controllers\UserDivisionController;
+use App\Exports\OrdrCombinedExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Http\Controllers\Report\PenjualanSprSegmentController;
 use App\Http\Controllers\Report\PenjualanSprSalesController;
@@ -84,6 +86,9 @@ Route::put('/pesanan/{id}/lenyapkan', [OrdrController::class, 'destroy'])->name(
 Route::get('/pesanan/{id}/detail', [OrdrController::class, 'detail'])->name('order.detail')->middleware('auth'); //ok
 Route::get('/pesanan/{id}/prosesPesanan/', [OrdrController::class, 'progress'])->name('order.progress');
 Route::get('/pesanan/sinkron', [OrdrController::class, 'refresh'])->name('order.refresh')->middleware('role:developer|manager|supervisor'); //ok
+Route::get('/pesanan/ekspor', function () {
+    return Excel::download(new OrdrCombinedExport, 'ORDR_COMBINED.xlsx');
+})->name('order.export')->middleware('role:developer|supervisor'); //ok
 
 Route::get('/kunjungan', [VisitController::class, 'index'])->name('visit')->middleware('auth');
 Route::post('/kunjungan/unggah', [VisitController::class, 'store'])->name('visit.store');
@@ -114,7 +119,7 @@ Route::get('/divisi/apiDiv', [DivisionController::class, 'api'])->name('div.apiD
 // Route::get('/divisi/pendaftaran', [UserDivisionController::class, 'create'])->name('userDiv.registration')->middleware('role:developer|manager|supervisor'); //ok
 Route::get('/pengguna/apiRep', [UserController::class, 'api'])->name('user.apiRep')->middleware('role:developer|manager|supervisor'); //ok
 Route::get('/laporan/apiRep', [ReportController::class, 'api'])->name('rep.apiRep')->middleware('role:developer|manager|supervisor'); //ok
-Route::get('/laporan/pendaftaran', [UserReportController::class, 'create'])->name('userRep.registration')->middleware('role:developer|manager|supervisor'); //ok
+// Route::get('/laporan/pendaftaran', [UserReportController::class, 'create'])->name('userRep.registration')->middleware('role:developer|manager|supervisor'); //ok
 
 Route::get('/laporan', [ReportController::class, 'index'])->name('report')->middleware('auth');
 Route::get('/laporan/buat', [ReportController::class, 'create'])->name('report.create')->middleware('role:developer'); //ok
