@@ -29,8 +29,6 @@ class LubRetailController extends Controller
         // Ambil data dari tabel lokal hasil sync
         $data = DB::table('report_lub_retail')
             ->select('TYPE', 'TYPE2', 'TYPE3', 'LITER')
-            ->where('TAHUN', $tahun)
-            ->where('BULAN', $bulan)
             ->orderBy('TYPE')
             ->orderBy('TYPE2')
             ->orderBy('TYPE3')
@@ -40,6 +38,7 @@ class LubRetailController extends Controller
             ->orderByDesc('tahun')
             ->orderByDesc('bulan')
             ->first();
+        // dd($data);
         $namaPeriode = null;
         if ($periode) {
             $namaPeriode = Carbon::createFromDate($periode->tahun, $periode->bulan, 1, 'Asia/Jakarta')
@@ -91,6 +90,7 @@ class LubRetailController extends Controller
         $bulan = $carbon->format('m'); // 08
         $startDate = Carbon::parse($month . '-01')->startOfMonth()->format('d.m.Y');
         $endDate   = Carbon::parse($month . '-01')->endOfMonth()->format('d.m.Y');
+        // dd($startDate, $endDate);
         Artisan::call('sync:reportLubRetail', [
             'startDate' => $startDate,
             'endDate' => $endDate,
