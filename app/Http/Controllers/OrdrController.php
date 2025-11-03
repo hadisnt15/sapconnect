@@ -297,7 +297,8 @@ class OrdrController extends Controller
 
     public function push()
     {
-        Artisan::call('push:ordr');
+        // Artisan::call('push:ordr');
+        \App\Jobs\PushOrdrJob::dispatch();
         return back()->with('success', 'Data Pesanan Berhasil Di-push ke SAP');
     }
 
@@ -447,7 +448,7 @@ class OrdrController extends Controller
 
         return redirect()->route('order')->with('success', 'Pengecekan pesanan berhasil diperbarui.');
     }
-
+    
     public function delete($id)
     {
         $order = OrdrLocal::findOrFail($id);
