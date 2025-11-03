@@ -124,8 +124,7 @@ unset($__errorArgs, $__bag); ?>
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
                             <option value="">Pilih Cabang</option>
                             <?php $__currentLoopData = $userBranches; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $branch): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($branch); ?>"
-                                    <?php echo e(old('branch', $branch ?? '') == $branch ? 'selected' : ''); ?>>
+                                <option value="<?php echo e($branch); ?>" <?php echo e(old('branch') == $branch ? 'selected' : ''); ?>>
                                     <?php echo e($branch); ?>
 
                                 </option>

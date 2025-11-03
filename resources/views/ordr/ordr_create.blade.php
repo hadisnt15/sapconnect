@@ -85,8 +85,7 @@
                             class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
                             <option value="">Pilih Cabang</option>
                             @foreach ($userBranches as $branch)
-                                <option value="{{ $branch }}"
-                                    {{ old('branch', $branch ?? '') == $branch ? 'selected' : '' }}>
+                                <option value="{{ $branch }}" {{ old('branch') == $branch ? 'selected' : '' }}>
                                     {{ $branch }}
                                 </option>
                             @endforeach
