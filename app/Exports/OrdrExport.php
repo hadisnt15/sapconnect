@@ -20,6 +20,20 @@ class OrdrExport implements WithEvents
                 $sheet = $event->sheet->getDelegate();
 
                 $user = Auth::user();
+                // dd($user->id);
+                // 🔹 Ambil divisi yang dimiliki user
+                $userDivisions = DB::table('user_division')
+                    ->join('division', 'user_division.div_id', '=', 'division.id')
+                    ->where('user_division.user_id', $user->id)
+                    ->pluck('division.div_name')
+                    ->toArray();
+
+                // 🔹 Ambil cabang yang dimiliki user
+                $userBranches = DB::table('user_branch')
+                    ->join('branch', 'user_branch.branch_id', '=', 'branch.id')
+                    ->where('user_branch.user_id', $user->id)
+                    ->pluck('branch.branch_name')
+                    ->toArray();
 
                 // 🔹 Ambil data
                 $data = DB::table('ordr_local')
@@ -30,6 +44,18 @@ class OrdrExport implements WithEvents
                     ->where('ordr_local.is_checked', 1)
                     ->where('ordr_local.is_deleted', 0)
                     ->where('ordr_local.is_synced', 0)
+                    ->when(empty($userBranches) && empty($userDivisions), function ($query) {
+                        // 🔒 Jika user tidak punya cabang & divisi, jangan tampilkan data
+                        $query->whereRaw('1=0');
+                    })
+                    ->when(!empty($userBranches), function ($query) use ($userBranches) {
+                        // 🔹 Filter berdasarkan cabang (field: branch)
+                        $query->whereIn('ordr_local.branch', $userBranches);
+                    })
+                    ->when(!empty($userDivisions), function ($query) use ($userDivisions) {
+                        // 🔹 Filter berdasarkan divisi (field: ProfitCenter di rdr1_local)
+                        $query->whereIn('rdr1_local.RdrItemProfitCenter', $userDivisions);
+                    })
                     ->orderBy('ordr_local.OdrRefNum')
                     ->orderBy('rdr1_local.id')
                     ->select(
@@ -53,7 +79,6 @@ class OrdrExport implements WithEvents
                     )
                     ->get()
                     ->groupBy('OdrRefNum');
-
                 $row = 1;
 
                 foreach ($data as $refNum => $items) {
