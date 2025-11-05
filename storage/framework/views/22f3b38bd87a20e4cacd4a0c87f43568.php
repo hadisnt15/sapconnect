@@ -61,7 +61,13 @@
                         class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
                         <i class="ri-upload-cloud-2-fill"></i> Kirim ke SAP
                     </a>
-                    <?php endif; ?>
+                <?php endif; ?>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('order.push')): ?>
+                    <a href="<?php echo e(route('order.export')); ?>"
+                        class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white" onclick="setTimeout(() => location.reload(), 1000)">
+                        <i class="ri-upload-cloud-2-fill"></i> Ekspor ke Excel
+                    </a>
+                <?php endif; ?>
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('order.refresh')): ?>
                     <a href="<?php echo e(route('order.refresh')); ?>"
                         class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">

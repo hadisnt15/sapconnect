@@ -18,7 +18,8 @@ use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\BranchController;
 // use App\Http\Controllers\UserDivisionController;
-use App\Exports\OrdrCombinedExport;
+// use App\Exports\OrdrCombinedExport;
+use App\Exports\OrdrExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Http\Controllers\Report\PenjualanSprSegmentController;
@@ -89,6 +90,7 @@ Route::get('/pesanan/sinkron', [OrdrController::class, 'refresh'])->name('order.
 // Route::get('/pesanan/ekspor', function () {
 //     return Excel::download(new OrdrCombinedExport, 'ORDR_COMBINED.xlsx');
 // })->name('order.export')->middleware('role:developer|supervisor'); //ok
+Route::get('/pesanan/ekspor', [OrdrController::class, 'export'])->name('order.export')->middleware('role:developer|supervisor'); //ok
 
 Route::get('/kunjungan', [VisitController::class, 'index'])->name('visit')->middleware('auth');
 Route::post('/kunjungan/unggah', [VisitController::class, 'store'])->name('visit.store');

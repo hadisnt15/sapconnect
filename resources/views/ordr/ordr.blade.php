@@ -50,7 +50,13 @@
                         class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
                         <i class="ri-upload-cloud-2-fill"></i> Kirim ke SAP
                     </a>
-                    @endcan
+                @endcan
+                @can('order.push')
+                    <a href="{{ route('order.export') }}"
+                        class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white" onclick="setTimeout(() => location.reload(), 1000)">
+                        <i class="ri-upload-cloud-2-fill"></i> Ekspor ke Excel
+                    </a>
+                @endcan
                 @can('order.refresh')
                     <a href="{{ route('order.refresh') }}"
                         class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">

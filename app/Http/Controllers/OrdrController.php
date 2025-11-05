@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
+use App\Exports\OrdrExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrdrController extends Controller
 {
@@ -304,6 +306,17 @@ class OrdrController extends Controller
         Artisan::call('push:ordr');
         // \App\Jobs\PushOrdrJob::dispatch();
         return back()->with('success', 'Data Pesanan Berhasil Di-push ke SAP');
+    }
+
+    public function export()
+    {
+        $user = Auth::user();
+        $timestamp = Carbon::now()->format('Ymd_His'); // contoh: 20251105_142300
+        $username = str_replace(' ', '_', strtolower($user->name)); // contoh: hadi_santoso
+
+        $filename = "Data_Pesanan_{$username}_{$timestamp}.xlsx";
+
+        return Excel::download(new OrdrExport, $filename);
     }
 
     /**
