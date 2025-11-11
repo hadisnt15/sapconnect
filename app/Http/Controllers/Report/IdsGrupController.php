@@ -71,7 +71,7 @@ class IdsGrupController extends Controller
                 ->translatedFormat('F Y');
         }
 
-        $lastSync = SyncLog::where('name', 'report.penjualan-lub-retail')->orderByDesc('last_sync')->first();
+        $lastSync = SyncLog::where('name', 'report.penjualan-industri-per-grup')->orderByDesc('last_sync')->first();
 
         if ($data->isEmpty()) {
             return view('reports.ids_grup', [
