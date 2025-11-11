@@ -17,12 +17,8 @@ class IdsGrupController extends Controller
     public function index(Request $request)
     {
         $report = Report::where('slug', 'penjualan-industri-per-grup')->first();
-        $monthInput = $request->input('month', now()->format('Y-m'));
-        [$tahun, $bulan] = explode('-', $monthInput);
 
-        $user = auth()->user();
-        $role = $user->role ?? null;
-
+        // --- Ambil periode yang tersedia ---
         $availablePeriods = DB::table('report_ids_grup')
             ->select(DB::raw("BULAN, TAHUN, CONCAT(TAHUN, '-', BULAN) as period"))
             ->distinct()
@@ -30,13 +26,31 @@ class IdsGrupController extends Controller
             ->orderByDesc(DB::raw('CAST(BULAN AS UNSIGNED)'))
             ->pluck('period');
 
+        // --- Periode yang dipilih ---
         $selectedPeriod = $request->input('period') ?? $availablePeriods->first();
         [$tahun, $bulan] = explode('-', $selectedPeriod);
 
-        $data = DB::table('report_ids_grup')
+        // --- Input pencarian ---
+        $search = trim($request->input('search', ''));
+
+        // --- Query utama data per grup ---
+        $query = DB::table('report_ids_grup')
             ->select('TYPECUST', 'GROUPCUST', 'CARDCODE', 'CARDNAME', 'KILOLITER')
             ->where('TAHUN', $tahun)
-            ->where('BULAN', $bulan)
+            ->where('BULAN', $bulan);
+
+        // Filter pencarian jika diisi
+        if ($search !== '') {
+            $query->where(function ($q) use ($search) {
+                $q->where('CARDNAME', 'like', "%{$search}%")
+                ->orWhere('CARDCODE', 'like', "%{$search}%")
+                ->orWhere('TYPECUST', 'like', "%{$search}%")
+                ->orWhere('GROUPCUST', 'like', "%{$search}%");
+            });
+        }
+
+        // Eksekusi dan kelompokkan
+        $data = $query
             ->orderBy('TYPECUST')
             ->orderBy('GROUPCUST')
             ->orderBy('CARDNAME')
@@ -50,45 +64,32 @@ class IdsGrupController extends Controller
                     ];
                 });
             });
-        
+
+        // Total per TYPECUST (terpengaruh pencarian juga)
         $typeTotal = DB::table('report_ids_grup')
             ->select('TYPECUST', DB::raw('SUM(KILOLITER) as TOTALKL'))
             ->where('TAHUN', $tahun)
             ->where('BULAN', $bulan)
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($q2) use ($search) {
+                    $q2->where('CARDNAME', 'like', "%{$search}%")
+                    ->orWhere('CARDCODE', 'like', "%{$search}%")
+                    ->orWhere('TYPECUST', 'like', "%{$search}%")
+                    ->orWhere('GROUPCUST', 'like', "%{$search}%");
+                });
+            })
             ->groupBy('TYPECUST')
             ->orderBy('TYPECUST')
-            ->pluck('TOTALKL','TYPECUST');
+            ->pluck('TOTALKL', 'TYPECUST');
 
-        $periode = ReportIdsGrup::select('tahun', 'bulan')
-            ->orderByDesc('tahun')
-            ->orderByDesc('bulan')
+        // Nama bulan human-readable
+        $namaPeriode = Carbon::createFromDate($tahun, $bulan, 1, 'Asia/Jakarta')
+            ->locale('id')
+            ->translatedFormat('F Y');
+
+        $lastSync = SyncLog::where('name', 'report.penjualan-industri-per-grup')
+            ->orderByDesc('last_sync')
             ->first();
-        // dd($data);
-        $namaPeriode = null;
-        if ($selectedPeriod) {
-            $namaPeriode = Carbon::createFromDate($tahun, $bulan, 1, 'Asia/Jakarta')
-                ->locale('id')
-                ->translatedFormat('F Y');
-        }
-
-        $lastSync = SyncLog::where('name', 'report.penjualan-industri-per-grup')->orderByDesc('last_sync')->first();
-
-        if ($data->isEmpty()) {
-            return view('reports.ids_grup', [
-                'title' => 'SCKKJ - Laporan ' . $report->name,
-                'titleHeader' => $report->name,
-                'data' => collect([]),
-                'typeTotal' => collect([]),
-                // 'data2' => collect([]),
-                'tahun' => $tahun,
-                'bulan' => $bulan,
-                'namaPeriode' => '-',
-                'availablePeriods' => $availablePeriods,
-                'selectedPeriod' => $selectedPeriod,
-                'lastSync' => $lastSync,
-                'message' => 'Tidak ada data untuk periode ini.'
-            ]);
-        }
 
         return view('reports.ids_grup', [
             'title' => 'SCKKJ - Laporan ' . $report->name,
@@ -101,6 +102,7 @@ class IdsGrupController extends Controller
             'availablePeriods' => $availablePeriods,
             'selectedPeriod' => $selectedPeriod,
             'lastSync' => $lastSync,
+            'search' => $search,
         ]);
     }
 

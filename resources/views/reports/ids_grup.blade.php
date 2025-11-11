@@ -23,18 +23,14 @@
             </ol>
         </nav>
 
-        
-        <!-- Filter Bulan -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
-            {{-- 🔹 Form Periode Tersedia (kiri) --}}
-            <form method="GET" action="{{ route('report.penjualan-industri-per-grup') }}" 
-                class="flex flex-col md:flex-row items-stretch md:items-center gap-2 w-full md:w-auto">
-                @csrf
-                <div class="flex flex-col md:flex-row md:items-center gap-2">
-                    <label for="period" class="text-xs font-medium text-gray-600">Periode Tersedia</label>
-                    <select name="period" id="period" onchange="this.form.submit()"
-                        class="bg-gray-50 border border-gray-300 text-xs rounded-lg text-gray-700 
-                            focus:ring focus:ring-indigo-200 py-2 px-3 w-full md:w-auto">
+            <!-- 🔍 Form Pencarian (Kiri) -->
+            <form action="{{ route('report.penjualan-industri-per-grup') }}" method="get" class="flex items-center gap-2 w-full md:w-auto">
+                <div>
+                    <select name="period" onchange="this.form.submit()" 
+                        class="bg-gray-50 border border-gray-300 text-xs rounded-lg text-gray-700 focus:ring focus:ring-indigo-200 py-2 px-2 w-full">
+                        <!--  -->
+                        <option value="">Bulan Tersedia</option>
                         @foreach($availablePeriods as $p)
                             <option value="{{ $p }}" {{ $selectedPeriod == $p ? 'selected' : '' }}>
                                 {{ $p }}
@@ -42,33 +38,42 @@
                         @endforeach
                     </select>
                 </div>
+                <label for="search" class="sr-only">Cari Pelanggan</label>
+                <div class="relative w-full md:w-96">
+                    <input type="text" id="search" name="search"
+                        value="{{ request('search') }}"
+                        class="block w-full p-2 ps-10 text-sm border rounded-lg bg-gray-50 border-gray-300 text-gray-700 placeholder-gray-400 focus:ring focus:ring-indigo-200"
+                        placeholder="Cari Pelanggan..." />
+                    <button type="submit"
+                        class="text-white absolute end-2 bottom-1.5 font-medium rounded-lg text-sm px-4 py-1 bg-red-800 hover:bg-red-500">
+                        <i class="ri-search-eye-fill"></i>
+                    </button>
+                </div>
             </form>
-            @can('dashboard.refresh')
-            {{-- 🔹 Form Sinkronisasi SAP (kanan) --}}
-            <form method="POST" action="{{ route('report.refresh.penjualan-industri-per-grup') }}" 
-                class="flex flex-col md:flex-row items-stretch md:items-center gap-2 w-full md:w-auto">
-                @csrf
-                <div class="flex flex-col md:flex-row md:items-center gap-2">
-                    <label for="month" class="text-xs font-medium text-gray-600"></label>
+
+            <!-- 🔧 Form Filter & Sinkronisasi (Kanan) -->
+            <div class="flex flex-col sm:flex-col md:flex-row md:items-center md:justify-end gap-3 w-full md:w-auto">
+                @can('dashboard.refresh')
+                <!-- 🔴 Sinkronisasi SAP -->
+                <form method="POST" action="{{ route('report.refresh.penjualan-industri-per-grup') }}" 
+                    class="flex flex-col md:flex-row gap-2 w-full md:w-auto">
+                    @csrf
                     <input 
                         type="month" 
                         id="month" 
                         name="month" 
                         value="{{ request('month', now()->format('Y-m')) }}"
-                        class="border rounded-lg py-2 px-3 text-xs font-medium text-gray-700 border-gray-300 
-                            focus:ring focus:ring-red-200 w-full md:w-auto"
+                        class="border rounded-lg p-2 text-xs font-medium text-gray-700 border-gray-300 focus:ring focus:ring-red-200 w-full"
                     >
-                </div>
-                <button type="submit" 
-                    class="text-xs w-full md:w-auto flex-shrink-0 rounded-lg px-3 py-2 bg-red-800 
-                        hover:bg-red-500 font-medium text-white flex items-center gap-1">
-                    <i class="ri-refresh-fill"></i> Sinkronkan dengan SAP
-                </button>
-            </form>
-            @endcan
+
+                    <button type="submit" 
+                        class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white flex items-center justify-center gap-1 w-full md:w-auto">
+                        <i class="ri-refresh-fill"></i> Sinkron
+                    </button>
+                </form>
+                @endcan
+            </div>
         </div>
-
-
         
         <div class="text-sm font-bold text-gray-500 mb-2">
             @if ($lastSync)
@@ -89,7 +94,7 @@
             </div>
 
             @if ($data->count() > 0)
-                <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
                     @foreach($typeTotal as $type => $total)
                         <div class="border rounded-lg shadow-sm">
                             <div class="bg-gray-100 rounded-t-lg border-b px-4 py-2"><span class="font-bold text-red-800">{{ $type }}</span></div>    
@@ -103,12 +108,14 @@
                         @foreach($groups as $group => $rows)
                         <div class="mb-6 border rounded-lg shadow-sm bg-white">
                             <div class="bg-gray-100 rounded-t-lg border-b px-4 py-2">
-                                <span class="font-bold text-red-800">{{ $type }} {{ $group }}</span>
+                                <span class="font-bold text-red-800">{{ $type }} </span>
+                                <span class="font-semibold text-red-800">{{ $group }}</span>
                             </div>
                             <div class="p-4 overflow-y-auto max-h-80">
                                 <table class="w-full text-xs border border-gray-300">
                                     <thead class="bg-gray-200 text-gray-700 text-center">
                                         <tr>
+                                            <th class="border px-2 py-1">#</th>
                                             <th class="border px-2 py-1 w-2/6">KODE PELANGGAN</th>
                                             <th class="border px-2 py-1 w-3/6">NAMA PELANGGAN</th>
                                             <th class="border px-2 py-1 w-1/6">CAPAIAN KL</th>
@@ -117,6 +124,7 @@
                                     <tbody>
                                         @foreach($rows['rows'] as $row)
                                         <tr>
+                                            <td class="border px-2 py-1">{{ $loop->iteration }}</td>
                                             <td class="border px-2 py-1">{{ $row->CARDCODE }}</td>
                                             <td class="border px-2 py-1">{{ $row->CARDNAME }}</td>
                                             <td class="border px-2 py-1 text-right">{{ number_format($row->KILOLITER,2) }}</td>
@@ -125,7 +133,7 @@
                                     </tbody>
                                     <thead>
                                         <tr class="bg-gray-200 text-gray-700">
-                                            <th colspan="2" class="border px-2 py-1 text-left">TOTAL {{ $type }} {{ $group }}</th>
+                                            <th colspan="3" class="border px-2 py-1 text-left">TOTAL {{ $type }} {{ $group }}</th>
                                             <th class="border px-2 py-1 text-right">{{ number_format($rows['total'], 2) }}</th>
                                         </tr>
                                     </thead>

@@ -33,18 +33,14 @@
             </ol>
         </nav>
 
-        
-        <!-- Filter Bulan -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
-            
-            <form method="GET" action="<?php echo e(route('report.penjualan-industri-per-grup')); ?>" 
-                class="flex flex-col md:flex-row items-stretch md:items-center gap-2 w-full md:w-auto">
-                <?php echo csrf_field(); ?>
-                <div class="flex flex-col md:flex-row md:items-center gap-2">
-                    <label for="period" class="text-xs font-medium text-gray-600">Periode Tersedia</label>
-                    <select name="period" id="period" onchange="this.form.submit()"
-                        class="bg-gray-50 border border-gray-300 text-xs rounded-lg text-gray-700 
-                            focus:ring focus:ring-indigo-200 py-2 px-3 w-full md:w-auto">
+            <!-- 🔍 Form Pencarian (Kiri) -->
+            <form action="<?php echo e(route('report.penjualan-industri-per-grup')); ?>" method="get" class="flex items-center gap-2 w-full md:w-auto">
+                <div>
+                    <select name="period" onchange="this.form.submit()" 
+                        class="bg-gray-50 border border-gray-300 text-xs rounded-lg text-gray-700 focus:ring focus:ring-indigo-200 py-2 px-2 w-full">
+                        <!--  -->
+                        <option value="">Bulan Tersedia</option>
                         <?php $__currentLoopData = $availablePeriods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($p); ?>" <?php echo e($selectedPeriod == $p ? 'selected' : ''); ?>>
                                 <?php echo e($p); ?>
@@ -53,33 +49,42 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
+                <label for="search" class="sr-only">Cari Pelanggan</label>
+                <div class="relative w-full md:w-96">
+                    <input type="text" id="search" name="search"
+                        value="<?php echo e(request('search')); ?>"
+                        class="block w-full p-2 ps-10 text-sm border rounded-lg bg-gray-50 border-gray-300 text-gray-700 placeholder-gray-400 focus:ring focus:ring-indigo-200"
+                        placeholder="Cari Pelanggan..." />
+                    <button type="submit"
+                        class="text-white absolute end-2 bottom-1.5 font-medium rounded-lg text-sm px-4 py-1 bg-red-800 hover:bg-red-500">
+                        <i class="ri-search-eye-fill"></i>
+                    </button>
+                </div>
             </form>
-            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('dashboard.refresh')): ?>
-            
-            <form method="POST" action="<?php echo e(route('report.refresh.penjualan-industri-per-grup')); ?>" 
-                class="flex flex-col md:flex-row items-stretch md:items-center gap-2 w-full md:w-auto">
-                <?php echo csrf_field(); ?>
-                <div class="flex flex-col md:flex-row md:items-center gap-2">
-                    <label for="month" class="text-xs font-medium text-gray-600"></label>
+
+            <!-- 🔧 Form Filter & Sinkronisasi (Kanan) -->
+            <div class="flex flex-col sm:flex-col md:flex-row md:items-center md:justify-end gap-3 w-full md:w-auto">
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('dashboard.refresh')): ?>
+                <!-- 🔴 Sinkronisasi SAP -->
+                <form method="POST" action="<?php echo e(route('report.refresh.penjualan-industri-per-grup')); ?>" 
+                    class="flex flex-col md:flex-row gap-2 w-full md:w-auto">
+                    <?php echo csrf_field(); ?>
                     <input 
                         type="month" 
                         id="month" 
                         name="month" 
                         value="<?php echo e(request('month', now()->format('Y-m'))); ?>"
-                        class="border rounded-lg py-2 px-3 text-xs font-medium text-gray-700 border-gray-300 
-                            focus:ring focus:ring-red-200 w-full md:w-auto"
+                        class="border rounded-lg p-2 text-xs font-medium text-gray-700 border-gray-300 focus:ring focus:ring-red-200 w-full"
                     >
-                </div>
-                <button type="submit" 
-                    class="text-xs w-full md:w-auto flex-shrink-0 rounded-lg px-3 py-2 bg-red-800 
-                        hover:bg-red-500 font-medium text-white flex items-center gap-1">
-                    <i class="ri-refresh-fill"></i> Sinkronkan dengan SAP
-                </button>
-            </form>
-            <?php endif; ?>
+
+                    <button type="submit" 
+                        class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white flex items-center justify-center gap-1 w-full md:w-auto">
+                        <i class="ri-refresh-fill"></i> Sinkron
+                    </button>
+                </form>
+                <?php endif; ?>
+            </div>
         </div>
-
-
         
         <div class="text-sm font-bold text-gray-500 mb-2">
             <?php if($lastSync): ?>
@@ -101,7 +106,7 @@
             </div>
 
             <?php if($data->count() > 0): ?>
-                <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
                     <?php $__currentLoopData = $typeTotal; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type => $total): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="border rounded-lg shadow-sm">
                             <div class="bg-gray-100 rounded-t-lg border-b px-4 py-2"><span class="font-bold text-red-800"><?php echo e($type); ?></span></div>    
@@ -115,12 +120,14 @@
                         <?php $__currentLoopData = $groups; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $group => $rows): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="mb-6 border rounded-lg shadow-sm bg-white">
                             <div class="bg-gray-100 rounded-t-lg border-b px-4 py-2">
-                                <span class="font-bold text-red-800"><?php echo e($type); ?> <?php echo e($group); ?></span>
+                                <span class="font-bold text-red-800"><?php echo e($type); ?> </span>
+                                <span class="font-semibold text-red-800"><?php echo e($group); ?></span>
                             </div>
                             <div class="p-4 overflow-y-auto max-h-80">
                                 <table class="w-full text-xs border border-gray-300">
                                     <thead class="bg-gray-200 text-gray-700 text-center">
                                         <tr>
+                                            <th class="border px-2 py-1">#</th>
                                             <th class="border px-2 py-1 w-2/6">KODE PELANGGAN</th>
                                             <th class="border px-2 py-1 w-3/6">NAMA PELANGGAN</th>
                                             <th class="border px-2 py-1 w-1/6">CAPAIAN KL</th>
@@ -129,6 +136,7 @@
                                     <tbody>
                                         <?php $__currentLoopData = $rows['rows']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
+                                            <td class="border px-2 py-1"><?php echo e($loop->iteration); ?></td>
                                             <td class="border px-2 py-1"><?php echo e($row->CARDCODE); ?></td>
                                             <td class="border px-2 py-1"><?php echo e($row->CARDNAME); ?></td>
                                             <td class="border px-2 py-1 text-right"><?php echo e(number_format($row->KILOLITER,2)); ?></td>
@@ -137,7 +145,7 @@
                                     </tbody>
                                     <thead>
                                         <tr class="bg-gray-200 text-gray-700">
-                                            <th colspan="2" class="border px-2 py-1 text-left">TOTAL <?php echo e($type); ?> <?php echo e($group); ?></th>
+                                            <th colspan="3" class="border px-2 py-1 text-left">TOTAL <?php echo e($type); ?> <?php echo e($group); ?></th>
                                             <th class="border px-2 py-1 text-right"><?php echo e(number_format($rows['total'], 2)); ?></th>
                                         </tr>
                                     </thead>
