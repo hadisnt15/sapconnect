@@ -29,6 +29,7 @@ use App\Http\Controllers\Report\LubRetailController;
 use App\Http\Controllers\Report\Top10LubRtlController;
 use App\Http\Controllers\Report\BulananAverageController;
 use App\Http\Controllers\Report\ProgRtlController;
+use App\Http\Controllers\Report\IdsGrupController;
 
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
@@ -118,10 +119,8 @@ Route::post('/pengguna/{id}/cabang', [BranchController::class, 'updateUserBranch
 
 Route::get('/pengguna/apiDiv', [UserController::class, 'api'])->name('user.apiDiv')->middleware('role:developer|manager|supervisor'); //ok
 Route::get('/divisi/apiDiv', [DivisionController::class, 'api'])->name('div.apiDiv')->middleware('role:developer|manager|supervisor'); //ok
-// Route::get('/divisi/pendaftaran', [UserDivisionController::class, 'create'])->name('userDiv.registration')->middleware('role:developer|manager|supervisor'); //ok
 Route::get('/pengguna/apiRep', [UserController::class, 'api'])->name('user.apiRep')->middleware('role:developer|manager|supervisor'); //ok
 Route::get('/laporan/apiRep', [ReportController::class, 'api'])->name('rep.apiRep')->middleware('role:developer|manager|supervisor'); //ok
-// Route::get('/laporan/pendaftaran', [UserReportController::class, 'create'])->name('userRep.registration')->middleware('role:developer|manager|supervisor'); //ok
 
 Route::get('/laporan', [ReportController::class, 'index'])->name('report')->middleware('auth');
 Route::get('/laporan/buat', [ReportController::class, 'create'])->name('report.create')->middleware('role:developer'); //ok
@@ -137,6 +136,8 @@ Route::get('/laporan/bulanan-dan-average', [BulananAverageController::class, 'in
 Route::post('/laporan/sinkron/bulanan-dan-average', [BulananAverageController::class, 'refresh'])->name('report.refresh.bulanan-dan-average')->middleware('can:dashboard.refresh'); //ok
 Route::get('/laporan/program-retail', [ProgRtlController::class, 'index'])->name('report.program-retail')->middleware('auth');
 Route::post('/laporan/sinkron/program-retail', [ProgRtlController::class, 'refresh'])->name('report.refresh.program-retail')->middleware('can:dashboard.refresh'); //ok
+Route::get('/laporan/penjualan-industri-per-grup', [IdsGrupController::class, 'index'])->name('report.penjualan-industri-per-grup')->middleware('auth');
+Route::post('/laporan/sinkron/penjualan-industri-per-grup', [IdsGrupController::class, 'refresh'])->name('report.refresh.penjualan-industri-per-grup')->middleware('auth');
 
 
 // Route::get('/test-hana', function () {
