@@ -26,26 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Schedule $schedule) {
 
-        $schedule->call(function () {
-            $startDate = now()->startOfMonth()->format('d.m.Y');
-            $endDate   = now()->endOfMonth()->format('d.m.Y');
-            $tahun     = now()->year;
-            $bulan     = now()->month;
-            Artisan::call('sync:dashboard', [
-                'startDate' => $startDate,
-                'endDate'   => $endDate,
-                'tahun'     => $tahun,
-                'bulan'     => $bulan,
-            ]);
-            SyncLog::create([
-                'name'      => 'dashboard',
-                'desc'      => 'Otomatis',
-                'last_sync' => now(),
-            ]);
-        })->everyThirtyMinutes()->when(function () {
-            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
-        });
-
+        // MASTER DATA
         $schedule->call(function () {
             Artisan::call('sync:oitm');
             SyncLog::create([
@@ -69,6 +50,17 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $schedule->call(function () {
+            Artisan::call('sync:oslp');
+            SyncLog::create([
+                'name' => 'oslp',
+                'desc' => 'Otomatis',
+                'last_sync' => now()
+            ]);
+        })->daily();
+        // END MASTER DATA
+
+        // TRANSACTION DATA
+        $schedule->call(function () {
             Artisan::call('sync:ordr');
             SyncLog::create([
                 'name' => 'ordr',
@@ -78,15 +70,28 @@ return Application::configure(basePath: dirname(__DIR__))
         })->everyThirtyMinutes()->when(function () {
             return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
         });
+        // END TRANSACTION DATA
 
+        // REPORT DATA
         $schedule->call(function () {
-            Artisan::call('sync:oslp');
-            SyncLog::create([
-                'name' => 'oslp',
-                'desc' => 'Otomatis',
-                'last_sync' => now()
+            $startDate = now()->startOfMonth()->format('d.m.Y');
+            $endDate   = now()->endOfMonth()->format('d.m.Y');
+            $tahun     = now()->year;
+            $bulan     = now()->month;
+            Artisan::call('sync:dashboard', [
+                'startDate' => $startDate,
+                'endDate'   => $endDate,
+                'tahun'     => $tahun,
+                'bulan'     => $bulan,
             ]);
-        })->daily();
+            SyncLog::create([
+                'name'      => 'dashboard',
+                'desc'      => 'Otomatis',
+                'last_sync' => now(),
+            ]);
+        })->hourly()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
 
         $schedule->call(function () {
             $startDate = now()->startOfMonth()->format('d.m.Y');
@@ -154,5 +159,25 @@ return Application::configure(basePath: dirname(__DIR__))
             return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
         });
 
+        $schedule->call(function () {
+            $startDate = now()->startOfMonth()->format('d.m.Y');
+            $endDate   = now()->endOfMonth()->format('d.m.Y');
+            $tahun     = now()->year;
+            $bulan     = now()->month;
+            Artisan::call('sync:reportIdsGrup', [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'tahun' => $tahun,
+                'bulan' => $bulan,
+            ]);
+            SyncLog::create([
+                'name' => 'report.penjualan-industri-per-grup',
+                'last_sync' => now(),
+                'desc' => 'Otomatis'
+            ]);
+        })->hourly()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
+        // END REPORT DATA
     })
     ->create();
