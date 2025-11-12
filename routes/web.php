@@ -126,6 +126,7 @@ Route::get('/laporan', [ReportController::class, 'index'])->name('report')->midd
 Route::get('/laporan/buat', [ReportController::class, 'create'])->name('report.create')->middleware('role:developer'); //ok
 Route::post('/laporan/simpan', [ReportController::class, 'store'])->name('report.store')->middleware('role:developer');
 Route::get('/laporan/pencapaian-penjualan-sparepart-per-segment', [PenjualanSprSegmentController::class, 'index'])->name('report.pencapaian-penjualan-sparepart-per-segment')->middleware('auth');
+Route::post('/laporan/sinkron/pencapaian-penjualan-sparepart-per-segment', [PenjualanSprSegmentController::class, 'refresh'])->name('report.refresh.pencapaian-penjualan-sparepart-per-segment')->middleware('auth');
 Route::get('/laporan/pencapaian-penjualan-sparepart-per-sales', [PenjualanSprSalesController::class, 'index'])->name('report.pencapaian-penjualan-sparepart-per-sales')->middleware('auth');
 Route::post('/laporan/sinkron/pencapaian-penjualan-sparepart-per-sales', [PenjualanSprSalesController::class, 'refresh'])->name('report.refresh.pencapaian-penjualan-sparepart-per-sales')->middleware('auth');
 Route::get('/laporan/grafik-penjualan-harian-sales', [GrafikPenjualanSalesController::class, 'index'])->name('report.grafik-penjualan-harian-sales')->middleware('auth');
