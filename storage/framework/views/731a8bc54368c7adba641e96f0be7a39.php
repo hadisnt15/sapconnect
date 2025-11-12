@@ -40,7 +40,7 @@
                     <select name="period" onchange="this.form.submit()" 
                         class="bg-gray-50 border border-gray-300 text-xs rounded-lg text-gray-700 focus:ring focus:ring-indigo-200 py-2 px-2 w-full">
                         <!--  -->
-                        <option value="">Bulan Tersedia</option>
+                        <option value="">Periode Tersedia</option>
                         <?php $__currentLoopData = $availablePeriods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($p); ?>" <?php echo e($selectedPeriod == $p ? 'selected' : ''); ?>>
                                 <?php echo e($p); ?>

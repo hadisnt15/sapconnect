@@ -32,10 +32,23 @@
                 </li>
             </ol>
         </nav>
-
-       <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
+        
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
             <!-- 🔍 Form Pencarian (Kiri) -->
-            <form action="" method="get" class="w-full md:w-auto">
+            <form action="<?php echo e(route('report.bulanan-dan-average')); ?>" method="get" class="flex items-center gap-2 w-full md:w-auto">
+                <div>
+                    <select name="segment" onchange="this.form.submit()" 
+                        class="bg-gray-50 border border-gray-300 text-xs rounded-lg text-gray-700 focus:ring focus:ring-indigo-200 py-2 px-2 w-full">
+                        <!--  -->
+                        <option value="">Semua Segment</option>
+                        <?php $__currentLoopData = $segments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $segment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($segment->SEGMENT); ?>" <?php echo e($segmentFilter == $segment->SEGMENT ? 'selected' : ''); ?>>
+                                <?php echo e($segment->SEGMENT); ?>
+
+                            </option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select>
+                </div>
                 <label for="search" class="sr-only">Cari Pelanggan</label>
                 <div class="relative w-full md:w-96">
                     <input type="text" id="search" name="search"
@@ -51,27 +64,6 @@
 
             <!-- 🔧 Form Filter & Sinkronisasi (Kanan) -->
             <div class="flex flex-col sm:flex-col md:flex-row md:items-center md:justify-end gap-3 w-full md:w-auto">
-
-                <!-- 🟢 Filter Segment -->
-                <form method="GET" action="<?php echo e(route('report.bulanan-dan-average')); ?>" 
-                    class="flex flex-col md:flex-row gap-2 w-full md:w-auto">
-                    <select name="segment" onchange="this.form.submit()" 
-                        class="bg-gray-50 border border-gray-300 text-xs rounded-md text-gray-700 focus:ring focus:ring-indigo-200 py-2 px-2 w-full">
-                        <option value="">Semua Segment</option>
-                        <?php $__currentLoopData = $segments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $segment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($segment->SEGMENT); ?>" <?php echo e($segmentFilter == $segment->SEGMENT ? 'selected' : ''); ?>>
-                                <?php echo e($segment->SEGMENT); ?>
-
-                            </option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select>
-
-                    <button type="submit"
-                        class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white w-full md:w-auto">
-                        Filter
-                    </button>
-                </form>
-
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('dashboard.refresh')): ?>
                 <!-- 🔴 Sinkronisasi SAP -->
                 <form method="POST" action="<?php echo e(route('report.refresh.bulanan-dan-average')); ?>" 
@@ -93,6 +85,8 @@
                 <?php endif; ?>
             </div>
         </div>
+
+       
 
 
 

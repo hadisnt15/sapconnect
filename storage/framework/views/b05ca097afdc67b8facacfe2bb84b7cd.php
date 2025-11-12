@@ -51,7 +51,7 @@
                 </div>
                 <button type="submit" 
                     class="text-xs w-full md:w-auto flex-shrink-0 rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
-                    <i class="ri-refresh-fill"></i> Sinkronkan dengan SAP
+                    <i class="ri-refresh-fill"></i> Sinkron
                 </button>
             </form>
         </div>
