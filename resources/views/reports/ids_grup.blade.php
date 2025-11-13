@@ -116,9 +116,10 @@
                                     <thead class="bg-gray-200 text-gray-700 text-center">
                                         <tr>
                                             <th class="border px-2 py-1">#</th>
-                                            <th class="border px-2 py-1 w-2/6">KODE PELANGGAN</th>
-                                            <th class="border px-2 py-1 w-3/6">NAMA PELANGGAN</th>
+                                            <th class="border px-2 py-1 w-1/6">KODE</th>
+                                            <th class="border px-2 py-1 w-3/6">NAMA</th>
                                             <th class="border px-2 py-1 w-1/6">CAPAIAN KL</th>
+                                            <th class="border px-2 py-1 w-2/6">PIUTANG JT</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -128,6 +129,7 @@
                                             <td class="border px-2 py-1">{{ $row->CARDCODE }}</td>
                                             <td class="border px-2 py-1">{{ $row->CARDNAME }}</td>
                                             <td class="border px-2 py-1 text-right">{{ number_format($row->KILOLITER,2) }}</td>
+                                            <td class="border px-2 py-1 text-right">{{ number_format($row->PIUTANGJT,2) }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -135,6 +137,7 @@
                                         <tr class="bg-gray-200 text-gray-700">
                                             <th colspan="3" class="border px-2 py-1 text-left">TOTAL {{ $type }} {{ $group }}</th>
                                             <th class="border px-2 py-1 text-right">{{ number_format($rows['total'], 2) }}</th>
+                                            <th class="border px-2 py-1 text-right">{{ number_format($rows['total2'], 2) }}</th>
                                         </tr>
                                     </thead>
                                 </table>

@@ -35,7 +35,7 @@ class IdsGrupController extends Controller
 
         // --- Query utama data per grup ---
         $query = DB::table('report_ids_grup')
-            ->select('TYPECUST', 'GROUPCUST', 'CARDCODE', 'CARDNAME', 'KILOLITER')
+            ->select('TYPECUST', 'GROUPCUST', 'CARDCODE', 'CARDNAME', 'KILOLITER', 'PIUTANGJT')
             ->where('TAHUN', $tahun)
             ->where('BULAN', $bulan);
 
@@ -61,6 +61,7 @@ class IdsGrupController extends Controller
                     return [
                         'rows' => $rows,
                         'total' => $rows->sum('KILOLITER'),
+                        'total2' => $rows->sum('PIUTANGJT'),
                     ];
                 });
             });

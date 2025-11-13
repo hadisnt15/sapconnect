@@ -128,9 +128,10 @@
                                     <thead class="bg-gray-200 text-gray-700 text-center">
                                         <tr>
                                             <th class="border px-2 py-1">#</th>
-                                            <th class="border px-2 py-1 w-2/6">KODE PELANGGAN</th>
-                                            <th class="border px-2 py-1 w-3/6">NAMA PELANGGAN</th>
+                                            <th class="border px-2 py-1 w-1/6">KODE</th>
+                                            <th class="border px-2 py-1 w-3/6">NAMA</th>
                                             <th class="border px-2 py-1 w-1/6">CAPAIAN KL</th>
+                                            <th class="border px-2 py-1 w-2/6">PIUTANG JT</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -140,6 +141,7 @@
                                             <td class="border px-2 py-1"><?php echo e($row->CARDCODE); ?></td>
                                             <td class="border px-2 py-1"><?php echo e($row->CARDNAME); ?></td>
                                             <td class="border px-2 py-1 text-right"><?php echo e(number_format($row->KILOLITER,2)); ?></td>
+                                            <td class="border px-2 py-1 text-right"><?php echo e(number_format($row->PIUTANGJT,2)); ?></td>
                                         </tr>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </tbody>
@@ -147,6 +149,7 @@
                                         <tr class="bg-gray-200 text-gray-700">
                                             <th colspan="3" class="border px-2 py-1 text-left">TOTAL <?php echo e($type); ?> <?php echo e($group); ?></th>
                                             <th class="border px-2 py-1 text-right"><?php echo e(number_format($rows['total'], 2)); ?></th>
+                                            <th class="border px-2 py-1 text-right"><?php echo e(number_format($rows['total2'], 2)); ?></th>
                                         </tr>
                                     </thead>
                                 </table>
