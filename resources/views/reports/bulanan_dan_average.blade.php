@@ -131,6 +131,7 @@
         
         <!-- MOBILE -->
         <div class="md:hidden block p-2 border border-gray-200 mt-4 rounded-lg bg-white">
+            <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Laporan Pencapaian Pelanggan Periode {{ $namaPeriode }} dan Rata-rata 3 Bulan Terakhir</h5></div>
             <div class="border border-gray-200 rounded-lg overflow-x-auto bg-white shadow-sm overflow-x-auto mb-8 sm:rounded-lg">
                 <table class="table w-full text-xs text-gray-600">
                     <thead class="text-xs font-bold text-white uppercase bg-red-800">

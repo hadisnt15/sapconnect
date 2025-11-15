@@ -30,6 +30,7 @@ use App\Http\Controllers\Report\Top10LubRtlController;
 use App\Http\Controllers\Report\BulananAverageController;
 use App\Http\Controllers\Report\ProgRtlController;
 use App\Http\Controllers\Report\IdsGrupController;
+use App\Http\Controllers\Report\UltahController;
 
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
@@ -140,6 +141,7 @@ Route::get('/laporan/program-retail', [ProgRtlController::class, 'index'])->name
 Route::post('/laporan/sinkron/program-retail', [ProgRtlController::class, 'refresh'])->name('report.refresh.program-retail')->middleware('can:dashboard.refresh'); //ok
 Route::get('/laporan/penjualan-industri-per-grup', [IdsGrupController::class, 'index'])->name('report.penjualan-industri-per-grup')->middleware('auth');
 Route::post('/laporan/sinkron/penjualan-industri-per-grup', [IdsGrupController::class, 'refresh'])->name('report.refresh.penjualan-industri-per-grup')->middleware('auth');
+Route::get('/laporan/kalender-ulang-tahun', [UltahController::class, 'index'])->name('report.kalender-ulang-tahun')->middleware('auth');
 
 
 // Route::get('/test-hana', function () {
