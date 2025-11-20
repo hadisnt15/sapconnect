@@ -21,6 +21,7 @@ class OitmController extends Controller
         // ambil semua divisi milik user
         $userDiv = $user->divisions->pluck('div_name');
         $items = OitmLocal::Filter(request(['search']))
+            ->where('TotalStock','>',0)
             ->whereIn('div_name',$userDiv)
             ->orderBy('Segment')
             ->orderBy('Type')
