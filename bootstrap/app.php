@@ -155,7 +155,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 'last_sync' => now(),
                 'desc' => 'Otomatis'
             ]);
-        })->hourly()->when(function () {
+        })->everyTwoHours()->when(function () {
             return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
         });
 
@@ -175,7 +175,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 'last_sync' => now(),
                 'desc' => 'Otomatis'
             ]);
-        })->hourly()->when(function () {
+        })->everyTwoHours()->when(function () {
             return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
         });
         
@@ -212,6 +212,17 @@ return Application::configure(basePath: dirname(__DIR__))
             ]);
             SyncLog::create([
                 'name' => 'report.penjualan_spr_segment',
+                'last_sync' => now(),
+                'desc' => 'Otomatis'
+            ]);
+        })->hourly()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
+
+        $schedule->call(function () {
+            Artisan::call('sync:reportStokPtm');
+            SyncLog::create([
+                'name' => 'report.stok-pertamina',
                 'last_sync' => now(),
                 'desc' => 'Otomatis'
             ]);

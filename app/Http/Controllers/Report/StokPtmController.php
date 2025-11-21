@@ -8,6 +8,7 @@ use App\Models\Report\ReportStokPtm;
 use App\Models\SyncLog;
 use App\Models\Report;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 
 class StokPtmController extends Controller
 {
@@ -57,4 +58,18 @@ class StokPtmController extends Controller
             'lastSync' => $lastSync,
         ]);
     }
+
+    public function refresh()
+    {
+        Artisan::call('sync:reportStokPtm');
+        SyncLog::create(
+            [
+                'name' => 'report.stok-pertamina',
+                'last_sync' => now(),
+                'desc' => 'Manual'
+            ]
+        );
+        return back()->with('success', 'Data Stok Pertamina Berhasil Di-refresh dari SAP');
+    }
+    
 }

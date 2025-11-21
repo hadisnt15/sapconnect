@@ -44,7 +44,7 @@
                 @can('dashboard.refresh')
                 <!-- 🔴 Sinkronisasi SAP -->
                 <div class="flex items-center">
-                    <a href="{{ route('item.refresh') }}"
+                    <a href="{{ route('report.refresh.stok-pertamina') }}"
                         class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
                         <i class="ri-refresh-fill"></i> Sinkronkan dengan SAP
                     </a>

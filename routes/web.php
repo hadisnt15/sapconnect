@@ -144,6 +144,7 @@ Route::get('/laporan/penjualan-industri-per-grup', [IdsGrupController::class, 'i
 Route::post('/laporan/sinkron/penjualan-industri-per-grup', [IdsGrupController::class, 'refresh'])->name('report.refresh.penjualan-industri-per-grup')->middleware('auth');
 Route::get('/laporan/kalender-ulang-tahun', [UltahController::class, 'index'])->name('report.kalender-ulang-tahun')->middleware('auth');
 Route::get('/laporan/stok-pertamina', [StokPtmController::class, 'index'])->name('report.stok-pertamina')->middleware('auth');
+Route::get('/laporan/sinkron/stok-pertamina', [StokPtmController::class, 'refresh'])->name('report.refresh.stok-pertamina')->middleware('auth');
 
 
 // Route::get('/test-hana', function () {

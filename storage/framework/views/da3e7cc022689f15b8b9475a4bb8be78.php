@@ -54,7 +54,7 @@
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('dashboard.refresh')): ?>
                 <!-- 🔴 Sinkronisasi SAP -->
                 <div class="flex items-center">
-                    <a href="<?php echo e(route('item.refresh')); ?>"
+                    <a href="<?php echo e(route('report.refresh.stok-pertamina')); ?>"
                         class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
                         <i class="ri-refresh-fill"></i> Sinkronkan dengan SAP
                     </a>
