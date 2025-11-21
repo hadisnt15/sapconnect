@@ -83,7 +83,7 @@ class OitmController extends Controller
                         CONCAT(ItemCode, ' || ', LEFT(FrgnName, 100), ' || ', KetStock)
                 END AS ItemLabel
             ")
-        );
+        )->where('TotalStock', '>', 0);
 
         // Jika user punya divisi, filter berdasarkan div_name
         if ($userDivisions->isNotEmpty()) {

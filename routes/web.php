@@ -31,6 +31,7 @@ use App\Http\Controllers\Report\BulananAverageController;
 use App\Http\Controllers\Report\ProgRtlController;
 use App\Http\Controllers\Report\IdsGrupController;
 use App\Http\Controllers\Report\UltahController;
+use App\Http\Controllers\Report\StokPtmController;
 
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
@@ -142,6 +143,7 @@ Route::post('/laporan/sinkron/program-retail', [ProgRtlController::class, 'refre
 Route::get('/laporan/penjualan-industri-per-grup', [IdsGrupController::class, 'index'])->name('report.penjualan-industri-per-grup')->middleware('auth');
 Route::post('/laporan/sinkron/penjualan-industri-per-grup', [IdsGrupController::class, 'refresh'])->name('report.refresh.penjualan-industri-per-grup')->middleware('auth');
 Route::get('/laporan/kalender-ulang-tahun', [UltahController::class, 'index'])->name('report.kalender-ulang-tahun')->middleware('auth');
+Route::get('/laporan/stok-pertamina', [StokPtmController::class, 'index'])->name('report.stok-pertamina')->middleware('auth');
 
 
 // Route::get('/test-hana', function () {
