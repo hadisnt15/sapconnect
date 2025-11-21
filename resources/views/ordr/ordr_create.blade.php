@@ -127,14 +127,25 @@
                 <!-- Detail Barang -->
                 <h3 class="text-base font-semibold mb-2 text-gray-800">Detail Barang</h3>
 
-                <div x-data="{
+                <div 
+                    x-data="{
                         items: [{
                             RdrItemCode: '', ItemName: '', RdrItemQuantity: 1, RdrItemPrice: 0,
                             RdrItemSatuan: '', RdrItemProfitCenter: '', RdrItemKetHKN: '', RdrItemKetFG: '', open: true
                         }]
-                    }" class="space-y-3">
+                    }" 
+                    class="space-y-3"
+                >
                     <template x-for="(item, index) in items" :key="index">
-                        <div class="border border-gray-200 bg-white rounded-lg shadow-sm">
+                        
+                        <!-- ADD: Border merah jika belum lengkap -->
+                        <div 
+                            class="border bg-white rounded-lg shadow-sm"
+                            :class="(!item.RdrItemCode || !item.RdrItemQuantity || !item.RdrItemPrice) 
+                                        ? 'border-red-500' 
+                                        : 'border-gray-200'"
+                        >
+
                             <!-- Header item -->
                             <div class="flex justify-between items-center p-3 bg-gray-100 rounded-t-lg cursor-pointer"
                                 @click="item.open = !item.open">
@@ -162,14 +173,16 @@
                                     <label class="text-xs text-gray-600">Kode Barang</label>
                                     <select :id="'itemSelect' + index" :name="'items[' + index + '][RdrItemCode]'" required
                                         class="border border-gray-300 bg-gray-50 rounded-md w-full md:text-sm text-xs p-2"
-                                        x-model="item.RdrItemCode" @change="
+                                        x-model="item.RdrItemCode" 
+                                        @change="
                                             let exists = items.some((i, idx) => i.RdrItemCode === item.RdrItemCode && idx !== index);
                                             if (exists) {
                                                 alert('Barang sudah dipilih di baris lain!');
                                                 item.RdrItemCode = '';
                                                 $nextTick(() => initSelect(index, ''));
                                             }
-                                        "></select>
+                                        "
+                                    ></select>
                                 </div>
 
                                 <!-- Input lainnya -->
@@ -182,13 +195,13 @@
                                     <div>
                                         <label class="text-xs text-gray-600">Qty</label>
                                         <input type="number" :name="'items[' + index + '][RdrItemQuantity]'"
-                                            x-model="item.RdrItemQuantity"
+                                            x-model="item.RdrItemQuantity" required
                                             class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
                                     </div>
                                     <div>
                                         <label class="text-xs text-gray-600">Harga</label>
                                         <input type="number" step="0.01" :name="'items[' + index + '][RdrItemPrice]'"
-                                            x-model="item.RdrItemPrice"
+                                            x-model="item.RdrItemPrice" required
                                             class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
                                     </div>
                                     <div>
@@ -245,14 +258,26 @@
 
                     <!-- Tombol tambah item -->
                     <button type="button"
-                        @click="items.push({
-                            RdrItemCode:'', ItemName:'', RdrItemQuantity:1, RdrItemPrice:0,
-                            RdrItemSatuan:'', RdrItemProfitCenter:'', RdrItemKetHKN:'', RdrItemKetFG:'', open:true
-                        });
-                        $nextTick(() => initSelect(items.length-1))"
+                        @click="
+                            items.push({
+                                RdrItemCode:'', ItemName:'', RdrItemQuantity:1, RdrItemPrice:0,
+                                RdrItemSatuan:'', RdrItemProfitCenter:'', RdrItemKetHKN:'', RdrItemKetFG:'', open:true
+                            });
+
+                            $nextTick(() => initSelect(items.length - 1));
+
+                            // Alert ketika kelipatan 3
+                            if (items.length % 10 === 0) {
+                                alert(
+                                    `Pengingat: Anda sudah memilih ${items.length} barang.\n\n` + 
+                                    `Simpan pesanan terlebih dahulu untuk menghindari logout otomatis.`
+                                );
+                            }
+                        "
                         class="w-fit p-2 bg-green-600 hover:bg-green-400 text-white py-2 rounded-lg text-sm">
                         <i class="ri-add-circle-fill"></i> Tambah Barang
                     </button>
+
 
                     <!-- Tombol submit -->
                     <button type="submit"
@@ -264,6 +289,7 @@
         </form>
     </div>
 </x-layout>
+
 <script>
     async function initSelect(index) {
         let response = await fetch('/barang/api');
@@ -277,9 +303,23 @@
             searchField: ['ItemCode', 'FrgnName'],
             options: data,
             placeholder: 'Pilih item...',
+
             onChange: function(value) {
+
+                /* ADD: Cek duplikasi item */
+                let alpineRoot = document.querySelector('#itemSelect' + index).closest('[x-data]');
+                let items = Alpine.$data(alpineRoot).items;
+
+                let duplicate = items.some((i, idx) => i.RdrItemCode === value && idx !== index);
+                if (duplicate) {
+                    alert('Barang tidak boleh duplikat!');
+                    this.clear();
+                    return;
+                }
+
                 let selected = this.options[value];
                 if (selected) {
+
                     document.querySelector(`[name="items[${index}][ItemName]"]`).value = selected.FrgnName;
                     document.querySelector(`[name="items[${index}][RdrItemPrice]"]`).value = selected.HET;
                     document.querySelector(`[name="items[${index}][RdrItemProfitCenter]"]`).value = selected.ProfitCenter;
@@ -287,17 +327,14 @@
                     document.querySelector(`[name="items[${index}][RdrItemKetHKN]"]`).value = selected.KetHKN;
                     document.querySelector(`[name="items[${index}][RdrItemKetFG]"]`).value = selected.KetFG;
 
-                    // 🔁 Tambahkan sinkronisasi ke Alpine reaktif
-                    let alpineScope = document.querySelector(`#itemSelect${index}`).closest('[x-data]');
-                    let item = Alpine.$data(alpineScope).items[index];
-                    item.ItemName = selected.FrgnName;
-                    item.RdrItemPrice = selected.HET;
-                    item.RdrItemProfitCenter = selected.ProfitCenter;
-                    item.RdrItemSatuan = selected.Satuan;
-                    item.RdrItemKetHKN = selected.KetHKN;
-                    item.RdrItemKetFG = selected.KetFG;
+                    let alpineScope = Alpine.$data(alpineRoot).items[index];
+                    alpineScope.ItemName = selected.FrgnName;
+                    alpineScope.RdrItemPrice = selected.HET;
+                    alpineScope.RdrItemProfitCenter = selected.ProfitCenter;
+                    alpineScope.RdrItemSatuan = selected.Satuan;
+                    alpineScope.RdrItemKetHKN = selected.KetHKN;
+                    alpineScope.RdrItemKetFG = selected.KetFG;
 
-                    // Trigger update untuk input
                     let el = document.querySelector(`#itemSelect${index}`);
                     el.dispatchEvent(new Event('input'));
                 }
