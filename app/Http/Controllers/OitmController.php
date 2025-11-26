@@ -54,43 +54,76 @@ class OitmController extends Controller
 
     public function api()
     {
-        // Ambil user yang sedang login
         $user = Auth::user();
 
-        // Ambil daftar nama divisi user
+        // Ambil daftar divisi user
         $userDivisions = DB::table('user_division')
             ->join('division', 'user_division.div_id', '=', 'division.id')
             ->where('user_division.user_id', $user->id)
             ->pluck('division.div_name');
 
-        // Query item sesuai divisi user
-        $query = OitmLocal::select(
-            'ItemCode as id',
-            'ItemCode',
-            'FrgnName',
-            'HET',
-            'ProfitCenter',
-            'Satuan',
-            'KetHKN',
-            'KetFG',
-            DB::raw("
-                CASE
-                    WHEN div_name = 'SPR' THEN 
-                        CONCAT(ItemCode, ' || ', Segment, ' || ', Type, ' || ', Series, ' || ', LEFT(FrgnName, 100), ' || ', KetStock)
-                    WHEN div_name IN ('LUB RTL', 'LUB IDS') THEN
-                        CONCAT(LEFT(FrgnName, 100), ' || ', KetStock)
-                    ELSE
-                        CONCAT(ItemCode, ' || ', LEFT(FrgnName, 100), ' || ', KetStock)
-                END AS ItemLabel
-            ")
-        );
+        // Subquery T1 (item yang sedang dipesan, belum sync, belum delete)
+        $subT1 = DB::table('oitm_local as a')
+            ->select(
+                'a.ItemCode',
+                DB::raw("COUNT(*) OVER(PARTITION BY a.ItemCode) AS Cek")
+            )
+            ->join('rdr1_local as b', 'b.RdrItemCode', '=', 'a.ItemCode')
+            ->join('ordr_local as c', 'c.id', '=', 'b.OdrId')
+            ->where('c.is_deleted', 0)
+            ->where('c.is_synced', 0);
 
-        // Jika user punya divisi, filter berdasarkan div_name
+        // Main query sesuai SQL Anda
+        $query = OitmLocal::from('oitm_local as T0')
+            ->select(
+                'T0.ItemCode as id',
+                'T0.ItemCode',
+                'T0.FrgnName',
+                'T0.HET',
+                'T0.TotalStock',
+                'T0.ProfitCenter',
+                'T0.Satuan',
+                'T0.KetHKN',
+                'T0.KetFG',
+                DB::raw("
+                    CASE
+                        WHEN T0.div_name = 'SPR' THEN 
+                            CONCAT(T0.ItemCode, ' || ', T0.Segment, ' || ', T0.Type, ' || ', T0.Series, ' || ', LEFT(T0.FrgnName, 100), ' || ', T0.KetStock)
+                        WHEN T0.div_name IN ('LUB RTL', 'LUB IDS') THEN
+                            CONCAT(T0.ItemCode, ' || ', LEFT(T0.FrgnName, 100), ' || ', T0.KetStock)
+                        ELSE
+                            CONCAT(T0.ItemCode, ' || ', LEFT(T0.FrgnName, 100), ' || ', T0.KetStock)
+                    END AS ItemLabel
+                "),
+                // Cek logic
+                DB::raw("
+                    CASE
+                        WHEN T0.TotalStock != 0 THEN 1
+                        ELSE (
+                            CASE 
+                                WHEN T1.Cek IS NOT NULL THEN 1
+                                ELSE 0
+                            END
+                        )
+                    END AS Cek
+                ")
+            )
+            ->leftJoinSub($subT1, 'T1', function ($join) {
+                $join->on('T1.ItemCode', '=', 'T0.ItemCode');
+            })
+            ->where(function ($q) {
+                $q->where('T0.TotalStock', '!=', 0)
+                ->orWhereNotNull('T1.Cek');
+            });
+
+        // Filter berdasarkan divisi user
         if ($userDivisions->isNotEmpty()) {
-            $query->whereIn('div_name', $userDivisions);
+            $query->whereIn('T0.div_name', $userDivisions);
         }
 
-        // Eksekusi query dan kembalikan hasil
+        // Hanya ambil item yang valid sesuai kondisi (Cek = 1)
+        $query->having('Cek', '=', 1);
+
         return $query->get();
     }
 

@@ -373,7 +373,7 @@ unset($__errorArgs, $__bag); ?>
             searchField: ['ItemCode', 'FrgnName'],
             options: data,
             placeholder: 'Pilih item...',
-
+            
             onChange: function(value) {
 
                 /* ADD: Cek duplikasi item */
