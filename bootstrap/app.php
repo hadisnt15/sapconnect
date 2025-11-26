@@ -73,26 +73,6 @@ return Application::configure(basePath: dirname(__DIR__))
         // END TRANSACTION DATA
 
         // REPORT DATA
-        // $schedule->call(function () {
-        //     $startDate = now()->startOfMonth()->format('d.m.Y');
-        //     $endDate   = now()->endOfMonth()->format('d.m.Y');
-        //     $tahun     = now()->year;
-        //     $bulan     = now()->month;
-        //     Artisan::call('sync:dashboard', [
-        //         'startDate' => $startDate,
-        //         'endDate'   => $endDate,
-        //         'tahun'     => $tahun,
-        //         'bulan'     => $bulan,
-        //     ]);
-        //     SyncLog::create([
-        //         'name'      => 'dashboard',
-        //         'desc'      => 'Otomatis',
-        //         'last_sync' => now(),
-        //     ]);
-        // })->hourly()->when(function () {
-        //     return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
-        // });
-
         $schedule->call(function () {
             $startDate = now()->startOfMonth()->format('d.m.Y');
             $endDate   = now()->endOfMonth()->format('d.m.Y');
@@ -152,6 +132,26 @@ return Application::configure(basePath: dirname(__DIR__))
             ]);
             SyncLog::create([
                 'name' => 'report.bulanan-dan-average',
+                'last_sync' => now(),
+                'desc' => 'Otomatis'
+            ]);
+        })->everyTwoHours()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
+        
+        $schedule->call(function () {
+            $startDate = now()->startOfMonth()->format('d.m.Y');
+            $endDate   = now()->endOfMonth()->format('d.m.Y');
+            $tahun     = now()->year;
+            $bulan     = now()->month;
+            Artisan::call('sync:reportBulananAverageLiter', [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'tahun' => $tahun,
+                'bulan' => $bulan,
+            ]);
+            SyncLog::create([
+                'name' => 'report.bulanan-dan-average-liter',
                 'last_sync' => now(),
                 'desc' => 'Otomatis'
             ]);

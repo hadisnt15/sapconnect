@@ -32,6 +32,7 @@ use App\Http\Controllers\Report\ProgRtlController;
 use App\Http\Controllers\Report\IdsGrupController;
 use App\Http\Controllers\Report\UltahController;
 use App\Http\Controllers\Report\StokPtmController;
+use App\Http\Controllers\Report\BulananAverageLiterController;
 
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
@@ -145,6 +146,8 @@ Route::post('/laporan/sinkron/penjualan-industri-per-grup', [IdsGrupController::
 Route::get('/laporan/kalender-ulang-tahun', [UltahController::class, 'index'])->name('report.kalender-ulang-tahun')->middleware('auth');
 Route::get('/laporan/stok-pertamina', [StokPtmController::class, 'index'])->name('report.stok-pertamina')->middleware('auth');
 Route::get('/laporan/sinkron/stok-pertamina', [StokPtmController::class, 'refresh'])->name('report.refresh.stok-pertamina')->middleware('auth');
+Route::get('/laporan/bulanan-dan-average-liter', [BulananAverageLiterController::class, 'index'])->name('report.bulanan-dan-average-liter')->middleware('auth');
+Route::post('/laporan/sinkron/bulanan-dan-average-liter', [BulananAverageLiterController::class, 'refresh'])->name('report.refresh.bulanan-dan-average-liter')->middleware('can:dashboard.refresh'); //ok
 
 
 // Route::get('/test-hana', function () {
