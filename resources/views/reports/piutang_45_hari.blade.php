@@ -94,7 +94,7 @@
             <div class="grid md:grid-cols-2 gap-2">
                 @foreach ($grouped as $key => $custs)
                     <div class="mb-2 border border-gray-200 rounded-lg overflow-x-auto bg-white">
-                        <div class="relative overflow-x-auto shadow-sm sm:rounded-lg max-h-160">
+                        <div class="relative overflow-x-auto shadow-sm sm:rounded-lg max-h-96">
                             <table class="table-auto w-full text-sm text-left rtl:text-right text-gray-600">
                                 <thead class="text-xs font-bold text-white uppercase bg-red-800">
                                     <tr>
