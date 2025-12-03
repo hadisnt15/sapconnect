@@ -36,7 +36,7 @@
                                 <label for="username" class="block mb-2 text-sm font-medium text-gray-700">Nama Pengguna</label>
                                 <input type="text" name="username" id="username"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-700 placeholder-gray-400 focus:ring focus:ring-indigo-200 focus:border-indigo-300"
-                                    placeholder="Nama Pengguna" required autocomplete="off">
+                                    placeholder="Nama Pengguna" required autocomplete="off" autofocus>
                                 @error('phone')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror

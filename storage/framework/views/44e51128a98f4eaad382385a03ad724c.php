@@ -59,8 +59,10 @@
             <?php $__currentLoopData = $report; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $r): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
                 <h5 class="font-medium tracking-tight text-gray-800">
-                    <?php echo e(strtoupper($r->name)); ?>
-
+                    <?php if($r->selisih_hari <= 3): ?>
+                        <span class="border rounded-md text-xs px-1 py-1 bg-green-500 text-white font-semibold">BARU</span>
+                    <?php endif; ?>
+                    <?php echo e(strtoupper($r->name)); ?> 
                 </h5>
                 <div class="ml-auto w-full">
                     <div class="items-center justify-end">

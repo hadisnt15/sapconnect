@@ -229,6 +229,17 @@ return Application::configure(basePath: dirname(__DIR__))
         })->hourly()->when(function () {
             return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
         });
+        
+        $schedule->call(function () {
+            Artisan::call('sync:reportPiut45Hari');
+            SyncLog::create([
+                'name' => 'report.piutang-45-hari',
+                'last_sync' => now(),
+                'desc' => 'Otomatis'
+            ]);
+        })->everyTwoHours()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
         // END REPORT DATA
     })
     ->create();

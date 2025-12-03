@@ -47,7 +47,7 @@
                                 <label for="username" class="block mb-2 text-sm font-medium text-gray-700">Nama Pengguna</label>
                                 <input type="text" name="username" id="username"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-700 placeholder-gray-400 focus:ring focus:ring-indigo-200 focus:border-indigo-300"
-                                    placeholder="Nama Pengguna" required autocomplete="off">
+                                    placeholder="Nama Pengguna" required autocomplete="off" autofocus>
                                 <?php $__errorArgs = ['phone'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

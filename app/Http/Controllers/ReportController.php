@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Report;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
+use App\Models\Report;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
@@ -20,12 +21,18 @@ class ReportController extends Controller
         // ambil semua divisi milik user
         $userRep = $user->reports->pluck('slug');
 
-        $report = Report::whereIn('slug', $userRep)->orderBy('name', 'asc')->Filter(request(['search']))->paginate(100)->withQueryString();
+        $report = Report::whereIn('slug', $userRep)
+            ->addSelect('*', DB::raw('DATEDIFF(NOW(), created_at) AS selisih_hari'))
+            ->orderBy('name', 'asc')
+            ->Filter(request(['search']))
+            ->paginate(100)
+            ->withQueryString();
 
+        
         return view('reports.report', [
             'title' => 'SCKKJ - Daftar Laporan',
             'titleHeader' => 'Daftar Laporan',
-            'report' => $report
+            'report' => $report,
         ]);
     }
 

@@ -33,6 +33,7 @@ use App\Http\Controllers\Report\IdsGrupController;
 use App\Http\Controllers\Report\UltahController;
 use App\Http\Controllers\Report\StokPtmController;
 use App\Http\Controllers\Report\BulananAverageLiterController;
+use App\Http\Controllers\Report\Piutang45HariController;
 
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
@@ -148,6 +149,8 @@ Route::get('/laporan/stok-pertamina', [StokPtmController::class, 'index'])->name
 Route::get('/laporan/sinkron/stok-pertamina', [StokPtmController::class, 'refresh'])->name('report.refresh.stok-pertamina')->middleware('auth');
 Route::get('/laporan/bulanan-dan-average-liter', [BulananAverageLiterController::class, 'index'])->name('report.bulanan-dan-average-liter')->middleware('auth');
 Route::post('/laporan/sinkron/bulanan-dan-average-liter', [BulananAverageLiterController::class, 'refresh'])->name('report.refresh.bulanan-dan-average-liter')->middleware('can:dashboard.refresh'); //ok
+Route::get('/laporan/piutang-45-hari', [Piutang45HariController::class, 'index'])->name('report.piutang-45-hari')->middleware('auth');
+Route::get('/laporan/sinkron/piutang-45-hari', [Piutang45HariController::class, 'refresh'])->name('report.refresh.piutang-45-hari')->middleware('auth');
 
 
 // Route::get('/test-hana', function () {

@@ -49,7 +49,10 @@
             @foreach($report as $r)
             <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
                 <h5 class="font-medium tracking-tight text-gray-800">
-                    {{ strtoupper($r->name) }}
+                    @if($r->selisih_hari <= 3)
+                        <span class="border rounded-md text-xs px-1 py-1 bg-green-500 text-white font-semibold">BARU</span>
+                    @endif
+                    {{ strtoupper($r->name) }} 
                 </h5>
                 <div class="ml-auto w-full">
                     <div class="items-center justify-end">
