@@ -77,78 +77,125 @@
         </div>
 
         
-        <div class="grid md:grid-cols-4 gap-3">
-            <?php $__currentLoopData = $custs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $c): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
-                    <div class="flex justify-between items-center mb-1 text-gray-500">
-                        <span
-                            class="text-xs font-bold border border-gray-400 me-2 px-2.5 py-0.5 rounded-lg bg-white text-red-800">
-                            <?php if($c->Type1 === 'PELANGGAN BARU'): ?>
-                                <?php echo e($c->Type1); ?>
+        <?php
+            $currentGroup = null;
+            $isGridOpen = false;
+        ?>
 
-                            <?php else: ?>
-                                <?php echo e($c->Type1); ?> - <?php echo e($c->Type2); ?> - <?php echo e($c->Group); ?>
+        <div class="space-y-4">
 
-                            <?php endif; ?>
-                        </span>
-                    </div>
-                    <h5 class="font-bold tracking-tight text-gray-800">
-                        <?php echo e($c->CardCode); ?>
+        <?php $__currentLoopData = $custs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $c): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                    </h5>
-                    <div class="mb-2 border-b border-gray-300">
-                        <p class="text-sm font-medium text-gray-600"><?php echo e(Str::limit($c->CardName, 30)); ?></p>
+            
+            <?php if($currentGroup !== $c->Group): ?>
+
+                
+                <?php if($isGridOpen): ?>
                     </div>
-                    <div class="text-xs font-medium text-gray-700">
-                        <p><?php echo e(strtoupper($c->Contact)); ?>: <?php echo e(strtoupper($c->Phone)); ?></p>
-                        <p><?php echo e(Str::limit(strtoupper($c->Address), 30)); ?></p>
-                        <p><?php echo e(strtoupper($c->City)); ?>, <?php echo e(strtoupper($c->State)); ?></p>
-                    </div>
-                    <div class="ml-auto w-full">
-                        <div class="flex items-center justify-end">
-                            <?php if($c->Type1 === 'PELANGGAN BARU'): ?>
-                                <a href="<?php echo e(route('customer.edit', $c->CardCode)); ?>" class="mt-1">
-                                    <span
-                                        class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
-                                        <i class="ri-edit-2-fill"></i> Edit
-                                    </span>
-                                </a>
-                            <?php endif; ?>
-                            <a href="<?php echo e(route('order.create', $c->CardCode)); ?>" class="mt-1">
+                    <?php $isGridOpen = false; ?>
+                <?php endif; ?>
+
+                <?php
+                    $currentGroup = $c->Group;
+                    $isGridOpen = true;
+                ?>
+
+                
+                <div class="w-full bg-red-800 text-white font-bold px-3 py-2 rounded">
+                    GROUP: <?php echo e($currentGroup); ?>
+
+                </div>
+
+                
+                <div class="px-5 grid md:grid-cols-4 gap-3 mb-2">
+            <?php endif; ?>
+
+
+            
+            <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
+                <div class="flex justify-between items-center mb-1 text-gray-500">
+                    <span
+                        class="text-xs font-bold border border-gray-400 me-2 px-2.5 py-0.5 rounded-lg bg-white text-red-800">
+                        <?php if($c->Type1 === 'PELANGGAN BARU'): ?>
+                            <?php echo e($c->Type1); ?>
+
+                        <?php else: ?>
+                            <?php echo e($c->Type1); ?> - <?php echo e($c->Type2); ?> - <?php echo e($c->Group); ?>
+
+                        <?php endif; ?>
+                    </span>
+                </div>
+
+                <h5 class="font-bold tracking-tight text-gray-800">
+                    <?php echo e($c->CardCode); ?>
+
+                </h5>
+
+                <div class="mb-2 border-b border-gray-300">
+                    <p class="text-sm font-medium text-gray-600"><?php echo e(Str::limit($c->CardName, 30)); ?></p>
+                </div>
+
+                <div class="text-xs font-medium text-gray-700">
+                    <p><?php echo e(strtoupper($c->Contact)); ?>: <?php echo e(strtoupper($c->Phone)); ?></p>
+                    <p><?php echo e(Str::limit(strtoupper($c->Address), 30)); ?></p>
+                    <p><?php echo e(strtoupper($c->City)); ?>, <?php echo e(strtoupper($c->State)); ?></p>
+                </div>
+
+                <div class="ml-auto w-full">
+                    <div class="flex items-center justify-end">
+                        <?php if($c->Type1 === 'PELANGGAN BARU'): ?>
+                            <a href="<?php echo e(route('customer.edit', $c->CardCode)); ?>" class="mt-1">
                                 <span
                                     class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
-                                    <i class="ri-bill-fill"></i> Pesanan
+                                    <i class="ri-edit-2-fill"></i> Edit
                                 </span>
                             </a>
-                            <button data-modal-target="ocrd-view" data-modal-toggle="ocrd-view" type="button"
-                                class="open-modal-ocrd-btn mt-1"
-                                data-cardcode="<?php echo e($c->CardCode); ?>"
-                                data-cardname="<?php echo e($c->CardName); ?>"
-                                data-address="<?php echo e($c->Address); ?>"
-                                data-city="<?php echo e($c->City); ?>"
-                                data-state="<?php echo e($c->State); ?>"
-                                data-contact="<?php echo e(strtoupper($c->Contact)); ?>"
-                                data-phone="<?php echo e($c->Phone); ?>"
-                                data-group="<?php echo e($c->Group); ?>"
-                                data-type1="<?php echo e($c->Type1); ?>"
-                                data-type2="<?php echo e($c->Type2); ?>"
-                                data-createdate="<?php echo e($c->CreateDate); ?>"
-                                data-lastodrdate="<?php echo e($c->LastOdrDate); ?>"
-                                data-termin="<?php echo e($c->Termin); ?>"
-                                data-limit="<?php echo e(number_format($c->Limit, 0, ',', '.')); ?>"
-                                data-actbal="<?php echo e(number_format($c->ActBal, 0, ',', '.')); ?>"
-                                data-dlvbal="<?php echo e(number_format($c->DlvBal, 0, ',', '.')); ?>"
-                                data-odrbal="<?php echo e(number_format($c->OdrBal, 0, ',', '.')); ?>"
-                                data-piutangjt="<?php echo e(number_format($c->piutang_jt, 0, ',', '.')); ?>">
-                                <span
-                                    class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
-                                    <i class="ri-eye-fill"></i> Detail
-                                </span>
-                            </button>
-                        </div>
+                        <?php endif; ?>
+                        <a href="<?php echo e(route('order.create', $c->CardCode)); ?>" class="mt-1">
+                            <span
+                                class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
+                                <i class="ri-bill-fill"></i> Pesanan
+                            </span>
+                        </a>
+
+                        
+                        <button data-modal-target="ocrd-view" data-modal-toggle="ocrd-view" type="button"
+                            class="open-modal-ocrd-btn mt-1"
+                            data-cardcode="<?php echo e($c->CardCode); ?>"
+                            data-cardname="<?php echo e($c->CardName); ?>"
+                            data-address="<?php echo e($c->Address); ?>"
+                            data-city="<?php echo e($c->City); ?>"
+                            data-state="<?php echo e($c->State); ?>"
+                            data-contact="<?php echo e(strtoupper($c->Contact)); ?>"
+                            data-phone="<?php echo e($c->Phone); ?>"
+                            data-group="<?php echo e($c->Group); ?>"
+                            data-type1="<?php echo e($c->Type1); ?>"
+                            data-type2="<?php echo e($c->Type2); ?>"
+                            data-createdate="<?php echo e($c->CreateDate); ?>"
+                            data-lastodrdate="<?php echo e($c->LastOdrDate); ?>"
+                            data-termin="<?php echo e($c->Termin); ?>"
+                            data-limit="<?php echo e(number_format($c->Limit, 0, ',', '.')); ?>"
+                            data-actbal="<?php echo e(number_format($c->ActBal, 0, ',', '.')); ?>"
+                            data-dlvbal="<?php echo e(number_format($c->DlvBal, 0, ',', '.')); ?>"
+                            data-odrbal="<?php echo e(number_format($c->OdrBal, 0, ',', '.')); ?>"
+                            data-piutangjt="<?php echo e(number_format($c->piutang_jt, 0, ',', '.')); ?>">
+                            <span
+                                class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
+                                <i class="ri-eye-fill"></i> Detail
+                            </span>
+                        </button>
                     </div>
-                </article>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+            </article>
+
+
+            
+            <?php if($loop->last): ?>
+                </div>
+            <?php endif; ?>
+
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
         </div>
         
 

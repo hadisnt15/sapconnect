@@ -66,75 +66,121 @@
         </div>
 
         {{-- DESKTOP --}}
-        <div class="grid md:grid-cols-4 gap-3">
-            @foreach ($custs as $c)
-                <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
-                    <div class="flex justify-between items-center mb-1 text-gray-500">
-                        <span
-                            class="text-xs font-bold border border-gray-400 me-2 px-2.5 py-0.5 rounded-lg bg-white text-red-800">
-                            @if ($c->Type1 === 'PELANGGAN BARU')
-                                {{ $c->Type1 }}
-                            @else
-                                {{ $c->Type1 }} - {{ $c->Type2 }} - {{ $c->Group }}
-                            @endif
-                        </span>
+        @php
+            $currentGroup = null;
+            $isGridOpen = false;
+        @endphp
+
+        <div class="space-y-4">
+
+        @foreach ($custs as $c)
+
+            {{-- === GROUPING BERDASARKAN GROUP === --}}
+            @if ($currentGroup !== $c->Group)
+
+                {{-- TUTUP GRID SEBELUMNYA --}}
+                @if ($isGridOpen)
                     </div>
-                    <h5 class="font-bold tracking-tight text-gray-800">
-                        {{ $c->CardCode }}
-                    </h5>
-                    <div class="mb-2 border-b border-gray-300">
-                        <p class="text-sm font-medium text-gray-600">{{ Str::limit($c->CardName, 30) }}</p>
-                    </div>
-                    <div class="text-xs font-medium text-gray-700">
-                        <p>{{ strtoupper($c->Contact) }}: {{ strtoupper($c->Phone) }}</p>
-                        <p>{{ Str::limit(strtoupper($c->Address), 30) }}</p>
-                        <p>{{ strtoupper($c->City) }}, {{ strtoupper($c->State) }}</p>
-                    </div>
-                    <div class="ml-auto w-full">
-                        <div class="flex items-center justify-end">
-                            @if ($c->Type1 === 'PELANGGAN BARU')
-                                <a href="{{ route('customer.edit', $c->CardCode) }}" class="mt-1">
-                                    <span
-                                        class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
-                                        <i class="ri-edit-2-fill"></i> Edit
-                                    </span>
-                                </a>
-                            @endif
-                            <a href="{{ route('order.create', $c->CardCode) }}" class="mt-1">
+                    @php $isGridOpen = false; @endphp
+                @endif
+
+                @php
+                    $currentGroup = $c->Group;
+                    $isGridOpen = true;
+                @endphp
+
+                {{-- HEADER GROUP --}}
+                <div class="w-full bg-red-800 text-white font-bold px-3 py-2 rounded">
+                    GROUP: {{ $currentGroup }}
+                </div>
+
+                {{-- GRID BARU --}}
+                <div class="px-5 grid md:grid-cols-4 gap-3 mb-2">
+            @endif
+
+
+            {{-- === CUSTOMER CARD === --}}
+            <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
+                <div class="flex justify-between items-center mb-1 text-gray-500">
+                    <span
+                        class="text-xs font-bold border border-gray-400 me-2 px-2.5 py-0.5 rounded-lg bg-white text-red-800">
+                        @if ($c->Type1 === 'PELANGGAN BARU')
+                            {{ $c->Type1 }}
+                        @else
+                            {{ $c->Type1 }} - {{ $c->Type2 }} - {{ $c->Group }}
+                        @endif
+                    </span>
+                </div>
+
+                <h5 class="font-bold tracking-tight text-gray-800">
+                    {{ $c->CardCode }}
+                </h5>
+
+                <div class="mb-2 border-b border-gray-300">
+                    <p class="text-sm font-medium text-gray-600">{{ Str::limit($c->CardName, 30) }}</p>
+                </div>
+
+                <div class="text-xs font-medium text-gray-700">
+                    <p>{{ strtoupper($c->Contact) }}: {{ strtoupper($c->Phone) }}</p>
+                    <p>{{ Str::limit(strtoupper($c->Address), 30) }}</p>
+                    <p>{{ strtoupper($c->City) }}, {{ strtoupper($c->State) }}</p>
+                </div>
+
+                <div class="ml-auto w-full">
+                    <div class="flex items-center justify-end">
+                        @if ($c->Type1 === 'PELANGGAN BARU')
+                            <a href="{{ route('customer.edit', $c->CardCode) }}" class="mt-1">
                                 <span
                                     class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
-                                    <i class="ri-bill-fill"></i> Pesanan
+                                    <i class="ri-edit-2-fill"></i> Edit
                                 </span>
                             </a>
-                            <button data-modal-target="ocrd-view" data-modal-toggle="ocrd-view" type="button"
-                                class="open-modal-ocrd-btn mt-1"
-                                data-cardcode="{{ $c->CardCode }}"
-                                data-cardname="{{ $c->CardName }}"
-                                data-address="{{ $c->Address }}"
-                                data-city="{{ $c->City }}"
-                                data-state="{{ $c->State }}"
-                                data-contact="{{ strtoupper($c->Contact) }}"
-                                data-phone="{{ $c->Phone }}"
-                                data-group="{{ $c->Group }}"
-                                data-type1="{{ $c->Type1 }}"
-                                data-type2="{{ $c->Type2 }}"
-                                data-createdate="{{ $c->CreateDate }}"
-                                data-lastodrdate="{{ $c->LastOdrDate }}"
-                                data-termin="{{ $c->Termin }}"
-                                data-limit="{{ number_format($c->Limit, 0, ',', '.') }}"
-                                data-actbal="{{ number_format($c->ActBal, 0, ',', '.') }}"
-                                data-dlvbal="{{ number_format($c->DlvBal, 0, ',', '.') }}"
-                                data-odrbal="{{ number_format($c->OdrBal, 0, ',', '.') }}"
-                                data-piutangjt="{{ number_format($c->piutang_jt, 0, ',', '.') }}">
-                                <span
-                                    class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
-                                    <i class="ri-eye-fill"></i> Detail
-                                </span>
-                            </button>
-                        </div>
+                        @endif
+                        <a href="{{ route('order.create', $c->CardCode) }}" class="mt-1">
+                            <span
+                                class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
+                                <i class="ri-bill-fill"></i> Pesanan
+                            </span>
+                        </a>
+
+                        {{-- Modal Detail --}}
+                        <button data-modal-target="ocrd-view" data-modal-toggle="ocrd-view" type="button"
+                            class="open-modal-ocrd-btn mt-1"
+                            data-cardcode="{{ $c->CardCode }}"
+                            data-cardname="{{ $c->CardName }}"
+                            data-address="{{ $c->Address }}"
+                            data-city="{{ $c->City }}"
+                            data-state="{{ $c->State }}"
+                            data-contact="{{ strtoupper($c->Contact) }}"
+                            data-phone="{{ $c->Phone }}"
+                            data-group="{{ $c->Group }}"
+                            data-type1="{{ $c->Type1 }}"
+                            data-type2="{{ $c->Type2 }}"
+                            data-createdate="{{ $c->CreateDate }}"
+                            data-lastodrdate="{{ $c->LastOdrDate }}"
+                            data-termin="{{ $c->Termin }}"
+                            data-limit="{{ number_format($c->Limit, 0, ',', '.') }}"
+                            data-actbal="{{ number_format($c->ActBal, 0, ',', '.') }}"
+                            data-dlvbal="{{ number_format($c->DlvBal, 0, ',', '.') }}"
+                            data-odrbal="{{ number_format($c->OdrBal, 0, ',', '.') }}"
+                            data-piutangjt="{{ number_format($c->piutang_jt, 0, ',', '.') }}">
+                            <span
+                                class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
+                                <i class="ri-eye-fill"></i> Detail
+                            </span>
+                        </button>
                     </div>
-                </article>
-            @endforeach
+                </div>
+            </article>
+
+
+            {{-- === TUTUP GRID JIKA LOOP BERAKHIR === --}}
+            @if ($loop->last)
+                </div>
+            @endif
+
+        @endforeach
+
         </div>
         {{-- END DESKTOP --}}
 
