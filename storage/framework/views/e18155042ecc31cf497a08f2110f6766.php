@@ -103,9 +103,9 @@
         <!-- DESKTOP -->
         <div class="hidden md:block p-2 border border-gray-200 mt-4 rounded-lg bg-white">
             <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Laporan Pencapaian Pelanggan Periode <?php echo e($namaPeriode); ?> dan Rata-rata 3 Bulan Terakhir</h5></div>
-            <div class="border border-gray-200 rounded-lg overflow-x-auto bg-white shadow-sm overflow-x-auto mb-8 sm:rounded-lg">
+            <div class="border border-gray-200 rounded-lg overflow-x-auto max-h-[600px] bg-white shadow-sm mb-8 sm:rounded-lg">
                 <table class="table w-full text-xs text-gray-600">
-                    <thead class="text-xs font-bold text-white uppercase bg-red-800">
+                    <thead class="text-xs font-bold text-white uppercase bg-red-800 sticky top-0 z-20">
                         <tr>
                             <th class="px-2 py-2">SEGMENT</th>
                             <th class="px-2 py-2">PELANGGAN</th>
@@ -145,9 +145,9 @@
         <!-- MOBILE -->
         <div class="md:hidden block p-2 border border-gray-200 mt-4 rounded-lg bg-white">
             <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Laporan Pencapaian Pelanggan Periode <?php echo e($namaPeriode); ?> dan Rata-rata 3 Bulan Terakhir</h5></div>
-            <div class="border border-gray-200 rounded-lg overflow-x-auto bg-white shadow-sm overflow-x-auto mb-8 sm:rounded-lg">
+            <div class="border border-gray-200 rounded-lg overflow-x-auto max-h-[600px] bg-white shadow-sm mb-8 sm:rounded-lg">
                 <table class="table w-full text-xs text-gray-600">
-                    <thead class="text-xs font-bold text-white uppercase bg-red-800">
+                    <thead class="text-xs font-bold text-white uppercase bg-red-800 sticky top-0 z-20">
                         <tr>
                             <th class="px-2 py-2">SEGMENT / PELANGGAN / PENJUAL / ALAMAT</th>
                             <th class="px-2 py-2 text-center">

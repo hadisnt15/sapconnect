@@ -106,7 +106,7 @@ class BulananAverageLiterController extends Controller
                 foreach ($bulanHeaders as $bulan) {
                     $cust[$bulan] = optional(
                         $group->firstWhere('NAMATAHUNBULAN', $bulan)
-                    )->VALUE ?? '-';
+                    )->LITER ?? '-';
                 }
 
                 return $cust;
