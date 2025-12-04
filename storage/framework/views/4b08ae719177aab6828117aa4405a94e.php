@@ -67,58 +67,125 @@
         </div>    
 
         
-        <div class="grid md:grid-cols-4 gap-3">
-            <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
-                    <div class="flex justify-between items-center mb-1 text-gray-500">
-                        <span
-                            class="text-xs font-bold border border-gray-400 me-2 px-2.5 py-0.5 rounded-lg bg-white text-red-800">
-                            <?php if($i->div_name === 'SPR'): ?>
+        <?php
+            $currentDiv = null;
+            $currentBrand = null;
+            $isGridOpen = false;
+        ?>
+
+        <div class="space-y-4">
+
+        <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
+            
+            <?php if($currentDiv !== $i->div_name): ?>
+
+                
+                <?php if($isGridOpen): ?>
+                    </div>
+                    <?php $isGridOpen = false; ?>
+                <?php endif; ?>
+
+                
+                <?php
+                    $currentDiv = $i->div_name;
+                    $currentBrand = null; // reset brand jika divisi berubah
+                ?>
+
+                
+                <div class="w-full bg-red-800 text-white font-bold px-3 py-2 rounded">
+                    DIVISI: <?php echo e($currentDiv); ?>
+
+                </div>
+            <?php endif; ?>
+
+
+            
+            <?php if($currentBrand !== $i->Brand): ?>
+
+                
+                <?php if($isGridOpen): ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php
+                    $currentBrand = $i->Brand;
+                    $isGridOpen = true;
+                ?>
+
+                
+                <div class="px-2">
+                    <div class="w-full bg-gray-200 text-gray-800 font-semibold px-5 py-1 rounded">
+                        BRAND: <?php echo e($currentBrand); ?>
+
+                    </div>
+                </div>
+                    
+                
+                <div class="px-5 grid md:grid-cols-4 gap-3 mb-2">
+            <?php endif; ?>
+
+
+            
+            <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
+                <div class="flex justify-between items-center mb-1 text-gray-500">
+                    <span class="text-xs font-bold border border-gray-400 px-2 py-0.5 rounded bg-white text-red-800">
+                        <?php if($i->div_name === 'SPR'): ?>
                             <?php echo e($i->Segment); ?> - <?php echo e($i->Type); ?> - <?php echo e($i->Series); ?>
 
-                            <?php elseif(Str::contains($i->div_name, 'LUB')): ?>
+                        <?php else: ?>
                             <?php echo e($i->Brand); ?> - <?php echo e($i->Series); ?>
 
-                            <?php endif; ?>
-                        </span>
+                        <?php endif; ?>
+                    </span>
+                </div>
+
+                <h5 class="font-bold tracking-tight text-gray-800"><?php echo e($i->ItemCode); ?></h5>
+                <p class="text-sm text-gray-600 mb-2 border-b pb-1">
+                    <?php echo e(Str::limit($i->FrgnName, 30)); ?>
+
+                </p>
+
+                <div class="grid grid-cols-2 text-sm text-gray-700">
+                    <div>
+                        <p>Stok: <?php echo e($i->TotalStock); ?></p>
+                        <p>HET: <?php echo e(number_format($i->HET)); ?></p>
                     </div>
-                    <h5 class="font-bold tracking-tight text-gray-800">
-                        <?php echo e($i->ItemCode); ?></h5>
-                    <div class="mb-2 border-b border-gray-300">
-                        <p class="text-sm font-medium text-gray-600"><?php echo e(Str::limit($i->FrgnName, 30)); ?></p>
+                    <div>
+                        <p>FG: <?php echo e($i->StatusFG); ?></p>
+                        <p>HKN: <?php echo e($i->StatusHKN); ?></p>
                     </div>
-                    <div class="grid grid-cols-2 text-gray-700 text-sm">
-                        <div>
-                            <p>Stok: <?php echo e($i->TotalStock); ?></p>
-                            <p>HET: <?php echo e(number_format($i->HET, 0, ',', '.')); ?></p>
-                        </div>
-                        <div>
-                            <p>Status FG: <?php echo e($i->StatusFG); ?></p>
-                            <p>Status HKN: <?php echo e($i->StatusHKN); ?></p>
-                        </div>
-                    </div>
-                    <button data-modal-target="oitm-view" data-modal-toggle="oitm-view" type="button"
-                        class="open-modal-oitm-btn flex ml-auto mt-2"
-                        data-ItemCode="<?php echo e($i->ItemCode); ?>"
-                        data-ItemName="<?php echo e($i->FrgnName); ?>"
-                        data-ProfitCenter="<?php echo e($i->ProfitCenter); ?>"
-                        data-Segment="<?php echo e($i->Segment); ?>"
-                        data-Type="<?php echo e($i->Type); ?>"
-                        data-Series="<?php echo e($i->Series); ?>"
-                        data-KetHKN="<?php echo e(e($i->KetHKN)); ?>"
-                        data-KetFG="<?php echo e(e($i->KetFG)); ?>"
-                        data-KetStock="<?php echo e(e($i->KetStock)); ?>"
-                        data-HET="<?php echo e(number_format($i->HET, 0, ',', '.')); ?>"
-                        data-TotalStock="<?php echo e($i->TotalStock); ?>"
-                        data-StatusFG="<?php echo e($i->StatusFG); ?>"
-                        data-StatusHKN="<?php echo e($i->StatusHKN); ?>">
-                        <span
-                            class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
-                            <i class="ri-eye-fill"></i> Detail
-                        </span>
-                    </button>
-                </article>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+                <button data-modal-target="oitm-view" data-modal-toggle="oitm-view" type="button"
+                    class="open-modal-oitm-btn flex ml-auto mt-2"
+                    data-ItemCode="<?php echo e($i->ItemCode); ?>"
+                    data-ItemName="<?php echo e($i->FrgnName); ?>"
+                    data-ProfitCenter="<?php echo e($i->ProfitCenter); ?>"
+                    data-Segment="<?php echo e($i->Segment); ?>"
+                    data-Type="<?php echo e($i->Type); ?>"
+                    data-Series="<?php echo e($i->Series); ?>"
+                    data-KetHKN="<?php echo e(e($i->KetHKN)); ?>"
+                    data-KetFG="<?php echo e(e($i->KetFG)); ?>"
+                    data-KetStock="<?php echo e(e($i->KetStock)); ?>"
+                    data-HET="<?php echo e(number_format($i->HET, 0, ',', '.')); ?>"
+                    data-TotalStock="<?php echo e($i->TotalStock); ?>"
+                    data-StatusFG="<?php echo e($i->StatusFG); ?>"
+                    data-StatusHKN="<?php echo e($i->StatusHKN); ?>">
+                    <span
+                        class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
+                        <i class="ri-eye-fill"></i> Detail
+                    </span>
+                </button>
+            </article>
+
+
+            
+            <?php if($loop->last): ?>
+                </div>
+            <?php endif; ?>
+
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
         </div>
         
 

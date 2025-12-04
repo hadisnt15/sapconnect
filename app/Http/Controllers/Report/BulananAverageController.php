@@ -45,7 +45,7 @@ class BulananAverageController extends Controller
         }
 
         // 🔹 Filter berdasarkan segment (jika dipilih dari dropdown)
-        if (!empty($segmentFilter)) {
+        if ($segmentFilter !== null && $segmentFilter !== '' && $segmentFilter !== 'SEMUA') {
             $query->where('SEGMENT', $segmentFilter);
         }
 
@@ -67,7 +67,6 @@ class BulananAverageController extends Controller
 
         // 🔹 Ambil data dari DB lokal
         $data = $query->get();
-
         // Ambil divisi user
         $userDivisions = $user->divisions->pluck('div_name')->toArray();
 
@@ -82,32 +81,34 @@ class BulananAverageController extends Controller
             ->get();
 
         // 🔹 Ambil semua bulan unik (header kolom)
-        $bulanHeaders = $query->get()->sortBy('NO')->pluck('NAMATAHUNBULAN')->unique()->values();
+        $bulanHeaders = DB::table('report_bulanan_average')->orderBy('NO')->pluck('NAMATAHUNBULAN')->unique()->values();
 
         // 🔹 Group data per customer + segment agar nilai bulannya bisa dipivot
-        $customers = $data->groupBy(['SEGMENT', 'KODECUSTOMER'])
-            ->flatMap(function ($segmentGroup, $segmentName) use ($bulanHeaders) {
-                return $segmentGroup->map(function ($custGroup) use ($segmentName, $bulanHeaders) {
-                    $first = $custGroup->first();
-                    $cust = [
-                        'SEGMENT' => $segmentName,
-                        'ROWNUM' => $first->ROWNUM,
-                        'KODECUSTOMER' => $first->KODECUSTOMER,
-                        'NAMACUSTOMER' => $first->NAMACUSTOMER,
-                        'NAMASALES' => $first->NAMASALES,
-                        'PROVINSI' => $first->PROVINSI,
-                        'KOTA' => $first->KOTA,
-                        'DIVISI' => $first->DIVISI,
-                    ];
+        $customers = $data->groupBy(function ($row) {
+                return $row->SEGMENT . '___' . $row->KODECUSTOMER;
+            })
+            ->map(function ($group) use ($bulanHeaders) {
 
-                    foreach ($bulanHeaders as $bulan) {
-                        $cust[$bulan] = optional(
-                            $custGroup->firstWhere('NAMATAHUNBULAN', $bulan)
-                        )->VALUE ?? '-';
-                    }
+                $first = $group->first();
 
-                    return $cust;
-                });
+                $cust = [
+                    'SEGMENT' => $first->SEGMENT,
+                    'ROWNUM' => $first->ROWNUM,
+                    'KODECUSTOMER' => $first->KODECUSTOMER,
+                    'NAMACUSTOMER' => $first->NAMACUSTOMER,
+                    'NAMASALES' => $first->NAMASALES,
+                    'PROVINSI' => $first->PROVINSI,
+                    'KOTA' => $first->KOTA,
+                    'DIVISI' => $first->DIVISI,
+                ];
+
+                foreach ($bulanHeaders as $bulan) {
+                    $cust[$bulan] = optional(
+                        $group->firstWhere('NAMATAHUNBULAN', $bulan)
+                    )->VALUE ?? '-';
+                }
+
+                return $cust;
             })
             ->sortBy([
                 ['SEGMENT', 'asc'],

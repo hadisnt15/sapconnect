@@ -23,6 +23,8 @@ class OitmController extends Controller
         $items = OitmLocal::Filter(request(['search']))
             ->where('TotalStock','>',0)
             ->whereIn('div_name',$userDiv)
+            ->orderBy('div_name')
+            ->orderBy('Brand')
             ->orderBy('Segment')
             ->orderBy('Type')
             ->orderBy('Series')

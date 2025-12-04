@@ -57,56 +57,120 @@
         </div>    
 
         {{-- DESKTOP --}}
-        <div class="grid md:grid-cols-4 gap-3">
-            @foreach ($items as $i)
-                <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
-                    <div class="flex justify-between items-center mb-1 text-gray-500">
-                        <span
-                            class="text-xs font-bold border border-gray-400 me-2 px-2.5 py-0.5 rounded-lg bg-white text-red-800">
-                            @if ($i->div_name === 'SPR')
+        @php
+            $currentDiv = null;
+            $currentBrand = null;
+            $isGridOpen = false;
+        @endphp
+
+        <div class="space-y-4">
+
+        @foreach ($items as $i)
+
+            {{-- === JIKA DIVISI BERUBAH === --}}
+            @if ($currentDiv !== $i->div_name)
+
+                {{-- TUTUP GRID SEBELUMNYA --}}
+                @if ($isGridOpen)
+                    </div>
+                    @php $isGridOpen = false; @endphp
+                @endif
+
+                {{-- UPDATE DIVISI --}}
+                @php
+                    $currentDiv = $i->div_name;
+                    $currentBrand = null; // reset brand jika divisi berubah
+                @endphp
+
+                {{-- HEADER DIVISI --}}
+                <div class="w-full bg-red-800 text-white font-bold px-3 py-2 rounded">
+                    DIVISI: {{ $currentDiv }}
+                </div>
+            @endif
+
+
+            {{-- === JIKA BRAND BERUBAH === --}}
+            @if ($currentBrand !== $i->Brand)
+
+                {{-- TUTUP GRID SEBELUMNYA --}}
+                @if ($isGridOpen)
+                    </div>
+                @endif
+
+                @php
+                    $currentBrand = $i->Brand;
+                    $isGridOpen = true;
+                @endphp
+
+                {{-- HEADER BRAND --}}
+                <div class="px-2">
+                    <div class="w-full bg-gray-200 text-gray-800 font-semibold px-5 py-1 rounded">
+                        BRAND: {{ $currentBrand }}
+                    </div>
+                </div>
+                    
+                {{-- BUAT GRID BARU --}}
+                <div class="px-5 grid md:grid-cols-4 gap-3 mb-2">
+            @endif
+
+
+            {{-- === ITEM CARD === --}}
+            <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
+                <div class="flex justify-between items-center mb-1 text-gray-500">
+                    <span class="text-xs font-bold border border-gray-400 px-2 py-0.5 rounded bg-white text-red-800">
+                        @if ($i->div_name === 'SPR')
                             {{ $i->Segment }} - {{ $i->Type }} - {{ $i->Series }}
-                            @elseif (Str::contains($i->div_name, 'LUB'))
+                        @else
                             {{ $i->Brand }} - {{ $i->Series }}
-                            @endif
-                        </span>
+                        @endif
+                    </span>
+                </div>
+
+                <h5 class="font-bold tracking-tight text-gray-800">{{ $i->ItemCode }}</h5>
+                <p class="text-sm text-gray-600 mb-2 border-b pb-1">
+                    {{ Str::limit($i->FrgnName, 30) }}
+                </p>
+
+                <div class="grid grid-cols-2 text-sm text-gray-700">
+                    <div>
+                        <p>Stok: {{ $i->TotalStock }}</p>
+                        <p>HET: {{ number_format($i->HET) }}</p>
                     </div>
-                    <h5 class="font-bold tracking-tight text-gray-800">
-                        {{ $i->ItemCode }}</h5>
-                    <div class="mb-2 border-b border-gray-300">
-                        <p class="text-sm font-medium text-gray-600">{{ Str::limit($i->FrgnName, 30) }}</p>
+                    <div>
+                        <p>FG: {{ $i->StatusFG }}</p>
+                        <p>HKN: {{ $i->StatusHKN }}</p>
                     </div>
-                    <div class="grid grid-cols-2 text-gray-700 text-sm">
-                        <div>
-                            <p>Stok: {{ $i->TotalStock }}</p>
-                            <p>HET: {{ number_format($i->HET, 0, ',', '.') }}</p>
-                        </div>
-                        <div>
-                            <p>Status FG: {{ $i->StatusFG }}</p>
-                            <p>Status HKN: {{ $i->StatusHKN }}</p>
-                        </div>
-                    </div>
-                    <button data-modal-target="oitm-view" data-modal-toggle="oitm-view" type="button"
-                        class="open-modal-oitm-btn flex ml-auto mt-2"
-                        data-ItemCode="{{ $i->ItemCode }}"
-                        data-ItemName="{{ $i->FrgnName }}"
-                        data-ProfitCenter="{{ $i->ProfitCenter }}"
-                        data-Segment="{{ $i->Segment }}"
-                        data-Type="{{ $i->Type }}"
-                        data-Series="{{ $i->Series }}"
-                        data-KetHKN="{{ e($i->KetHKN) }}"
-                        data-KetFG="{{ e($i->KetFG) }}"
-                        data-KetStock="{{ e($i->KetStock) }}"
-                        data-HET="{{ number_format($i->HET, 0, ',', '.') }}"
-                        data-TotalStock="{{ $i->TotalStock }}"
-                        data-StatusFG="{{ $i->StatusFG }}"
-                        data-StatusHKN="{{ $i->StatusHKN }}">
-                        <span
-                            class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
-                            <i class="ri-eye-fill"></i> Detail
-                        </span>
-                    </button>
-                </article>
-            @endforeach
+                </div>
+                <button data-modal-target="oitm-view" data-modal-toggle="oitm-view" type="button"
+                    class="open-modal-oitm-btn flex ml-auto mt-2"
+                    data-ItemCode="{{ $i->ItemCode }}"
+                    data-ItemName="{{ $i->FrgnName }}"
+                    data-ProfitCenter="{{ $i->ProfitCenter }}"
+                    data-Segment="{{ $i->Segment }}"
+                    data-Type="{{ $i->Type }}"
+                    data-Series="{{ $i->Series }}"
+                    data-KetHKN="{{ e($i->KetHKN) }}"
+                    data-KetFG="{{ e($i->KetFG) }}"
+                    data-KetStock="{{ e($i->KetStock) }}"
+                    data-HET="{{ number_format($i->HET, 0, ',', '.') }}"
+                    data-TotalStock="{{ $i->TotalStock }}"
+                    data-StatusFG="{{ $i->StatusFG }}"
+                    data-StatusHKN="{{ $i->StatusHKN }}">
+                    <span
+                        class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
+                        <i class="ri-eye-fill"></i> Detail
+                    </span>
+                </button>
+            </article>
+
+
+            {{-- === TUTUP GRID JIKA LOOP BERAKHIR === --}}
+            @if ($loop->last)
+                </div>
+            @endif
+
+        @endforeach
+
         </div>
         {{-- END DESKTOP --}}
 
