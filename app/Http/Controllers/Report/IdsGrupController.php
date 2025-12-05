@@ -59,7 +59,7 @@ class IdsGrupController extends Controller
             ->map(function ($groupCusts) {
                 return $groupCusts->map(function ($rows) {
                     return [
-                        'rows' => $rows->sortByDesc('KILOLITER')->sortByDesc('PIUTANG'),
+                        'rows' => $rows->sortByDesc('PIUTANG')->sortByDesc('KILOLITER'),
                         'total' => $rows->sum('KILOLITER'),
                         'total2' => $rows->sum('PIUTANGJT'),
                         'total3' => $rows->sum('PIUTANG'),

@@ -161,6 +161,7 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
+              
             <?php else: ?>
                 <p class="text-gray-500 text-center py-4">Tidak ada data ditemukan</p>
             <?php endif; ?>
