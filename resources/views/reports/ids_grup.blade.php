@@ -111,32 +111,35 @@
                                 <span class="font-bold text-red-800">{{ $type }} </span>
                                 <span class="font-semibold text-red-800">{{ $group }}</span>
                             </div>
-                            <div class="p-4 overflow-y-auto max-h-80">
+                            <div class="px-4 pb-4 mt-4 overflow-y-auto max-h-80 relative z-10">
                                 <table class="w-full text-xs border border-gray-300">
-                                    <thead class="bg-gray-200 text-gray-700 text-center">
+                                    <thead class="bg-gray-200 text-gray-700 text-center sticky top-0 z-20">
                                         <tr>
                                             <th class="border px-2 py-1">#</th>
-                                            <th class="border px-2 py-1 w-1/6">KODE</th>
-                                            <th class="border px-2 py-1 w-3/6">NAMA</th>
-                                            <th class="border px-2 py-1 w-1/6">CAPAIAN KL</th>
-                                            <th class="border px-2 py-1 w-2/6">PIUTANG JT</th>
+                                            {{-- <th class="border px-2 py-1 w-1/6">KODE</th> --}}
+                                            <th class="border px-2 py-1 w-5/12">PELANGGAN</th>
+                                            <th class="border px-2 py-1 w-1/12">KL</th>
+                                            <th class="border px-2 py-1 w-3/12">PIUTANG</th>
+                                            <th class="border px-2 py-1 w-3/12">PIUTANG JT</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($rows['rows'] as $row)
                                         <tr>
                                             <td class="border px-2 py-1">{{ $loop->iteration }}</td>
-                                            <td class="border px-2 py-1">{{ $row->CARDCODE }}</td>
-                                            <td class="border px-2 py-1">{{ $row->CARDNAME }}</td>
+                                            {{-- <td class="border px-2 py-1">{{ $row->CARDCODE }}</td> --}}
+                                            <td class="border px-2 py-1">{{ $row->CARDNAME }} <br> <span class="font-semibold">{{ $row->CARDCODE }}</span></td>
                                             <td class="border px-2 py-1 text-right">{{ number_format($row->KILOLITER,2) }}</td>
+                                            <td class="border px-2 py-1 text-right">{{ number_format($row->PIUTANG,2) }}</td>
                                             <td class="border px-2 py-1 text-right">{{ number_format($row->PIUTANGJT,2) }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                     <thead>
                                         <tr class="bg-gray-200 text-gray-700">
-                                            <th colspan="3" class="border px-2 py-1 text-left">TOTAL {{ $type }} {{ $group }}</th>
+                                            <th colspan="2" class="border px-2 py-1 text-left">TOTAL {{ $type }} {{ $group }}</th>
                                             <th class="border px-2 py-1 text-right">{{ number_format($rows['total'], 2) }}</th>
+                                            <th class="border px-2 py-1 text-right">{{ number_format($rows['total3'], 2) }}</th>
                                             <th class="border px-2 py-1 text-right">{{ number_format($rows['total2'], 2) }}</th>
                                         </tr>
                                     </thead>

@@ -48,6 +48,7 @@ class SyncReportIdsGrupFromHana extends Command
                             CAST(\"TAHUN\" AS NVARCHAR(255)) AS \"TAHUN\",
                             CAST(\"BULAN\" AS NVARCHAR(255)) AS \"BULAN\",
                             CAST(\"KILOLITER\" AS NVARCHAR(255)) AS \"KILOLITER\",
+                            CAST(\"PIUTANG\" AS NVARCHAR(255)) AS \"PIUTANG\",
                             CAST(\"PIUTANGJT\" AS NVARCHAR(255)) AS \"PIUTANGJT\"
                         FROM LVKKJ_REP_IDSGRUP ('{$startDate}', '{$endDate}')");
         
@@ -62,6 +63,7 @@ class SyncReportIdsGrupFromHana extends Command
                     'TAHUN' => $row->TAHUN,
                     'BULAN' => $row->BULAN,
                     'KILOLITER' => $row->KILOLITER,
+                    'PIUTANG' => $row->PIUTANG,
                     'PIUTANGJT' => $row->PIUTANGJT,
                     'updated_at'    => now(),
                     // tambahkan field lain sesuai schema
