@@ -1,11 +1,12 @@
 <?php
 
+use App\Models\SyncLog;
 use Illuminate\Foundation\Application;
+use App\Http\Middleware\RoleMiddleware;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\RoleMiddleware;
-use Illuminate\Console\Scheduling\Schedule;
-use App\Models\SyncLog;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -170,6 +171,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 'tahun' => $tahun,
                 'bulan' => $bulan,
             ]);
+            Artisan::call('sync:reportIdsGrup12Bln');
             SyncLog::create([
                 'name' => 'report.penjualan-industri-per-grup',
                 'last_sync' => now(),
