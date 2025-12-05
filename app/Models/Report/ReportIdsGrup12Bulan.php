@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models\Report;
+
+use Illuminate\Database\Eloquent\Model;
+
+class ReportIdsGrup12Bulan extends Model
+{
+    protected $table = 'report_ids_grup_12bulan';
+    protected $primaryKey = 'MAINKEY';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $fillable = ['MAINKEY', 'TYPECUST', 'GROUPCUST', 'TAHUN', 'BULAN', 'KILOLITER'];
+}

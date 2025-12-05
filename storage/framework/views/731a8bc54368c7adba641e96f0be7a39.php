@@ -128,7 +128,6 @@
                                     <thead class="bg-gray-200 text-gray-700 text-center sticky top-0 z-20">
                                         <tr>
                                             <th class="border px-2 py-1">#</th>
-                                            
                                             <th class="border px-2 py-1 w-5/12">PELANGGAN</th>
                                             <th class="border px-2 py-1 w-1/12">KL</th>
                                             <th class="border px-2 py-1 w-3/12">PIUTANG</th>
@@ -139,7 +138,6 @@
                                         <?php $__currentLoopData = $rows['rows']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td class="border px-2 py-1"><?php echo e($loop->iteration); ?></td>
-                                            
                                             <td class="border px-2 py-1"><?php echo e($row->CARDNAME); ?> <br> <span class="font-semibold"><?php echo e($row->CARDCODE); ?></span></td>
                                             <td class="border px-2 py-1 text-right"><?php echo e(number_format($row->KILOLITER,2)); ?></td>
                                             <td class="border px-2 py-1 text-right"><?php echo e(number_format($row->PIUTANG,2)); ?></td>
@@ -156,6 +154,68 @@
                                         </tr>
                                     </thead>
                                 </table>
+                                <!-- GRAFIK 12 BULAN -->
+                                <div class="px-4 pt-2 font-base text-red-800 text-xs">
+                                    GRAFIK PENJUALAN<span class="font-semibold "> <?php echo e($type); ?> <?php echo e($group); ?> </span>SELAMA 12 BULAN TERAKHIR DALAM BENTUK KL
+                                </div>
+                                <div class="px-4 pb-4 mt-4">
+                                    <canvas id="chart_<?php echo e(Str::slug($type)); ?>_<?php echo e(Str::slug($group)); ?>"></canvas>
+                                </div>
+
+                                <?php
+                                    $grafikRows = $grafik[$type][$group] ?? collect();
+                                    $labels = $grafikRows->map(fn($g) => (int)$g->TAHUN . '-' . (int)$g->BULAN);
+                                    $values = $grafikRows->map(fn($g) => number_format($g->KILOLITER, 2, '.', ','));
+                                ?>
+
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        new Chart(
+                                            document.getElementById("chart_<?php echo e(Str::slug($type)); ?>_<?php echo e(Str::slug($group)); ?>"),
+                                            {
+                                                type: 'line',
+                                                data: {
+                                                    labels: <?php echo json_encode($labels); ?>,
+                                                    datasets: [{
+                                                        label: "KL / 12 Bulan",
+                                                        data: <?php echo json_encode($values); ?>,
+                                                        borderWidth: 2,
+                                                        borderColor: "rgba(100,100,100,0.8)",
+                                                        backgroundColor: "rgba(150,150,150,0.2)",
+                                                        tension: 0.2,
+                                                        fill: true
+                                                    }]
+                                                },
+                                                options: {
+                                                    scales: {
+                                                        y: {
+                                                            beginAtZero: true
+                                                        }
+                                                    },
+                                                    plugins: {
+                                                        tooltip: {
+                                                            callbacks: {
+                                                                label: function(context) {
+                                                                    let value = context.raw;
+
+                                                                    // format angka menjadi 1,000.00
+                                                                    let formatted = Number(value).toLocaleString("en-US", {
+                                                                        minimumFractionDigits: 2,
+                                                                        maximumFractionDigits: 2
+                                                                    });
+
+                                                                    return "KL / 12 Bulan: " + formatted;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        );
+                                    });
+                                </script>
+
+
                             </div>
                         </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

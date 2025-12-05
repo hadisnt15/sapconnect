@@ -84,6 +84,24 @@ class IdsGrupController extends Controller
             ->orderBy('TYPECUST')
             ->pluck('TOTALKL', 'TYPECUST');
 
+        $queryGrafik = DB::table('report_ids_grup_12bulan')
+            ->select(
+                'MAINKEY',
+                'TYPECUST',
+                'GROUPCUST',
+                DB::raw('CAST(TAHUN AS SIGNED) as TAHUN'),
+                DB::raw('CAST(BULAN AS SIGNED) as BULAN'),
+                'KILOLITER',
+                'TAHUNUPDATE',
+                'BULANUPDATE'
+            )
+            ->where('TAHUNUPDATE', $tahun)
+            ->where('BULANUPDATE', $bulan)
+            ->orderBy('TAHUN', 'asc')
+            ->orderBy('BULAN', 'asc');
+        
+        $grafik = $queryGrafik->get()->groupBy(['TYPECUST','GROUPCUST']);
+
         // Nama bulan human-readable
         $namaPeriode = Carbon::createFromDate($tahun, $bulan, 1, 'Asia/Jakarta')
             ->locale('id')
@@ -97,6 +115,7 @@ class IdsGrupController extends Controller
             'title' => 'SCKKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data' => $data,
+            'grafik' => $grafik,
             'typeTotal' => $typeTotal,
             'tahun' => $tahun,
             'bulan' => $bulan,
