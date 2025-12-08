@@ -63,7 +63,7 @@ class GrafikPenjualanSalesController extends Controller
             ->groupBy('tanggal', 'salesman', 'divisi')
             ->orderBy('tanggal', 'asc')
             ->get();
-        dd($query);
+        // dd($query);
         // Ambil list unique sales dan tanggal
         $salesList = $data->pluck('salesman')->unique()->values();
         $tanggalList = $data->pluck('tanggal')->unique()->values();

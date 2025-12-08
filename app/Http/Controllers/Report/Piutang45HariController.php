@@ -31,61 +31,73 @@ class Piutang45HariController extends Controller
         ->when($filter, function ($query, $filter) {
             $query->where('KEY', $filter);
         })
-        ->whereIn('KEY', $divisiList) 
+        ->whereIn('KEY', $divisiList)
+        ->orderBy('KET3')
         ->orderBy('KEY')
         ->orderByRaw('CAST(LEWATHARI AS SIGNED) DESC')
         ->get();
 
-        $grouped = $piutang45->groupBy('KEY')->map(function ($cust) {
+        $grouped = $piutang45->groupBy('KET3')->map(function ($ket3Group) {
 
-            // Hitung total per KEY di akhir
-            $ket2Groups = $cust->groupBy('KET2')->map(function ($piutangData) {
+            return $ket3Group->groupBy('KEY')->map(function ($keyGroup) {
+
+                // Group per KET2
+                $ket2Groups = $keyGroup->groupBy('KET2')->map(function ($rows) {
+                    return [
+                        'rows' => $rows,
+                        'total_ket2' => $rows->sum('PIUTANG'),
+                    ];
+                });
+
                 return [
-                    'rows' => $piutangData,
-                    'total_ket2' => $piutangData->sum('PIUTANG'), // total per KET2
+                    'ket2' => $ket2Groups,
+                    'total_key' => $ket2Groups->sum('total_ket2')
                 ];
             });
 
-            // total per KEY (jumlah total seluruh ket2)
-            $totalKey = $ket2Groups->sum('total_ket2');
-
-            return [
-                'ket2' => $ket2Groups,
-                'total_key' => $totalKey,
-            ];
         });
 
-        $summary = ReportPiutang45Hari::select('KEY', 'KET2', DB::raw('SUM(PIUTANG) AS JUMLAH'))
+        $summary = ReportPiutang45Hari::select(
+                'KET3',
+                'KEY',
+                'KET2',
+                DB::raw('SUM(PIUTANG) AS JUMLAH')
+            )
             ->whereIn('KEY', $divisiList)
-            ->groupBy('KEY', 'KET2')
+            ->groupBy('KET3', 'KEY', 'KET2')
+            ->orderBy('KET3')
             ->orderBy('KEY')
             ->orderBy('KET2')
             ->orderByRaw("FIELD(KET2, 'Lebih 45 Hari', 'Lebih 60 Hari', 'Lebih 90 Hari')")
             ->get();
 
-        $groupedSum = $summary->groupBy('KEY')->map(function ($key) {
-            $firstKey = $key->first();
-            $order = ['Lebih 45 Hari', 'Lebih 60 Hari', 'Lebih 90 Hari'];
+        $groupedSum = $summary
+            ->groupBy('KET3') // 🔥 grouping level pertama
+            ->map(function ($ket3Group) {
 
-            $ket2Groups = $key->groupBy('KET2')->map(function ($ket2) use ($order) {
+                return $ket3Group->groupBy('KEY')->map(function ($keyGroup) {
+                    $first = $keyGroup->first();
 
-                // Ambil total per ket2
-                $totalKet2 = $ket2->sum('JUMLAH');
+                    // urutan ket2
+                    $order = ['Lebih 45 Hari', 'Lebih 60 Hari', 'Lebih 90 Hari'];
 
-                return [
-                    'total' => $totalKet2,
-                ];
+                    $ket2Groups = $keyGroup->groupBy('KET2')->map(function ($ket2) {
+                        return [
+                            'total' => $ket2->sum('JUMLAH'),
+                        ];
+                    });
+
+                    $totalAll = $ket2Groups->sum('total');
+
+                    return [
+                        'headerkey' => $first->KEY,
+                        'ket2' => $ket2Groups,
+                        'total_all' => $totalAll,
+                    ];
+                });
+
             });
 
-            // Hitung total keseluruhan per KEY
-            $totalAll = $ket2Groups->sum('total');
-
-            return [
-                'headerkey' => "{$firstKey->KEY}",
-                'ket2' => $ket2Groups,
-                'total_all' => $totalAll,
-            ];
-        });
 
         $lastSync = SyncLog::where('name', 'report.piutang-45-hari')->orderByDesc('last_sync')->first();
 

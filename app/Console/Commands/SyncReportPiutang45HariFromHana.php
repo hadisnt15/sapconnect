@@ -42,8 +42,9 @@ class SyncReportPiutang45HariFromHana extends Command
                             CAST(\"LEWATHARI\" AS NVARCHAR(255)) AS \"LEWATHARI\",
                             CAST(\"KET\" AS NVARCHAR(255)) AS \"KET\",
                             CAST(\"KET2\" AS NVARCHAR(255)) AS \"KET2\",
+                            CAST(\"KET3\" AS NVARCHAR(255)) AS \"KET3\",
                             CAST(\"PIUTANG\" AS NVARCHAR(255)) AS \"PIUTANG\"
-                        FROM LVKKJ_REP_PIUTANG45HARI ()");
+                        FROM LVKKJ_REP_PIUTANG ()");
         
         foreach ($hanaData as $row) {
             DB::table('report_piutang_45hari')->updateOrInsert(
@@ -57,6 +58,7 @@ class SyncReportPiutang45HariFromHana extends Command
                     'LEWATHARI' => $row->LEWATHARI,
                     'KET' => $row->KET,
                     'KET2' => $row->KET2,
+                    'KET3' => $row->KET3,
                     'PIUTANG' => $row->PIUTANG,
                     'updated_at'    => now(),
                     // tambahkan field lain sesuai schema
