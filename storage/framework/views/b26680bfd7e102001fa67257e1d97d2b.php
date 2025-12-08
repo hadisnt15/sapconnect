@@ -75,7 +75,7 @@
                 <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Data Rekap Piutang 45 Hari</h5></div>
                  
                 <?php $__currentLoopData = $groupedSum; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ket3Value => $keys): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <h2 class="text-sm font-bold text-red-800 border-b pb-1 mb-2">
+                    <h2 class="text-sm font-bold text-red-800 border-t pb-1 mt-4 mb-2">
                         <?php if($ket3Value == '<= 45 Hari'): ?> 
                             45 Hari ke Atas
                         <?php else: ?>
@@ -125,7 +125,7 @@
                 <div class="grid md:grid-cols-1 gap-4">
                     <?php $__currentLoopData = $grouped; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ket3 => $keys): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         
-                        <h2 class="text-sm font-bold text-red-800 border-b pb-1 mb-2">
+                        <h2 class="text-sm font-bold text-red-800 border-t pb-1 mt-4 mb-2">
                             <?php if($ket3 == '<= 45 Hari'): ?> 
                                 45 Hari ke Atas
                             <?php else: ?>

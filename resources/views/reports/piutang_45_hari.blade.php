@@ -65,7 +65,7 @@
                 <div><h5 class="text-gray-800 font-bold ms-4 mb-2">Data Rekap Piutang 45 Hari</h5></div>
                  {{-- LOOP KET3 --}}
                 @foreach($groupedSum as $ket3Value => $keys)
-                    <h2 class="text-sm font-bold text-red-800 border-b pb-1 mb-2">
+                    <h2 class="text-sm font-bold text-red-800 border-t pb-1 mt-4 mb-2">
                         @if($ket3Value == '<= 45 Hari') 
                             45 Hari ke Atas
                         @else
@@ -114,7 +114,7 @@
                 <div class="grid md:grid-cols-1 gap-4">
                     @foreach ($grouped as $ket3 => $keys)
                         {{-- HEADER KET3 --}}
-                        <h2 class="text-sm font-bold text-red-800 border-b pb-1 mb-2">
+                        <h2 class="text-sm font-bold text-red-800 border-t pb-1 mt-4 mb-2">
                             @if($ket3 == '<= 45 Hari') 
                                 45 Hari ke Atas
                             @else
