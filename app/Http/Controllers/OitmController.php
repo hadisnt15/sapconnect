@@ -56,27 +56,19 @@ class OitmController extends Controller
 
     public function api()
     {
+        // Ambil user
         $user = Auth::user();
 
-        // Ambil daftar divisi user
+        // Divisi user
         $userDivisions = DB::table('user_division')
             ->join('division', 'user_division.div_id', '=', 'division.id')
             ->where('user_division.user_id', $user->id)
             ->pluck('division.div_name');
 
-        // Subquery T1 (item yang sedang dipesan, belum sync, belum delete)
-        $subT1 = DB::table('oitm_local as a')
-            ->select(
-                'a.ItemCode',
-                DB::raw("COUNT(*) OVER(PARTITION BY a.ItemCode) AS Cek")
-            )
-            ->join('rdr1_local as b', 'b.RdrItemCode', '=', 'a.ItemCode')
-            ->join('ordr_local as c', 'c.id', '=', 'b.OdrId')
-            ->where('c.is_deleted', 0)
-            ->where('c.is_synced', 0);
-
-        // Main query sesuai SQL Anda
-        $query = OitmLocal::from('oitm_local as T0')
+        // ==========================
+        // SUBQUERY 1 — BRAND PERTAMINA
+        // ==========================
+        $pertaminaSub = DB::table('oitm_local as T0')
             ->select(
                 'T0.ItemCode as id',
                 'T0.ItemCode',
@@ -87,6 +79,8 @@ class OitmController extends Controller
                 'T0.Satuan',
                 'T0.KetHKN',
                 'T0.KetFG',
+
+                // ITEM LABEL
                 DB::raw("
                     CASE
                         WHEN T0.div_name = 'SPR' THEN 
@@ -97,37 +91,84 @@ class OitmController extends Controller
                             CONCAT(T0.ItemCode, ' || ', LEFT(T0.FrgnName, 100), ' || ', T0.KetStock)
                     END AS ItemLabel
                 "),
-                // Cek logic
+
+                // CEK
                 DB::raw("
-                    CASE
-                        WHEN T0.TotalStock != 0 THEN 1
-                        ELSE (
-                            CASE 
-                                WHEN T1.Cek IS NOT NULL THEN 1
-                                ELSE 0
-                            END
-                        )
+                    CASE 
+                        WHEN T1.ItemCode IS NOT NULL THEN 1
+                        ELSE (CASE WHEN T0.TotalStock > 0 THEN 1 ELSE 0 END)
                     END AS Cek
                 ")
             )
-            ->leftJoinSub($subT1, 'T1', function ($join) {
-                $join->on('T1.ItemCode', '=', 'T0.ItemCode');
-            })
-            ->where(function ($q) {
-                $q->where('T0.TotalStock', '!=', 0)
-                ->orWhereNotNull('T1.Cek');
-            });
+            ->leftJoin(DB::raw("
+                (
+                    SELECT T0.ItemCode
+                    FROM oitm_local T0
+                    JOIN rdr1_local T1 ON T1.RdrItemCode = T0.ItemCode
+                    JOIN ordr_local T2 ON T2.id = T1.OdrId
+                    WHERE T2.is_deleted = 0 
+                    AND T2.is_synced = 0 
+                    AND T0.Brand = 'PERTAMINA'
+                ) AS T1
+            "), 'T1.ItemCode', '=', 'T0.ItemCode')
+            ->where('T0.Brand', '=', 'PERTAMINA');
 
-        // Filter berdasarkan divisi user
+        // Filter divisi user
         if ($userDivisions->isNotEmpty()) {
-            $query->whereIn('T0.div_name', $userDivisions);
+            $pertaminaSub->whereIn('T0.div_name', $userDivisions);
         }
 
-        // Hanya ambil item yang valid sesuai kondisi (Cek = 1)
-        $query->having('Cek', '=', 1);
+        // ==========================
+        // SUBQUERY 2 — BRAND NON-PERTAMINA
+        // ==========================
+        $nonPertaminaSub = DB::table('oitm_local as T0')
+            ->select(
+                'T0.ItemCode as id',
+                'T0.ItemCode',
+                'T0.FrgnName',
+                'T0.HET',
+                'T0.TotalStock',
+                'T0.ProfitCenter',
+                'T0.Satuan',
+                'T0.KetHKN',
+                'T0.KetFG',
 
-        return $query->get();
+                // Item Label
+                DB::raw("
+                    CASE
+                        WHEN T0.div_name = 'SPR' THEN 
+                            CONCAT(T0.ItemCode, ' || ', T0.Segment, ' || ', T0.Type, ' || ', T0.Series, ' || ', LEFT(T0.FrgnName, 100), ' || ', T0.KetStock)
+                        WHEN T0.div_name IN ('LUB RTL', 'LUB IDS') THEN
+                            CONCAT(T0.ItemCode, ' || ', LEFT(T0.FrgnName, 100), ' || ', T0.KetStock)
+                        ELSE
+                            CONCAT(T0.ItemCode, ' || ', LEFT(T0.FrgnName, 100), ' || ', T0.KetStock)
+                    END AS ItemLabel
+                "),
+
+                // Cek = 1
+                DB::raw("1 AS Cek")
+            )
+            ->where('T0.Brand', '!=', 'PERTAMINA');
+
+        // Filter divisi user
+        if ($userDivisions->isNotEmpty()) {
+            $nonPertaminaSub->whereIn('T0.div_name', $userDivisions);
+        }
+
+        // ==========================
+        // UNION ALL
+        // ==========================
+        $union = $pertaminaSub->unionAll($nonPertaminaSub);
+
+        $final = DB::query()
+            ->fromSub($union, 'X')
+            ->where('Cek', 1)
+            ->orderBy('ItemLabel')
+            ->get();
+
+        return $final;
     }
+
 
     /**
      * Show the form for creating a new resource.
