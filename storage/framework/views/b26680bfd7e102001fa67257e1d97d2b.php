@@ -77,11 +77,9 @@
                 <?php $__currentLoopData = $groupedSum; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ket3Value => $keys): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <h2 class="text-sm font-bold text-red-800 border-t pb-1 mt-4 mb-2">
                         <?php if($ket3Value == '<= 45 Hari'): ?> 
-                            45 Hari ke Bawah <?php echo e($ket3Value); ?>
-
+                            45 Hari ke Bawah 
                         <?php else: ?>
-                            Di Atas 45 Hari <?php echo e($ket3Value); ?>
-
+                            Di Atas 45 Hari 
                         <?php endif; ?>
                     </h2>
 
@@ -129,11 +127,9 @@
                         
                         <h2 class="text-sm font-bold text-red-800 border-t pb-1 mt-4 mb-2">
                             <?php if($ket3 == '<= 45 Hari'): ?> 
-                                45 Hari ke Bawah <?php echo e($ket3); ?>
-
+                                45 Hari ke Bawah 
                             <?php else: ?>
-                                Di Atas 45 Hari <?php echo e($ket3); ?>
-
+                                Di Atas 45 Hari 
                             <?php endif; ?>
                         </h2>
 
