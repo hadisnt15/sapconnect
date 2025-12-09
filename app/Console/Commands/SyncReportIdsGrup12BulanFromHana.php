@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use App\Models\Report\ReportIdsGrup12Bulan;
 
-class SyncReportIdsGrup12BlnFromHana extends Command
+class SyncReportIdsGrup12BulanFromHana extends Command
 {
     /**
      * The name and signature of the console command.
