@@ -142,6 +142,7 @@ class IdsGrupController extends Controller
             'tahun' => $tahun,
             'bulan' => $bulan,
         ]);
+        Artisan::call('sync:reportIdsGrup12Bln');
 
         SyncLog::create(
             [
