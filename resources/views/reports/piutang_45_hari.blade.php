@@ -67,9 +67,9 @@
                 @foreach($groupedSum as $ket3Value => $keys)
                     <h2 class="text-sm font-bold text-red-800 border-t pb-1 mt-4 mb-2">
                         @if($ket3Value == '<= 45 Hari') 
-                            45 Hari ke Atas
+                            45 Hari ke Bawah
                         @else
-                            Di Bawah 45 Hari
+                            Di Atas 45 Hari
                         @endif
                     </h2>
 
@@ -115,10 +115,10 @@
                     @foreach ($grouped as $ket3 => $keys)
                         {{-- HEADER KET3 --}}
                         <h2 class="text-sm font-bold text-red-800 border-t pb-1 mt-4 mb-2">
-                            @if($ket3 == '<= 45 Hari') 
-                                45 Hari ke Atas
+                            @if($ket3Value == '<= 45 Hari') 
+                                45 Hari ke Bawah
                             @else
-                                Di Bawah 45 Hari
+                                Di Atas 45 Hari
                             @endif
                         </h2>
 
