@@ -22,7 +22,7 @@ class OitmController extends Controller
         $userDiv = $user->divisions->pluck('div_name');
         $items = OitmLocal::Filter(request(['search']))
             ->where('TotalStock','>',0)
-            ->whereIn('div_name',$userDiv)
+            ->whereIn('ProfitCenter',$userDiv)
             ->orderBy('div_name')
             ->orderBy('Brand')
             ->orderBy('Segment')
@@ -115,7 +115,7 @@ class OitmController extends Controller
 
         // Filter divisi user
         if ($userDivisions->isNotEmpty()) {
-            $pertaminaSub->whereIn('T0.div_name', $userDivisions);
+            $pertaminaSub->whereIn('T0.ProfitCenter', $userDivisions);
         }
 
         // ==========================

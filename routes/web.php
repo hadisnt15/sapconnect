@@ -1,7 +1,9 @@
 <?php
 
+use App\Exports\OrdrExport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OcrdController;
 use App\Http\Controllers\OitmController;
@@ -10,30 +12,29 @@ use App\Http\Controllers\OslpController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\VisitController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PasswordController;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DivisionController;
-use App\Http\Controllers\ReportController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\PasswordController;
 // use App\Http\Controllers\UserDivisionController;
 // use App\Exports\OrdrCombinedExport;
-use App\Exports\OrdrExport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\DashboardController;
 
-use App\Http\Controllers\Report\PenjualanSprSegmentController;
-use App\Http\Controllers\Report\PenjualanSprSalesController;
-use App\Http\Controllers\Report\GrafikPenjualanSalesController;
+use App\Http\Controllers\Report\UltahController;
+use App\Http\Controllers\Report\IdsGrupController;
+use App\Http\Controllers\Report\ProgRtlController;
+use App\Http\Controllers\Report\StokPtmController;
 use App\Http\Controllers\Report\LubRetailController;
 use App\Http\Controllers\Report\Top10LubRtlController;
-use App\Http\Controllers\Report\BulananAverageController;
-use App\Http\Controllers\Report\ProgRtlController;
-use App\Http\Controllers\Report\IdsGrupController;
-use App\Http\Controllers\Report\UltahController;
-use App\Http\Controllers\Report\StokPtmController;
-use App\Http\Controllers\Report\BulananAverageLiterController;
 use App\Http\Controllers\Report\Piutang45HariController;
+use App\Http\Controllers\Report\BulananAverageController;
+use App\Http\Controllers\Report\PenjualanRtlSalesController;
+use App\Http\Controllers\Report\PenjualanSprSalesController;
+use App\Http\Controllers\Report\BulananAverageLiterController;
+use App\Http\Controllers\Report\PenjualanSprSegmentController;
+use App\Http\Controllers\Report\GrafikPenjualanSalesController;
 
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
@@ -151,6 +152,8 @@ Route::get('/laporan/bulanan-dan-average-liter', [BulananAverageLiterController:
 Route::post('/laporan/sinkron/bulanan-dan-average-liter', [BulananAverageLiterController::class, 'refresh'])->name('report.refresh.bulanan-dan-average-liter')->middleware('can:dashboard.refresh'); //ok
 Route::get('/laporan/piutang-45-hari', [Piutang45HariController::class, 'index'])->name('report.piutang-45-hari')->middleware('auth');
 Route::get('/laporan/sinkron/piutang-45-hari', [Piutang45HariController::class, 'refresh'])->name('report.refresh.piutang-45-hari')->middleware('auth');
+Route::get('/laporan/pencapaian-penjualan-retail-per-sales', [PenjualanRtlSalesController::class, 'index'])->name('report.pencapaian-penjualan-retail-per-sales')->middleware('auth');
+Route::post('/laporan/sinkron/pencapaian-penjualan-retail-per-sales', [PenjualanRtlSalesController::class, 'refresh'])->name('report.refresh.pencapaian-penjualan-retail-per-sales')->middleware('auth');
 
 
 // Route::get('/test-hana', function () {

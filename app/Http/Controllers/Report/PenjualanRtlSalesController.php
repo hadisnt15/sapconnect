@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers\Report;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Report;
-use App\Models\Report\ReportSprSales;
-use App\Models\SyncLog;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Artisan;
+use App\Models\Report;
+use App\Models\SyncLog;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Report\ReportRtlSales;
+use Illuminate\Support\Facades\Artisan;
 
-class PenjualanSprSalesController extends Controller
+class PenjualanRtlSalesController extends Controller
 {
     public function index(Request $request)
     {
-        $report = Report::where('slug', 'pencapaian-penjualan-sparepart-per-sales')->first();
+        $report = Report::where('slug', 'pencapaian-penjualan-retail-per-sales')->first();
         $user = Auth::user();
 
         // --- Ambil periode yang tersedia ---
-        $availablePeriods = DB::table('report_spr_sales')
+        $availablePeriods = DB::table('report_rtl_sales')
             ->select(DB::raw("BULAN, TAHUN, CONCAT(TAHUN, '-', BULAN) as period"))
             ->distinct()
             ->orderByDesc(DB::raw('CAST(TAHUN AS UNSIGNED)'))
@@ -34,35 +34,32 @@ class PenjualanSprSalesController extends Controller
         if ($user->role === 'salesman') {
             if ($user->oslpReg) {
                 $slpCode = $user->oslpReg->RegSlpCode;
-                $dashboard = ReportSprSales::where('KODESALES', $slpCode)
+                $dashboard = ReportRtlSales::where('SLPCODE', $slpCode)
                     ->where('TAHUN', $tahun)
                     ->where('BULAN', $bulan)
-                    ->orderBy('NAMASALES')
-                    ->orderBy('DOCENTRY')
-                    ->orderBy('KEY3')
-                    ->orderBy('TYPE')
+                    ->orderBy('SLPNAME')
+                    ->orderBy('SEGMENT')
                     ->get();
             } else {
                 // kalau belum ada relasi, return collection kosong
                 $dashboard = collect();
             }
         } else {
-            $dashboard = ReportSprSales::where('TAHUN', $tahun)->where('BULAN', $bulan)->orderBy('NAMASALES')->orderBy('DOCENTRY')->orderBy('KEY3')->orderBy('TYPE')->get();
+            $dashboard = ReportRtlSales::where('TAHUN', $tahun)->where('BULAN', $bulan)->orderBy('SLPNAME')->orderBy('SEGMENT')->get();
         }
-        $grouped = $dashboard->groupBy('NAMASALES')->map(function ($salesData) {
-            return $salesData->groupBy('KEY3')->map(function ($segmentData) {
+        $grouped = $dashboard->groupBy('SLPNAME')->map(function ($salesData) {
                 return [
-                    'rows' => $segmentData,
-                    'sum_target' => $segmentData->sum('TARGET'),
-                    'sum_capai' => $segmentData->sum('CAPAI'),
-                    'sum_persentase' => $segmentData->avg('PERSENTASE'),
+                    'rows' => $salesData,
+                    'sum_target' => $salesData->sum('TARGET'),
+                    'sum_liter' => $salesData->sum('LITER'),
+                    'sum_persen' => $salesData->sum('LITER')/$salesData->sum('TARGET')*100,
                 ];
-            });
         });
-        $periode = ReportSprSales::select('tahun', 'bulan')
-            ->orderByDesc('tahun')
-            ->orderByDesc('bulan')
+        $periode = ReportRtlSales::select('TAHUN', 'BULAN')
+            ->orderByDesc('TAHUN')
+            ->orderByDesc('BULAN')
             ->first();
+        // dd($periode);
         $namaPeriode = null;
         if ($periode) {
             $namaPeriode = Carbon::createFromDate($tahun, $bulan, 1, 'Asia/Jakarta')
@@ -70,9 +67,9 @@ class PenjualanSprSalesController extends Controller
                 ->translatedFormat('F Y');
         }
 
-        $lastSync = SyncLog::where('name', 'report.penjualan_spr_sales')->orderByDesc('last_sync')->first();
+        $lastSync = SyncLog::where('name', 'report.penjualan_rtl_sales')->orderByDesc('last_sync')->first();
         
-        return view('reports.penjualan_spr_sales', [
+        return view('reports.penjualan_rtl_sales', [
             'title' => 'SCKKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'grouped' => $grouped,
@@ -93,7 +90,7 @@ class PenjualanSprSalesController extends Controller
         $startDate = Carbon::parse($month . '-01')->startOfMonth()->format('d.m.Y');
         $endDate   = Carbon::parse($month . '-01')->endOfMonth()->format('d.m.Y');
         // dd($startDate, $endDate);
-        Artisan::call('sync:reportSprSales', [
+        Artisan::call('sync:reportRtlSales', [
             'startDate' => $startDate,
             'endDate' => $endDate,
             'tahun' => $tahun,
@@ -102,12 +99,12 @@ class PenjualanSprSalesController extends Controller
 
         SyncLog::create(
             [
-                'name' => 'report.penjualan_spr_sales',
+                'name' => 'report.penjualan_rtl_sales',
                 'last_sync' => now(),
                 'desc' => 'Manual'
             ]
         );
 
-        return back()->with('success', 'Data Penjualan Sparepart per Penjual Berhasil Disinkronkan dari SAP');
+        return back()->with('success', 'Data Penjualan Retail per Penjual Berhasil Disinkronkan dari SAP');
     }
 }
