@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\SyncLog;
+use App\Models\OslpTeam;
 use App\Models\OcrdLocal;
 use App\Models\OitmLocal;
 use App\Models\OrdrLocal;
 use App\Models\Rdr1Local;
-use App\Models\SyncLog;
+use App\Exports\OrdrExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
-use App\Exports\OrdrExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Artisan;
 
 class OrdrController extends Controller
 {
@@ -40,7 +41,13 @@ class OrdrController extends Controller
         if ($user->role === 'salesman') {
             if ($user->oslpReg) {
                 $slpCode = $user->oslpReg->RegSlpCode;
-                $query->where('OdrSlpCode', $slpCode);
+                $slpCodeMember = OslpTeam::where('SlpCodeLeader', $slpCode)->pluck('SlpCodeMember');
+                if ($slpCodeMember->isNotEmpty()) {
+                    $query->whereIn('OdrSlpCode', $slpCodeMember);
+                } else {
+                    $query->where('OdrSlpCode', $slpCode);
+                }
+                // dd($slpCodeMember);
             } else {
                 $query->whereRaw('1=0'); // tidak punya sales code
             }
@@ -75,6 +82,8 @@ class OrdrController extends Controller
                 }
             }
         }
+
+        
         // 🔹 Filter pencarian (jika ada scopeFilter)
         $query->filter($request->only(['search']));
 

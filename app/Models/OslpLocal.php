@@ -36,4 +36,9 @@ class OslpLocal extends Model
     {
         return $this->hasOne(OslpReg::class, 'RegSlpCode', 'SlpCode');
     }
+
+    public function oslpTeam()
+    {
+        return $this->hasMany(OslpTeam::class, 'SlpCode', 'SlpCodeLeader');
+    }
 }
