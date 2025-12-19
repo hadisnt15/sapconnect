@@ -17,36 +17,36 @@ class UltahController extends Controller
         // Ambil data dari tabel lokal hasil sync
         $data = ReportUltah::select('KODECUST', 'NAMACUST', 'PEMILIK', 'ULTAH')->get();
 
-        $ultah = $data->map(function ($bdy) {
+        $ultah = $data->flatMap(function ($bdy) {
 
             $clean = preg_replace('/[^0-9]/', '', $bdy->ULTAH);
 
             if (strlen($clean) < 8) {
-                return null;
+                return [];
             }
 
-            $birth = substr($clean, 0, 8);
-            $birthDate = \Carbon\Carbon::createFromFormat('Ymd', $birth);
+            $birthDate = \Carbon\Carbon::createFromFormat('Ymd', substr($clean, 0, 8));
 
-            // Buat tanggal ulang tahun tahun ini
-            $eventDate = $birthDate->copy()->setYear(now()->year);
+            return collect(range(now()->year, now()->year + 5))->map(function ($year) use ($bdy, $birthDate) {
 
-            // Hitung umur tahun ini → kalau ulang tahunnya belum lewat, tetap umur yang sama
-            $age = now()->year - $birthDate->year;
+                $eventDate = $birthDate->copy()->setYear($year);
 
-            return [
-                'title'        => $bdy->PEMILIK . ' 🎂 (' . $age . ' th)',
-                'start'        => $eventDate->format('Y-m-d'),
-                'allDay'       => true,
+                $age = $year - $birthDate->year;
 
-                // untuk popup
-                'cust_name'    => $bdy->NAMACUST,
-                'cust_code'    => $bdy->KODECUST,
-                'pemilik'      => $bdy->PEMILIK,
-                'tanggal_asli' => $birthDate->format('d-m-Y'),
-                'usia'         => $age,
-            ];
-        })->filter()->values();
+                return [
+                    'title'        => $bdy->PEMILIK . ' 🎂 (' . $age . ' th)',
+                    'start'        => $eventDate->format('Y-m-d'),
+                    'allDay'       => true,
+
+                    'cust_name'    => $bdy->NAMACUST,
+                    'cust_code'    => $bdy->KODECUST,
+                    'pemilik'      => $bdy->PEMILIK,
+                    'tanggal_asli' => $birthDate->format('d-m-Y'),
+                    'usia'         => $age,
+                ];
+            });
+        });
+
 
 
         // dd($data);
