@@ -35,7 +35,7 @@ class IdsGrupController extends Controller
 
         // --- Query utama data per grup ---
         $query = DB::table('report_ids_grup')
-            ->select('TYPECUST', 'GROUPCUST', 'CARDCODE', 'CARDNAME', 'KILOLITER', 'PIUTANG', 'PIUTANGJT')
+            ->select('TYPECUST', 'GROUPCUST', 'CARDCODE', 'CARDNAME', 'KILOLITER', 'PIUTANG', 'PIUTANGJT','RUPIAH')
             ->where('TAHUN', $tahun)
             ->where('BULAN', $bulan);
 
@@ -63,13 +63,14 @@ class IdsGrupController extends Controller
                         'total' => $rows->sum('KILOLITER'),
                         'total2' => $rows->sum('PIUTANGJT'),
                         'total3' => $rows->sum('PIUTANG'),
+                        'total4' => $rows->sum('RUPIAH'),
                     ];
                 });
             });
 
         // Total per TYPECUST (terpengaruh pencarian juga)
         $typeTotal = DB::table('report_ids_grup')
-            ->select('TYPECUST', DB::raw('SUM(KILOLITER) as TOTALKL'))
+            ->select('TYPECUST', DB::raw('SUM(KILOLITER) as TOTALKL'), DB::raw('SUM(RUPIAH) as TOTALRP'))
             ->where('TAHUN', $tahun)
             ->where('BULAN', $bulan)
             ->when($search, function ($q) use ($search) {
@@ -82,7 +83,8 @@ class IdsGrupController extends Controller
             })
             ->groupBy('TYPECUST')
             ->orderBy('TYPECUST')
-            ->pluck('TOTALKL', 'TYPECUST');
+            ->get();
+        // dd($typeTotal);
 
         $queryGrafik = DB::table('report_ids_grup_12bulan')
             ->select(

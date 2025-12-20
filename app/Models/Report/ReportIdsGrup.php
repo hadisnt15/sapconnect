@@ -10,6 +10,6 @@ class ReportIdsGrup extends Model
     protected $primaryKey = 'MAINKEY';
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['MAINKEY', 'TYPECUST', 'GROUPCUST', 'TAHUN', 'BULAN', 'KILOLITER', 'PIUTANG', 'PIUTANGJT', 'CARDCODE', 'CARDNAME'];
+    protected $fillable = ['MAINKEY', 'TYPECUST', 'GROUPCUST', 'TAHUN', 'BULAN', 'KILOLITER', 'RUPIAH', 'PIUTANG', 'PIUTANGJT', 'CARDCODE', 'CARDNAME'];
 
 }
