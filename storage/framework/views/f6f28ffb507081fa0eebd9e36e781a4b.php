@@ -309,26 +309,65 @@
 
 <!-- SCRIPT: TomSelect + Anti Duplicate + Sync Alpine -->
 <script>
-    async function initSelect(index, selectedValue = null) {
-        let response = await fetch('/barang/api');
-        let data = await response.json();
-        let select = document.getElementById('itemSelect' + index);
+    // ==================================================
+    // GLOBAL CACHE (LOAD SEKALI)
+    // ==================================================
+    let ITEM_CACHE = null;
+    let ITEM_PROMISE = null;
 
-        let ts = new TomSelect(select, {
+    async function loadItemsOnce() {
+        if (ITEM_CACHE) return ITEM_CACHE;
+
+        if (!ITEM_PROMISE) {
+            ITEM_PROMISE = fetch('/barang/api')
+                .then(res => res.json())
+                .then(data => {
+                    ITEM_CACHE = data;
+                    return data;
+                });
+        }
+
+        return ITEM_PROMISE;
+    }
+
+    // ==================================================
+    // INIT TOMSELECT
+    // ==================================================
+    async function initSelect(index, selectedValue = null) {
+        const select = document.getElementById('itemSelect' + index);
+        if (!select) return;
+
+        // 🚫 cegah double init
+        if (select.tomselect) {
+            if (selectedValue) select.tomselect.setValue(selectedValue);
+            return;
+        }
+
+        const data = await loadItemsOnce();
+
+        const ts = new TomSelect(select, {
             valueField: 'ItemCode',
             labelField: 'ItemLabel',
             searchField: ['ItemCode', 'FrgnName'],
             options: data,
+            preload: true,
+            maxOptions: 100,
             placeholder: 'Pilih item...',
-            onChange: function(value) {
+
+            onChange(value) {
+                if (!value) return;
 
                 // ==================================================
-                // Cegah duplikasi item (TomSelect)
+                // CEGAH DUPLIKASI
                 // ==================================================
-                let alpineScope = document.querySelector(`#itemSelect${index}`).closest('[x-data]');
-                let items = Alpine.$data(alpineScope).items;
+                const alpineRoot = select.closest('[x-data]');
+                const alpineData = Alpine.$data(alpineRoot);
+                const items = alpineData.items;
 
-                let duplicate = items.some((i, idx) => i.RdrItemCode === value && idx !== index);
+                const duplicate = items.some(
+                    (i, idx) => i.RdrItemCode === value && idx !== index
+                );
+
                 if (duplicate) {
                     alert('Barang sudah dipilih di baris lain!');
                     this.clear();
@@ -336,37 +375,45 @@
                 }
 
                 // ==================================================
-                // Ambil data item
+                // AMBIL DATA ITEM
                 // ==================================================
-                let selected = this.options[value];
-                if (selected) {
-                    let fields = [
-                        ['ItemName', selected.FrgnName],
-                        ['RdrItemProfitCenter', selected.ProfitCenter],
-                        ['RdrItemSatuan', selected.Satuan],
-                        ['RdrItemKetHKN', selected.KetHKN],
-                        ['RdrItemKetFG', selected.KetFG],
-                    ];
+                const selected = this.options[value];
+                if (!selected) return;
 
-                    fields.forEach(([name, val]) =>
-                        document.querySelector(`[name="items[${index}][${name}]"]`).value = val
+                const fields = {
+                    ItemName: selected.FrgnName,
+                    RdrItemProfitCenter: selected.ProfitCenter,
+                    RdrItemSatuan: selected.Satuan,
+                    RdrItemKetHKN: selected.KetHKN,
+                    RdrItemKetFG: selected.KetFG,
+                };
+
+                // set ke input hidden
+                Object.entries(fields).forEach(([name, val]) => {
+                    const el = document.querySelector(
+                        `[name="items[${index}][${name}]"]`
                     );
+                    if (el) el.value = val;
+                });
 
-                    let priceInput = document.querySelector(`[name="items[${index}][RdrItemPrice]"]`);
-                    if (!priceInput.value || priceInput.value === "0") {
-                        priceInput.value = selected.HET;
-                    }
+                // harga: isi hanya kalau kosong / 0
+                const priceInput = document.querySelector(
+                    `[name="items[${index}][RdrItemPrice]"]`
+                );
 
-                    let dataItem = items[index];
-                    dataItem.ItemName = selected.FrgnName;
-                    dataItem.RdrItemProfitCenter = selected.ProfitCenter;
-                    dataItem.RdrItemSatuan = selected.Satuan;
-                    dataItem.RdrItemKetHKN = selected.KetHKN;
-                    dataItem.RdrItemKetFG = selected.KetFG;
+                if (priceInput && (!priceInput.value || priceInput.value == 0)) {
+                    priceInput.value = selected.HET;
+                }
 
-                    if (!dataItem.RdrItemPrice || dataItem.RdrItemPrice == 0) {
-                        dataItem.RdrItemPrice = selected.HET;
-                    }
+                // ==================================================
+                // SYNC KE ALPINE
+                // ==================================================
+                const dataItem = items[index];
+
+                Object.assign(dataItem, fields);
+
+                if (!dataItem.RdrItemPrice || dataItem.RdrItemPrice == 0) {
+                    dataItem.RdrItemPrice = selected.HET;
                 }
             }
         });
@@ -374,11 +421,17 @@
         if (selectedValue) ts.setValue(selectedValue);
     }
 
-    // Init semua select ketika halaman dibuka
-    document.addEventListener('DOMContentLoaded', () => {
+    // ==================================================
+    // INIT SAAT PAGE LOAD
+    // ==================================================
+    document.addEventListener('DOMContentLoaded', async () => {
+        // 🚀 preload data lebih awal
+        await loadItemsOnce();
+
+        const selectedValues = <?php echo json_encode(array_column($rows, 'RdrItemCode'), 512) ?>;
+
         document.querySelectorAll('[id^="itemSelect"]').forEach((el, idx) => {
-            let selected = <?php echo json_encode(array_column($rows, 'RdrItemCode'), 512) ?>;
-            initSelect(idx, selected[idx] ?? null);
+            initSelect(idx, selectedValues[idx] ?? null);
         });
     });
 </script>

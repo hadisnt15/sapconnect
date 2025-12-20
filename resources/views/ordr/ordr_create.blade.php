@@ -291,58 +291,91 @@
 </x-layout>
 
 <script>
-    async function initSelect(index) {
-        let response = await fetch('/barang/api');
-        let data = await response.json();
+    // CACHE GLOBAL (hanya load 1x)
+    let ITEM_CACHE = null;
+    let ITEM_LOADING = null;
 
-        let select = document.getElementById('itemSelect' + index);
+    async function loadItemsOnce() {
+        if (ITEM_CACHE) return ITEM_CACHE;
+
+        if (!ITEM_LOADING) {
+            ITEM_LOADING = fetch('/barang/api')
+                .then(res => res.json())
+                .then(data => {
+                    ITEM_CACHE = data;
+                    return data;
+                });
+        }
+
+        return ITEM_LOADING;
+    }
+
+    async function initSelect(index) {
+        const select = document.getElementById('itemSelect' + index);
+
+        // 🚫 cegah double init
+        if (select.tomselect) return;
+
+        // ambil data dari cache
+        const data = await loadItemsOnce();
 
         new TomSelect(select, {
             valueField: 'ItemCode',
             labelField: 'ItemLabel',
             searchField: ['ItemCode', 'FrgnName'],
             options: data,
+            preload: true,
+            maxOptions: 100,
             placeholder: 'Pilih item...',
-            
-            onChange: function(value) {
 
-                /* ADD: Cek duplikasi item */
-                let alpineRoot = document.querySelector('#itemSelect' + index).closest('[x-data]');
-                let items = Alpine.$data(alpineRoot).items;
+            onChange(value) {
+                if (!value) return;
 
-                let duplicate = items.some((i, idx) => i.RdrItemCode === value && idx !== index);
+                const alpineRoot = select.closest('[x-data]');
+                const alpineData = Alpine.$data(alpineRoot);
+                const items = alpineData.items;
+
+                // 🔍 cek duplikasi
+                const duplicate = items.some(
+                    (i, idx) => i.RdrItemCode === value && idx !== index
+                );
+
                 if (duplicate) {
                     alert('Barang tidak boleh duplikat!');
                     this.clear();
                     return;
                 }
 
-                let selected = this.options[value];
-                if (selected) {
+                const selected = this.options[value];
+                if (!selected) return;
 
-                    document.querySelector(`[name="items[${index}][ItemName]"]`).value = selected.FrgnName;
-                    document.querySelector(`[name="items[${index}][RdrItemPrice]"]`).value = selected.HET;
-                    document.querySelector(`[name="items[${index}][RdrItemProfitCenter]"]`).value = selected.ProfitCenter;
-                    document.querySelector(`[name="items[${index}][RdrItemSatuan]"]`).value = selected.Satuan;
-                    document.querySelector(`[name="items[${index}][RdrItemKetHKN]"]`).value = selected.KetHKN;
-                    document.querySelector(`[name="items[${index}][RdrItemKetFG]"]`).value = selected.KetFG;
+                // set input hidden
+                document.querySelector(`[name="items[${index}][ItemName]"]`).value = selected.FrgnName;
+                document.querySelector(`[name="items[${index}][RdrItemPrice]"]`).value = selected.HET;
+                document.querySelector(`[name="items[${index}][RdrItemProfitCenter]"]`).value = selected.ProfitCenter;
+                document.querySelector(`[name="items[${index}][RdrItemSatuan]"]`).value = selected.Satuan;
+                document.querySelector(`[name="items[${index}][RdrItemKetHKN]"]`).value = selected.KetHKN;
+                document.querySelector(`[name="items[${index}][RdrItemKetFG]"]`).value = selected.KetFG;
 
-                    let alpineScope = Alpine.$data(alpineRoot).items[index];
-                    alpineScope.ItemName = selected.FrgnName;
-                    alpineScope.RdrItemPrice = selected.HET;
-                    alpineScope.RdrItemProfitCenter = selected.ProfitCenter;
-                    alpineScope.RdrItemSatuan = selected.Satuan;
-                    alpineScope.RdrItemKetHKN = selected.KetHKN;
-                    alpineScope.RdrItemKetFG = selected.KetFG;
+                // sync ke Alpine
+                Object.assign(alpineData.items[index], {
+                    ItemName: selected.FrgnName,
+                    RdrItemPrice: selected.HET,
+                    RdrItemProfitCenter: selected.ProfitCenter,
+                    RdrItemSatuan: selected.Satuan,
+                    RdrItemKetHKN: selected.KetHKN,
+                    RdrItemKetFG: selected.KetFG,
+                });
 
-                    let el = document.querySelector(`#itemSelect${index}`);
-                    el.dispatchEvent(new Event('input'));
-                }
+                select.dispatchEvent(new Event('input'));
             }
         });
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // 🚀 preload data sejak awal halaman
+    document.addEventListener('DOMContentLoaded', async () => {
+        await loadItemsOnce();
         initSelect(0);
     });
 </script>
+
