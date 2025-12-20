@@ -310,7 +310,7 @@
     }
 
     // ==================================================
-    // INIT TOMSELECT
+    // INIT TOMSELECT (OPTIMIZED)
     // ==================================================
     async function initSelect(index, selectedValue = null) {
         const select = document.getElementById('itemSelect' + index);
@@ -324,87 +324,82 @@
 
         const data = await loadItemsOnce();
 
-        const ts = new TomSelect(select, {
-            valueField: 'ItemCode',
-            labelField: 'ItemLabel',
-            searchField: ['ItemCode', 'FrgnName'],
-            options: data,
-            preload: true,
-            maxOptions: 100,
-            placeholder: 'Pilih item...',
+        const build = () => {
+            const ts = new TomSelect(select, {
+                valueField: 'ItemCode',
+                labelField: 'ItemLabel',
+                searchField: ['ItemCode', 'FrgnName'],
+                options: data,
+                preload: true,
+                maxOptions: 100,
+                placeholder: 'Pilih item...',
 
-            onChange(value) {
-                if (!value) return;
+                onChange(value) {
+                    if (!value) return;
 
-                // ==================================================
-                // CEGAH DUPLIKASI
-                // ==================================================
-                const alpineRoot = select.closest('[x-data]');
-                const alpineData = Alpine.$data(alpineRoot);
-                const items = alpineData.items;
+                    const alpineRoot = select.closest('[x-data]');
+                    const alpineData = Alpine.$data(alpineRoot);
+                    const items = alpineData.items;
 
-                const duplicate = items.some(
-                    (i, idx) => i.RdrItemCode === value && idx !== index
-                );
-
-                if (duplicate) {
-                    alert('Barang sudah dipilih di baris lain!');
-                    this.clear();
-                    return;
-                }
-
-                // ==================================================
-                // AMBIL DATA ITEM
-                // ==================================================
-                const selected = this.options[value];
-                if (!selected) return;
-
-                const fields = {
-                    ItemName: selected.FrgnName,
-                    RdrItemProfitCenter: selected.ProfitCenter,
-                    RdrItemSatuan: selected.Satuan,
-                    RdrItemKetHKN: selected.KetHKN,
-                    RdrItemKetFG: selected.KetFG,
-                };
-
-                // set ke input hidden
-                Object.entries(fields).forEach(([name, val]) => {
-                    const el = document.querySelector(
-                        `[name="items[${index}][${name}]"]`
+                    const duplicate = items.some(
+                        (i, idx) => i.RdrItemCode === value && idx !== index
                     );
-                    if (el) el.value = val;
-                });
 
-                // harga: isi hanya kalau kosong / 0
-                const priceInput = document.querySelector(
-                    `[name="items[${index}][RdrItemPrice]"]`
-                );
+                    if (duplicate) {
+                        alert('Barang sudah dipilih di baris lain!');
+                        this.clear();
+                        return;
+                    }
 
-                if (priceInput && (!priceInput.value || priceInput.value == 0)) {
-                    priceInput.value = selected.HET;
+                    const selected = this.options[value];
+                    if (!selected) return;
+
+                    const fields = {
+                        ItemName: selected.FrgnName,
+                        RdrItemProfitCenter: selected.ProfitCenter,
+                        RdrItemSatuan: selected.Satuan,
+                        RdrItemKetHKN: selected.KetHKN,
+                        RdrItemKetFG: selected.KetFG,
+                    };
+
+                    Object.entries(fields).forEach(([name, val]) => {
+                        const el = document.querySelector(
+                            `[name="items[${index}][${name}]"]`
+                        );
+                        if (el) el.value = val;
+                    });
+
+                    const priceInput = document.querySelector(
+                        `[name="items[${index}][RdrItemPrice]"]`
+                    );
+
+                    if (priceInput && (!priceInput.value || priceInput.value == 0)) {
+                        priceInput.value = selected.HET;
+                    }
+
+                    Object.assign(items[index], fields);
+
+                    if (!items[index].RdrItemPrice || items[index].RdrItemPrice == 0) {
+                        items[index].RdrItemPrice = selected.HET;
+                    }
                 }
+            });
 
-                // ==================================================
-                // SYNC KE ALPINE
-                // ==================================================
-                const dataItem = items[index];
+            if (selectedValue) ts.setValue(selectedValue);
+        };
 
-                Object.assign(dataItem, fields);
-
-                if (!dataItem.RdrItemPrice || dataItem.RdrItemPrice == 0) {
-                    dataItem.RdrItemPrice = selected.HET;
-                }
-            }
-        });
-
-        if (selectedValue) ts.setValue(selectedValue);
+        // 🚀 INIT SAAT BROWSER IDLE (INI KUNCINYA)
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(build, { timeout: 300 });
+        } else {
+            setTimeout(build, 0);
+        }
     }
 
     // ==================================================
     // INIT SAAT PAGE LOAD
     // ==================================================
     document.addEventListener('DOMContentLoaded', async () => {
-        // 🚀 preload data lebih awal
         await loadItemsOnce();
 
         const selectedValues = @json(array_column($rows, 'RdrItemCode'));
