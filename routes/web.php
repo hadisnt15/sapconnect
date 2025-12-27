@@ -30,6 +30,7 @@ use App\Http\Controllers\Report\LubRetailController;
 use App\Http\Controllers\Report\Top10LubRtlController;
 use App\Http\Controllers\Report\Piutang45HariController;
 use App\Http\Controllers\Report\BulananAverageController;
+use App\Http\Controllers\Report\PembelianHarianController;
 use App\Http\Controllers\Report\PenjualanRtlSalesController;
 use App\Http\Controllers\Report\PenjualanSprSalesController;
 use App\Http\Controllers\Report\BulananAverageLiterController;
@@ -154,6 +155,8 @@ Route::get('/laporan/piutang-45-hari', [Piutang45HariController::class, 'index']
 Route::get('/laporan/sinkron/piutang-45-hari', [Piutang45HariController::class, 'refresh'])->name('report.refresh.piutang-45-hari')->middleware('auth');
 Route::get('/laporan/pencapaian-penjualan-retail-per-sales', [PenjualanRtlSalesController::class, 'index'])->name('report.pencapaian-penjualan-retail-per-sales')->middleware('auth');
 Route::post('/laporan/sinkron/pencapaian-penjualan-retail-per-sales', [PenjualanRtlSalesController::class, 'refresh'])->name('report.refresh.pencapaian-penjualan-retail-per-sales')->middleware('auth');
+Route::get('/laporan/pembelian-harian', [PembelianHarianController::class, 'index'])->name('report.pembelian-harian')->middleware('auth');
+Route::get('/laporan/sinkron/pembelian-harian', [PembelianHarianController::class, 'refresh'])->name('report.refresh.pembelian-harian')->middleware('auth');
 
 
 // Route::get('/test-hana', function () {
