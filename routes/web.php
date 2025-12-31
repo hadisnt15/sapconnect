@@ -36,6 +36,7 @@ use App\Http\Controllers\Report\PenjualanSprSalesController;
 use App\Http\Controllers\Report\BulananAverageLiterController;
 use App\Http\Controllers\Report\PenjualanSprSegmentController;
 use App\Http\Controllers\Report\GrafikPenjualanSalesController;
+use App\Http\Controllers\Report\PeminjamanBarangController;
 
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
@@ -157,6 +158,8 @@ Route::get('/laporan/pencapaian-penjualan-retail-per-sales', [PenjualanRtlSalesC
 Route::post('/laporan/sinkron/pencapaian-penjualan-retail-per-sales', [PenjualanRtlSalesController::class, 'refresh'])->name('report.refresh.pencapaian-penjualan-retail-per-sales')->middleware('auth');
 Route::get('/laporan/pembelian-harian', [PembelianHarianController::class, 'index'])->name('report.pembelian-harian')->middleware('auth');
 Route::get('/laporan/sinkron/pembelian-harian', [PembelianHarianController::class, 'refresh'])->name('report.refresh.pembelian-harian')->middleware('auth');
+Route::get('/laporan/peminjaman-barang', [PeminjamanBarangController::class, 'index'])->name('report.peminjaman-barang')->middleware('auth');
+Route::get('/laporan/sinkron/peminjaman-barang', [PeminjamanBarangController::class, 'refresh'])->name('report.refresh.peminjaman-barang')->middleware('auth');
 
 
 // Route::get('/test-hana', function () {
