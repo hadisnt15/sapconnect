@@ -14,7 +14,7 @@ class PeminjamanBarangController extends Controller
 {
     public function index(Request $request) 
     {
-        $report = Report::where('slug', 'pembelian-harian')->first();
+        $report = Report::where('slug', 'peminjaman-barang')->first();
         $date = $request->input('date', now()->format('Y-m-d'));
 
         $data = ReportPeminjamanBarang::where('TANGGAL', $date)
