@@ -159,7 +159,11 @@
             <div id="accordion-body-4" class="hidden bg-white rounded-b-xl">
                 <div class="p-5 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
                     <p class="mb-3">Silakan unduh dan pelajari dokumen di bawah ini untuk panduan penggunaan website SAP Connect.</p>
-                    <p>Lagi proses bikin🙏</p>
+                    <p>
+                        <a href="{{ asset('storage/panduan/SAPConnect-Untuk-Sales.pdf') }}" target="_blank">
+                            Test
+                        </a>
+                    </p>
                 </div>
             </div>
         </div>
