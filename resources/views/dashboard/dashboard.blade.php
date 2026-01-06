@@ -161,7 +161,7 @@
                     <p class="mb-3">Silakan unduh dan pelajari dokumen di bawah ini untuk panduan penggunaan website SAP Connect.</p>
                     <p>
                         <a href="{{ asset('storage/panduan/SAPConnect-Untuk-Sales.pdf') }}" target="_blank">
-                            Test
+                            <i class="ri-folder-download-fill"></i> Unduh
                         </a>
                     </p>
                 </div>
