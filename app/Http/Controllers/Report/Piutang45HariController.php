@@ -32,6 +32,7 @@ class Piutang45HariController extends Controller
             $query->where('KEY', $filter);
         })
         ->whereIn('KEY', $divisiList)
+        ->where('LEWATHARI','>',0)
         ->orderBy('KET3')
         ->orderBy('KEY')
         ->orderByRaw('CAST(LEWATHARI AS SIGNED) DESC')
