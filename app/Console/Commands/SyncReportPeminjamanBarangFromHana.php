@@ -46,22 +46,22 @@ class SyncReportPeminjamanBarangFromHana extends Command
                             CAST(\"UOM\" AS NVARCHAR(255)) AS \"UOM\"
                         FROM LVKKJ_REP_PEMINJAMANBARANG ()");
         
-        foreach ($hanaData as $row) {
-            DB::table('report_peminjaman_barang')->updateOrInsert(
-                [ 'MAINKEY' => $row->MAINKEY, ], // key unik
-                [
-                    'TANGGAL' => $row->TANGGAL,
-                    'ALUR' => $row->ALUR,
-                    'ORIGINCODE' => $row->ORIGINCODE,
-                    'FRGNNAME' => $row->FRGNNAME,
-                    'QTY' => $row->QTY,
-                    'UOM' => $row->UOM,
-                    'updated_at'    => now(),
-                    // tambahkan field lain sesuai schema
-                ]
-            );
-        }
+        ReportPeminjamanBarang::truncate();
 
+        // Insert data Dashboard
+        foreach ($hanaData as $row) {
+            ReportPeminjamanBarang::create([
+                'MAINKEY' => $row->MAINKEY,
+                'TANGGAL' => $row->TANGGAL,
+                'ALUR' => $row->ALUR,
+                'ORIGINCODE' => $row->ORIGINCODE,
+                'FRGNNAME' => $row->FRGNNAME,
+                'QTY' => $row->QTY,
+                'UOM' => $row->UOM,
+                'updated_at'    => now(),
+            ]);
+        }
+        DB::commit();
         // Logging hasil
         $this->info("Total data Report Bulanan Average (HANA): " . count($hanaData));
         $this->info("Total data Report Bulanan Average (Laravel): " . ReportPeminjamanBarang::count());
