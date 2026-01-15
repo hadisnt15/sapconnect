@@ -93,8 +93,11 @@
                     <option value="">Tanpa Filter</option>
                     <option value="1" <?php echo e(request('checked') == '1' ? 'selected' : ''); ?>>Ceklis</option>
                     <option value="0" <?php echo e(request('checked') == '0' ? 'selected' : ''); ?>>Non Ceklis</option>
-                    <option value="2" <?php echo e(request('checked') == '2' ? 'selected' : ''); ?>>Terkirim</option>
-                    <option value="3" <?php echo e(request('checked') == '3' ? 'selected' : ''); ?>>Tertunda</option>
+                    <option value="2" <?php echo e(request('checked') == '2' ? 'selected' : ''); ?>>Terkirim (Status Web)</option>
+                    <option value="3" <?php echo e(request('checked') == '3' ? 'selected' : ''); ?>>Tertunda (Status Web)</option>
+                    <option value="4" <?php echo e(request('checked') == '4' ? 'selected' : ''); ?>>Belum Diproses (Status SAP)</option>
+                    <option value="5" <?php echo e(request('checked') == '5' ? 'selected' : ''); ?>>Pesanan Tertunda (Status SAP)</option>
+                    <option value="6" <?php echo e(request('checked') == '6' ? 'selected' : ''); ?>>Pesanan Selesai (Status SAP)</option>
                 </select>
 
                 <!-- 🔹 Date Range -->
@@ -127,7 +130,7 @@
                                 <th class="px-2 py-2 w-3/12">PELANGGAN</th>
                                 <th class="px-2 py-2 w-2/12">PENJUAL</th>
                                 <th class="px-2 py-2 w-1/24">CEK</th>
-                                <th class="px-2 py-2 w-1/24">STATUS</th>
+                                <th class="px-2 py-2 w-1/24">STATUS WEB</th>
                                 <th class="px-2 py-2 w-1/24">STATUS SAP</th>
                                 <th class="px-2 py-2 w-1/18">AKSI</th>
                             </tr>
@@ -275,6 +278,7 @@
                                         <?php endif; ?>
                                     </td>
                                     <td class="text-xs px-2 py-2 font-medium">
+                                        <div class="mt-2">STATUS WEB:</div>
                                         <?php if($o->is_synced === 1): ?>
                                             <span class="text-green-600 font-semibold">TERKIRIM</span>
                                         <?php else: ?>

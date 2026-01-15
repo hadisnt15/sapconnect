@@ -82,8 +82,11 @@
                     <option value="">Tanpa Filter</option>
                     <option value="1" {{ request('checked') == '1' ? 'selected' : '' }}>Ceklis</option>
                     <option value="0" {{ request('checked') == '0' ? 'selected' : '' }}>Non Ceklis</option>
-                    <option value="2" {{ request('checked') == '2' ? 'selected' : '' }}>Terkirim</option>
-                    <option value="3" {{ request('checked') == '3' ? 'selected' : '' }}>Tertunda</option>
+                    <option value="2" {{ request('checked') == '2' ? 'selected' : '' }}>Terkirim (Status Web)</option>
+                    <option value="3" {{ request('checked') == '3' ? 'selected' : '' }}>Tertunda (Status Web)</option>
+                    <option value="4" {{ request('checked') == '4' ? 'selected' : '' }}>Belum Diproses (Status SAP)</option>
+                    <option value="5" {{ request('checked') == '5' ? 'selected' : '' }}>Pesanan Tertunda (Status SAP)</option>
+                    <option value="6" {{ request('checked') == '6' ? 'selected' : '' }}>Pesanan Selesai (Status SAP)</option>
                 </select>
 
                 <!-- 🔹 Date Range -->
@@ -116,7 +119,7 @@
                                 <th class="px-2 py-2 w-3/12">PELANGGAN</th>
                                 <th class="px-2 py-2 w-2/12">PENJUAL</th>
                                 <th class="px-2 py-2 w-1/24">CEK</th>
-                                <th class="px-2 py-2 w-1/24">STATUS</th>
+                                <th class="px-2 py-2 w-1/24">STATUS WEB</th>
                                 <th class="px-2 py-2 w-1/24">STATUS SAP</th>
                                 <th class="px-2 py-2 w-1/18">AKSI</th>
                             </tr>
@@ -260,6 +263,7 @@
                                         @endif
                                     </td>
                                     <td class="text-xs px-2 py-2 font-medium">
+                                        <div class="mt-2">STATUS WEB:</div>
                                         @if ($o->is_synced === 1)
                                             <span class="text-green-600 font-semibold">TERKIRIM</span>
                                         @else

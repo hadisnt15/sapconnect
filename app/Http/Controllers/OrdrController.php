@@ -94,6 +94,21 @@ class OrdrController extends Controller
                 case '0': $query->where('is_checked', 0); break;
                 case '2': $query->where('is_synced', 1); break;
                 case '3': $query->where('is_synced', 0); break;
+                case '4': // BELUM DIPROSES
+                    $query->whereHas('ordrStatus', function ($q) {
+                        $q->where('pesanan_status', 'LIKE', '%BELUM DIPROSES%');
+                    });
+                    break;
+                case '5': // PESANAN TERTUNDA
+                    $query->whereHas('ordrStatus', function ($q) {
+                        $q->where('pesanan_status', 'LIKE', '%PESANAN TERTUNDA%');
+                    });
+                    break;
+                case '6': // PESANAN SELESAI
+                    $query->whereHas('ordrStatus', function ($q) {
+                        $q->where('pesanan_status', 'LIKE', '%PESANAN SELESAI%');
+                    });
+                    break;
             }
         }
 
