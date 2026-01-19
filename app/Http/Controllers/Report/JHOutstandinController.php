@@ -14,7 +14,7 @@ class JHOutstandinController extends Controller
 {
     public function index()
     {
-        $report = Report::where('slug', 'peminjaman-barang')->first();
+        $report = Report::where('slug', 'jh-outstanding')->first();
 
         $data = ReportJHOutstanding::orderBy('PRJNAME')
             ->orderBy('MAINKEY','desc')
