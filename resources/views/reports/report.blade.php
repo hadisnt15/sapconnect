@@ -63,6 +63,14 @@
                                 <i class="ri-folder-open-fill"></i> Lihat Laporan
                             </span>
                         </a>
+                        @can('report.create')
+                            <a href="{{ route('report.edit', $r->id) }}" class="mt-2">
+                                <span
+                                    class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-green-800 hover:bg-green-500 text-white transition">
+                                    <i class="ri-folder-open-fill"></i> Edit Laporan
+                                </span>
+                            </a>
+                        @endcan
                     </div>
                 </div>
             </article>

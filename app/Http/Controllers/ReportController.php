@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ReportController extends Controller
 {
@@ -107,7 +108,13 @@ class ReportController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $report = Report::findOrFail($id);
+
+        return view('reports.report_edit', [
+            'title' => 'SCKKJ - Perbarui Laporan',
+            'titleHeader' => 'Perbarui Laporan',
+            'report' => $report,
+        ]);
     }
 
     /**
@@ -115,7 +122,29 @@ class ReportController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $report = Report::findOrFail($id);
+        $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'min:3',
+                'max:50',
+                'regex:/^[a-zA-Z\s]+$/'
+            ],
+            'category' => [
+                'required',
+                'in:Penjualan Semua,Penjualan IDS,Penjualan RTL,Penjualan IDP,Pembelian,Persediaan,Piutang,Lain-lain',
+            ],
+            'description' => [
+                'required',
+                'string'
+            ],
+        ], [
+            'name.required' => 'Nama wajib diisi.',
+            'name.regex' => 'Nama hanya boleh berisi huruf dan spasi.',
+        ]);
+        $report->update($request->all());
+        return redirect('/laporan')->with('success',value: 'Pembaruan Data Laporan Berhasil!');
     }
 
     /**

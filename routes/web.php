@@ -97,8 +97,8 @@ Route::get('/pesanan/{id}/detail', [OrdrController::class, 'detail'])->name('ord
 Route::get('/pesanan/{id}/prosesPesanan/', [OrdrController::class, 'progress'])->name('order.progress');
 Route::get('/pesanan/sinkron', [OrdrController::class, 'refresh'])->name('order.refresh')->middleware('role:developer|manager|supervisor'); //ok
 // Route::get('/pesanan/ekspor', function () {
-//     return Excel::download(new OrdrCombinedExport, 'ORDR_COMBINED.xlsx');
-// })->name('order.export')->middleware('role:developer|supervisor'); //ok
+    //     return Excel::download(new OrdrCombinedExport, 'ORDR_COMBINED.xlsx');
+    // })->name('order.export')->middleware('role:developer|supervisor'); //ok
 Route::get('/pesanan/ekspor', [OrdrController::class, 'export'])->name('order.export')->middleware('role:developer|supervisor'); //ok
 
 Route::get('/kunjungan', [VisitController::class, 'index'])->name('visit')->middleware('auth');
@@ -133,6 +133,9 @@ Route::get('/laporan/apiRep', [ReportController::class, 'api'])->name('rep.apiRe
 Route::get('/laporan', [ReportController::class, 'index'])->name('report')->middleware('auth');
 Route::get('/laporan/buat', [ReportController::class, 'create'])->name('report.create')->middleware('role:developer'); //ok
 Route::post('/laporan/simpan', [ReportController::class, 'store'])->name('report.store')->middleware('role:developer');
+Route::get('/laporan/{id}/edit', [ReportController::class, 'edit'])->name('report.edit')->middleware('role:developer'); //ok
+Route::put('/laporan/{id}/perbarui', [ReportController::class, 'update'])->name('report.update')->middleware('role:developer'); //ok
+
 Route::get('/laporan/pencapaian-penjualan-sparepart-per-segment', [PenjualanSprSegmentController::class, 'index'])->name('report.pencapaian-penjualan-sparepart-per-segment')->middleware('auth');
 Route::post('/laporan/sinkron/pencapaian-penjualan-sparepart-per-segment', [PenjualanSprSegmentController::class, 'refresh'])->name('report.refresh.pencapaian-penjualan-sparepart-per-segment')->middleware('auth');
 Route::get('/laporan/pencapaian-penjualan-sparepart-per-sales', [PenjualanSprSalesController::class, 'index'])->name('report.pencapaian-penjualan-sparepart-per-sales')->middleware('auth');

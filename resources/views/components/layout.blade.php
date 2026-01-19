@@ -38,7 +38,7 @@
 </head>
 
 <body class="h-full">
-    <div class="min-h-full ">
+    <div class="min-h-screen ">
         <div>
 
             <div class="fixed top-0 left-0 w-full z-50">

@@ -73,6 +73,14 @@
                                 <i class="ri-folder-open-fill"></i> Lihat Laporan
                             </span>
                         </a>
+                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('report.create')): ?>
+                            <a href="<?php echo e(route('report.edit', $r->id)); ?>" class="mt-2">
+                                <span
+                                    class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-green-800 hover:bg-green-500 text-white transition">
+                                    <i class="ri-folder-open-fill"></i> Edit Laporan
+                                </span>
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </article>
