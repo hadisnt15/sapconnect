@@ -45,8 +45,7 @@ class SyncReportPembelianHarianFromHana extends Command
                             CAST(\"LITER\" AS NVARCHAR(255)) AS \"LITER\",
                             CAST(\"KILOLITER\" AS NVARCHAR(255)) AS \"KILOLITER\",
                             CAST(\"KETQTYUOM\" AS NVARCHAR(255)) AS \"KETQTYUOM\"
-                        FROM LVKKJ_REP_PEMBELIANHARIAN ()");
-        
+                        FROM LVKKJV_REP_PEMBELIANHARIAN");
         foreach ($hanaData as $row) {
             DB::table('report_pembelian_harian')->updateOrInsert(
                 [ 'MAINKEY' => $row->MAINKEY, ], // key unik

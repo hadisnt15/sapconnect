@@ -26,20 +26,7 @@
         @can('dashboard.refresh')
         <!-- Filter Bulan -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-end mb-4 gap-2">
-            <form method="get" action="{{ route('report.peminjaman-barang') }}" 
-                class="flex flex-col md:flex-row items-stretch md:items-center gap-2 w-full md:w-auto">
-                @csrf
-                <div class="flex flex-col md:flex-row md:items-center gap-2 w-full md:w-auto">
-                    <label for="date" class="text-xs font-medium text-gray-600">Pilih Tanggal:</label>
-                    <input 
-                        type="date" 
-                        id="date" 
-                        name="date" 
-                        value="{{ request('date', now()->format('Y-m-d')) }}" onchange="this.form.submit()"
-                        class="border rounded-lg p-2 text-xs font-medium text-gray-700 border-gray-300 focus:ring focus:ring-red-200 w-full md:w-auto"
-                    >
-                </div>
-            </form>
+            
             <!-- 🔴 Sinkronisasi SAP -->
             <a href="{{ route('report.refresh.peminjaman-barang') }}"
                 class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">

@@ -44,7 +44,7 @@ class SyncReportPeminjamanBarangFromHana extends Command
                             CAST(\"FRGNNAME\" AS NVARCHAR(255)) AS \"FRGNNAME\",
                             CAST(\"QTY\" AS NVARCHAR(255)) AS \"QTY\",
                             CAST(\"UOM\" AS NVARCHAR(255)) AS \"UOM\"
-                        FROM LVKKJ_REP_PEMINJAMANBARANG ()");
+                        FROM LVKKJV_REP_PEMINJAMANBARANG");
         
         ReportPeminjamanBarang::truncate();
 
