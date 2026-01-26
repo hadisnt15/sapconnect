@@ -10,6 +10,6 @@ class ReportPembelianHarian extends Model
     protected $primaryKey = 'MAINKEY';
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['MAINKEY', 'TANGGAL', 'TIPE', 'KETPERIODE', 'SEGMENT', 'LITER', 'KILOLITER', 'KETQTYUOM'];
+    protected $fillable = ['MAINKEY', 'TANGGAL', 'TIPE', 'KETPERIODE', 'SEGMENT', 'LITER', 'KILOLITER', 'KETQTYUOM', 'KETQTYITEM'];
 
 }

@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Report\ReportPembelianHarian;
+use App\Models\Report\ReportPembelianHarianDetail;
 use App\Models\SyncLog;
 
 class SyncReportPembelianHarianFromHana extends Command
@@ -36,24 +37,59 @@ class SyncReportPembelianHarianFromHana extends Command
 
         $this->info("Syncing data ...");
 
-        $hanaData = DB::connection('hana')->select("SELECT 
+        // $hanaData = DB::connection('hana')->select("SELECT 
+        //                     CAST(\"MAINKEY\" AS NVARCHAR(255)) AS \"MAINKEY\",
+        //                     CAST(\"TANGGAL\" AS DATE) AS \"TANGGAL\",
+        //                     CAST(\"TIPE2\" AS NVARCHAR(255)) AS \"TIPE2\",
+        //                     CAST(\"KETPERIODE\" AS NVARCHAR(255)) AS \"KETPERIODE\",
+        //                     CAST(\"SEGMENT\" AS NVARCHAR(255)) AS \"SEGMENT\",
+        //                     CAST(\"LITER\" AS NVARCHAR(255)) AS \"LITER\",
+        //                     CAST(\"KILOLITER\" AS NVARCHAR(255)) AS \"KILOLITER\",
+        //                     CAST(\"KETQTYUOM\" AS NVARCHAR(255)) AS \"KETQTYUOM\",
+        //                     CAST(\"KETQTYITEM\" AS NVARCHAR(5000)) AS \"KETQTYITEM\"
+        //                 FROM LVKKJ_REP_PEMBELIANHARIAN ()");
+        $hanaData2 = DB::connection('hana')->select("SELECT 
                             CAST(\"MAINKEY\" AS NVARCHAR(255)) AS \"MAINKEY\",
                             CAST(\"TANGGAL\" AS DATE) AS \"TANGGAL\",
                             CAST(\"TIPE2\" AS NVARCHAR(255)) AS \"TIPE2\",
                             CAST(\"KETPERIODE\" AS NVARCHAR(255)) AS \"KETPERIODE\",
                             CAST(\"SEGMENT\" AS NVARCHAR(255)) AS \"SEGMENT\",
+                            CAST(\"FRGNNAME\" AS NVARCHAR(255)) AS \"FRGNNAME\",
+                            CAST(\"UOMCODE\" AS NVARCHAR(255)) AS \"UOMCODE\",
+                            CAST(\"QTY\" AS NVARCHAR(255)) AS \"QTY\",
                             CAST(\"LITER\" AS NVARCHAR(255)) AS \"LITER\",
                             CAST(\"KILOLITER\" AS NVARCHAR(255)) AS \"KILOLITER\",
                             CAST(\"KETQTYUOM\" AS NVARCHAR(255)) AS \"KETQTYUOM\"
-                        FROM LVKKJV_REP_PEMBELIANHARIAN");
-        foreach ($hanaData as $row) {
-            DB::table('report_pembelian_harian')->updateOrInsert(
+                        FROM LVKKJ_REP_PEMBELIANHARIANDETAIL ()");
+        // dd($hanaData);
+        // foreach ($hanaData as $row) {
+        //     DB::table('report_pembelian_harian')->updateOrInsert(
+        //         [ 'MAINKEY' => $row->MAINKEY, ], // key unik
+        //         [
+        //             'TANGGAL' => $row->TANGGAL,
+        //             'TIPE' => $row->TIPE2,
+        //             'KETPERIODE' => $row->KETPERIODE,
+        //             'SEGMENT' => $row->SEGMENT,
+        //             'LITER' => $row->LITER,
+        //             'KILOLITER' => $row->KILOLITER,
+        //             'KETQTYUOM' => $row->KETQTYUOM,
+        //             'KETQTYITEM' => $row->KETQTYITEM,
+        //             'updated_at'    => now(),
+        //             // tambahkan field lain sesuai schema
+        //         ]
+        //     );
+        // }
+        foreach ($hanaData2 as $row) {
+            DB::table('report_pembelian_harian_detail')->updateOrInsert(
                 [ 'MAINKEY' => $row->MAINKEY, ], // key unik
                 [
                     'TANGGAL' => $row->TANGGAL,
                     'TIPE' => $row->TIPE2,
                     'KETPERIODE' => $row->KETPERIODE,
                     'SEGMENT' => $row->SEGMENT,
+                    'FRGNNAME' => $row->FRGNNAME,
+                    'UOMCODE' => $row->UOMCODE,
+                    'QTY' => $row->QTY,
                     'LITER' => $row->LITER,
                     'KILOLITER' => $row->KILOLITER,
                     'KETQTYUOM' => $row->KETQTYUOM,
@@ -64,7 +100,7 @@ class SyncReportPembelianHarianFromHana extends Command
         }
 
         // Logging hasil
-        $this->info("Total data Report Bulanan Average (HANA): " . count($hanaData));
-        $this->info("Total data Report Bulanan Average (Laravel): " . ReportPembelianHarian::count());
+        $this->info("Total data Report Pembelian Harian Detail (HANA): " . count($hanaData2));
+        $this->info("Total data Report Pembelian Harian Detail (Laravel): " . ReportPembelianHarianDetail::count());
     }
 }

@@ -67,7 +67,7 @@
 
             {{-- Grouping per TYPE2 --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                @forelse ($data as $tipe => $rows)
+                @forelse ($data as $tipe => $segments)
 
                     <div class="mb-6 border rounded-lg bg-white shadow-sm">
                         <!-- Header TIPE -->
@@ -75,7 +75,7 @@
                             {{ $tipe }}
                         </div>
 
-                        <div class="overflow-x-auto">
+                        <div class="overflow-y-auto max-h-120 relative z-10">
                             <table class="w-full text-sm">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -84,22 +84,44 @@
                                         <th class="px-3 py-2 text-right">Per Satuan</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach ($rows as $row)
-                                        <tr class="border-t">
+                                @foreach ($segments as $segment => $dataSeg)
+                                    <tbody x-data="{ open: false }">
+                                        <tr class="border-t cursor-pointer" @click="open = !open">
                                             <td class="px-3 py-2">
-                                                <span class="font-semibold">{{ $row->SEGMENT }}</span> <br>
-                                                <span class="text-xs">{{ $row->KETPERIODE }}</span>
+                                                <span class="font-semibold">{{ $segment }}</span> <br>
+                                                <span class="text-xs">{{ $dataSeg['ket_periode'] }}</span>
                                             </td>
                                             <td class="px-3 py-2 text-right">
-                                                {{ number_format($row->KILOLITER, 2) }}
+                                                {{ number_format($dataSeg['total_kl'], 2) }}
                                             </td>
                                             <td class="px-3 py-2 text-right">
-                                                {{ ($row->KETQTYUOM) }}
+                                                {{ $dataSeg['ket_uom'] }}
                                             </td>
                                         </tr>
-                                    @endforeach
-                                </tbody>
+                                        {{-- DETAIL --}}
+                                        <template x-if="open">
+                                            <tr>
+                                                <td colspan="3" class="p-0">
+                                                    <table class="w-full text-xs bg-white">
+                                                        @foreach ($dataSeg['items'] as $item)
+                                                            <tr class="border-t">
+                                                                <td class="px-6 py-2 text-gray-700">
+                                                                    • {{ $item->FRGNNAME }}
+                                                                </td>
+                                                                <td class="px-3 py-2 text-right">
+                                                                    {{ number_format($item->QTY, 2) }}
+                                                                </td>
+                                                                <td class="px-3 py-2">
+                                                                    {{ $item->UOMCODE }}
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                @endforeach
                             </table>
                         </div>
                     </div>

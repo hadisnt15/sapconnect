@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\Report\ReportPembelianHarian;
+use App\Models\Report\ReportPembelianHarianDetail;
 
 class PembelianHarianController extends Controller
 {
@@ -17,11 +18,36 @@ class PembelianHarianController extends Controller
         $report = Report::where('slug', 'pembelian-harian')->first();
         $date = $request->input('date', now()->format('Y-m-d'));
 
-        $data = ReportPembelianHarian::where('TANGGAL', $date)
+        $data = ReportPembelianHarianDetail::where('TANGGAL', $date)
             ->orderBy('TIPE', 'desc')
             ->orderBy('SEGMENT')
             ->get()
-            ->groupBy('TIPE');
+            ->groupBy('TIPE')
+            ->map(function ($rowsByTipe) {
+                return $rowsByTipe
+                    ->groupBy('SEGMENT')
+                    ->map(function ($rowsBySegment) {
+                        return [
+                            'ket_periode' => $rowsBySegment->first()->KETPERIODE,
+                            'total_kl' => $rowsBySegment->first()->KILOLITER,
+                            'ket_uom' => $rowsBySegment->first()->KETQTYUOM,
+                            'items' => $rowsBySegment
+                                ->sortBy([
+                                    ['UOMCODE', 'asc'],
+                                    ['QTY', 'desc'],
+                                    ['FRGNNAME', 'asc'],
+                                ])    
+                                ->map(function ($row) {
+                                    return (object) [
+                                        'FRGNNAME' => $row->FRGNNAME,
+                                        'QTY' => $row->QTY,
+                                        'UOMCODE' => $row->UOMCODE,
+                                    ];
+                                })
+                                ->values(),
+                        ];
+                    });
+            });
         $date2 = Carbon::parse($date)->translatedFormat('d M Y');
 
         $lastSync = SyncLog::where('name', 'report.pembelian-harian')->orderByDesc('last_sync')->first();
