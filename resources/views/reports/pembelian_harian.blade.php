@@ -75,7 +75,7 @@
                             {{ $tipe }}
                         </div>
 
-                        <div class="overflow-y-auto max-h-120 relative z-10">
+                        <div class="overflow-y-auto max-h-[30rem] relative z-10">
                             <table class="w-full text-sm">
                                 <thead class="bg-gray-50">
                                     <tr>
