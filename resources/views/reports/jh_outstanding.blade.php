@@ -93,6 +93,15 @@
                                                 </td>
                                             </tr>
                                         @endforeach
+                                        <tr class="bg-gray-100 font-bold border-t">
+                                            <td class="px-3 py-2">
+                                                TOTAL {{ $project }}
+                                            </td>
+                                            <td class="px-3 py-2 text-right text-red-900">
+                                                {{ number_format($rows->sum('TOTAL')) }}
+                                            </td>
+                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -104,7 +113,7 @@
                             </div>
                         </div>
                     @endforelse
-
+                    
                 </div>
             </div>
         @endif
