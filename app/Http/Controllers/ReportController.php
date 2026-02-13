@@ -89,6 +89,7 @@ class ReportController extends Controller
         Report::create([
             'name' => $validated['name'],
             'description' => $validated['description'],
+            'category' => '',
             'slug' => $slug,
             'route' => $route,
         ]);
