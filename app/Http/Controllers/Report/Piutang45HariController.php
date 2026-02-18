@@ -65,6 +65,7 @@ class Piutang45HariController extends Controller
                 DB::raw('SUM(PIUTANG) AS JUMLAH')
             )
             ->whereIn('KEY', $divisiList)
+            ->where('LEWATHARI','>',0)
             ->groupBy('KET3', 'KEY', 'KET2')
             ->orderBy('KET3')
             ->orderBy('KEY')
