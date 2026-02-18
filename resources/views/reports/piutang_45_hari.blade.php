@@ -129,12 +129,12 @@
                                     <table class="table-auto w-full text-sm text-left text-gray-600">
                                         <thead class="text-xs font-bold text-white uppercase bg-red-800 sticky top-0 z-20">
                                             <tr>
-                                                <td colspan="3" class="text-center py-2">{{ $key }}</td>
+                                                <td colspan="4" class="text-center py-2">{{ $key }}</td>
                                             </tr>
                                             <tr>
-                                                <th class="px-2 py-2 text-center w-8/12">PELANGGAN</th>
+                                                <th class="px-2 py-2 text-center w-5/12">PELANGGAN</th>
                                                 <th class="px-2 py-2 text-center w-2/12">LEWAT HARI</th>
-                                                <th class="px-2 py-2 text-center w-2/12">PIUTANG</th>
+                                                <th class="px-2 py-2 text-center w-5/12">PIUTANG</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -149,20 +149,36 @@
                                                 @foreach ($cust['rows'] as $row)
                                                     <tr class="hover:bg-gray-50 border-t">
                                                         <td class="px-2 py-2 font-medium text-gray-700">
-                                                            {{ $row->NAMACUST }} - {{ $row->KODECUST }} - {{ $row->CABANG }}
+                                                            {{ $row->NAMACUST }} <br>
+                                                            {{ $row->KODECUST }} - {{ $row->CABANG }}
                                                         </td>
                                                         <td class="px-2 py-2 font-medium text-center text-gray-700">
                                                             {{ $row->LEWATHARI }} hari
                                                         </td>
                                                         <td class="px-2 py-2 text-right font-medium text-gray-700">
-                                                            {{ number_format($row->PIUTANG) }}
+                                                            {{ number_format($row->PIUTANG) }} <br>
+                                                            @php
+                                                                $kets = explode("\n", $row->KETPIUTANG);
+                                                            @endphp
+
+                                                            <div class="mt-1 text-sm text-gray-500">
+                                                                @foreach($kets as $ket)
+                                                                    @php
+                                                                        [$label, $value] = explode(': ', $ket);
+                                                                    @endphp
+                                                                    <div class="flex justify-between">
+                                                                        <span class="font-medium text-xs text-gray-600 text-right"></span>
+                                                                        <span class="font-medium text-xs text-gray-600">{{ $label }}: {{ $value }}</span>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 @endforeach
 
                                                 {{-- TOTAL PER KET2 --}}
                                                 <tr class="bg-gray-50 font-bold text-gray-800">
-                                                    <td class="px-4 py-2 border-t" colspan="2">Total {{ $ket2Name }}</td>
+                                                    <td class="px-4 py-2 border-t" colspan="2   ">Total {{ $ket2Name }}</td>
                                                     <td class="px-2 py-2 border-t text-right">
                                                         {{ number_format($cust['total_ket2']) }}
                                                     </td>

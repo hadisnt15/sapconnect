@@ -140,12 +140,12 @@
                                     <table class="table-auto w-full text-sm text-left text-gray-600">
                                         <thead class="text-xs font-bold text-white uppercase bg-red-800 sticky top-0 z-20">
                                             <tr>
-                                                <td colspan="3" class="text-center py-2"><?php echo e($key); ?></td>
+                                                <td colspan="4" class="text-center py-2"><?php echo e($key); ?></td>
                                             </tr>
                                             <tr>
-                                                <th class="px-2 py-2 text-center w-8/12">PELANGGAN</th>
+                                                <th class="px-2 py-2 text-center w-5/12">PELANGGAN</th>
                                                 <th class="px-2 py-2 text-center w-2/12">LEWAT HARI</th>
-                                                <th class="px-2 py-2 text-center w-2/12">PIUTANG</th>
+                                                <th class="px-2 py-2 text-center w-5/12">PIUTANG</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -160,22 +160,37 @@
                                                 <?php $__currentLoopData = $cust['rows']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <tr class="hover:bg-gray-50 border-t">
                                                         <td class="px-2 py-2 font-medium text-gray-700">
-                                                            <?php echo e($row->NAMACUST); ?> - <?php echo e($row->KODECUST); ?> - <?php echo e($row->CABANG); ?>
+                                                            <?php echo e($row->NAMACUST); ?> <br>
+                                                            <?php echo e($row->KODECUST); ?> - <?php echo e($row->CABANG); ?>
 
                                                         </td>
                                                         <td class="px-2 py-2 font-medium text-center text-gray-700">
                                                             <?php echo e($row->LEWATHARI); ?> hari
                                                         </td>
                                                         <td class="px-2 py-2 text-right font-medium text-gray-700">
-                                                            <?php echo e(number_format($row->PIUTANG)); ?>
+                                                            <?php echo e(number_format($row->PIUTANG)); ?> <br>
+                                                            <?php
+                                                                $kets = explode("\n", $row->KETPIUTANG);
+                                                            ?>
 
+                                                            <div class="mt-1 text-sm text-gray-500">
+                                                                <?php $__currentLoopData = $kets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ket): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                    <?php
+                                                                        [$label, $value] = explode(': ', $ket);
+                                                                    ?>
+                                                                    <div class="flex justify-between">
+                                                                        <span class="font-medium text-xs text-gray-600 text-right"></span>
+                                                                        <span class="font-medium text-xs text-gray-600"><?php echo e($label); ?>: <?php echo e($value); ?></span>
+                                                                    </div>
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                                 
                                                 <tr class="bg-gray-50 font-bold text-gray-800">
-                                                    <td class="px-4 py-2 border-t" colspan="2">Total <?php echo e($ket2Name); ?></td>
+                                                    <td class="px-4 py-2 border-t" colspan="2   ">Total <?php echo e($ket2Name); ?></td>
                                                     <td class="px-2 py-2 border-t text-right">
                                                         <?php echo e(number_format($cust['total_ket2'])); ?>
 

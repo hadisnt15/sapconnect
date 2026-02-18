@@ -43,7 +43,8 @@ class SyncReportPiutang45HariFromHana extends Command
                             CAST(\"KET\" AS NVARCHAR(255)) AS \"KET\",
                             CAST(\"KET2\" AS NVARCHAR(255)) AS \"KET2\",
                             CAST(\"KET3\" AS NVARCHAR(255)) AS \"KET3\",
-                            CAST(\"PIUTANG\" AS NVARCHAR(255)) AS \"PIUTANG\"
+                            CAST(\"PIUTANG\" AS NVARCHAR(255)) AS \"PIUTANG\",
+                            CAST(\"KETPIUTANG\" AS NVARCHAR(255)) AS \"KETPIUTANG\"
                         FROM LVKKJ_REP_PIUTANG ()");
         
         foreach ($hanaData as $row) {
@@ -60,6 +61,7 @@ class SyncReportPiutang45HariFromHana extends Command
                     'KET2' => $row->KET2,
                     'KET3' => $row->KET3,
                     'PIUTANG' => $row->PIUTANG,
+                    'KETPIUTANG' => $row->KETPIUTANG,
                     'updated_at'    => now(),
                     // tambahkan field lain sesuai schema
                 ]
