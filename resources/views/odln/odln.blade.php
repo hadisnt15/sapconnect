@@ -95,7 +95,7 @@
 
 
         <!-- Table -->
-        <div class="">
+        <div class="hidden md:block">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <form action="{{ route('delivery.updateChecked') }}" method="POST">
                     @csrf @method('patch')
@@ -110,51 +110,58 @@
                         </thead>
                         <tbody class="">
                             @foreach ($deliveries as $q)
-                                <tr class="bg-white border-b hover:bg-gray-50">
-                                    <td class="px-2 py-2 font-medium text-gray-800">
-                                        No Ref SJ: {{ $q->ref_sj }} | {{ $q->tgl_sj }} <br> 
-                                        No Dokumen SJ: {{ $q->no_sj }} <br> 
-                                        Freegood: {{ $q->freegood }} <br> 
-                                        @if ($q->is_synced === 1)
-                                            <span class="text-green-600 font-semibold">TERKIRIM</span>
-                                        @else
-                                            <span class="text-yellow-600 font-semibold">BELUM DIKIRIM</span>
-                                        @endif
-                                    </td>
-                                    <td class="px-2 py-2 font-medium text-gray-800">
-                                        {{ $q->nama_customer }} <br> 
-                                        {{ $q->kode_customer }} 
-                                    </td>
-                                    <td class="px-2 py-2 font-medium text-gray-800">
-                                        @if ($q->is_synced === 1)
-                                            <input type="text" name="notes[{{ $q->id }}]" autocomplete="off" value="{{ $q->ket }}" readonly
-                                                class="bg-gray-300 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                                        @else
-                                            <input type="text" name="notes[{{ $q->id }}]" autocomplete="off" value="{{ $q->ket }}" 
-                                                class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                                        @endif
-                                    </td>
-                                    <td class="px-2 py-2 text-center">
-                                        @if ($q->is_synced === 1)
-                                            <!-- Checkbox hanya untuk tampilan -->
-                                            <input type="checkbox" checked disabled
-                                                class="w-4 h-4 text-red-800 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500">
-
-                                            <!-- Hidden input agar value tetap terkirim -->
-                                            <input type="hidden" name="is_checked[]" value="{{ $q->id }}">
-                                        @else
-                                            <input type="checkbox" 
-                                                name="is_checked[]" 
-                                                value="{{ $q->id }}"
-                                                class="w-4 h-4 text-red-800 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500"
-                                                {{ $q->is_checked === 1 ? 'checked' : '' }}>
-                                        @endif
-                                    </td>
-                                </tr>
+                                <div class="hover:bg-gray-50">
+                                    <tr class="bg-white">
+                                        <td class="px-2 py-2 font-medium text-gray-800">
+                                            No Ref SJ: {{ $q->ref_sj }} | {{ \Carbon\Carbon::parse($q->tgl_sj)->format('d/m/Y') }} <br> 
+                                            No Dokumen SJ: {{ $q->no_sj }} <br> 
+                                            Freegood: {{ $q->freegood }} <br> 
+                                            
+                                        </td>
+                                        <td class="px-2 py-2 font-medium text-gray-800">
+                                            {{ $q->nama_customer }} <br> 
+                                            {{ $q->kode_customer }} 
+                                        </td>
+                                        <td class="px-2 py-2 font-medium text-gray-800">
+                                            @if ($q->is_synced === 1)
+                                                <input type="text" name="notes[{{ $q->id }}]" autocomplete="off" value="{{ $q->ket }}" readonly
+                                                    class="bg-gray-300 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                                            @else
+                                                <input type="text" name="notes[{{ $q->id }}]" autocomplete="off" value="{{ $q->ket }}" 
+                                                    class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                                            @endif
+                                        </td>
+                                        <td class="px-2 py-2 text-center">
+                                            @if ($q->is_synced === 1)
+                                                <!-- Checkbox hanya untuk tampilan -->
+                                                <input type="checkbox" checked disabled
+                                                    class="w-4 h-4 text-red-800 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500">
+    
+                                                <!-- Hidden input agar value tetap terkirim -->
+                                                <input type="hidden" name="is_checked[]" value="{{ $q->id }}">
+                                            @else
+                                                <input type="checkbox" 
+                                                    name="is_checked[]" 
+                                                    value="{{ $q->id }}"
+                                                    class="w-4 h-4 text-red-800 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500"
+                                                    {{ $q->is_checked === 1 ? 'checked' : '' }}>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white border-b ">
+                                        <td colspan="4" class="px-2 font-semibold">
+                                            @if ($q->is_synced === 1)
+                                                <span class="text-green-600 font-semibold">TERKIRIM</span>
+                                            @else
+                                                <span class="text-yellow-600 font-semibold">BELUM DIKIRIM</span>
+                                            @endif. Catatan Sales: {{ $q->note_so }}
+                                        </td>
+                                    </tr>
+                                </div>
                             @endforeach
                         </tbody>
                     </table>
-                    @if (in_array($user->role, ['developer', 'salesman']))
+                    @if (in_array($user->role, ['developer', 'warehouse']))
                     <div class="fixed bottom-5 right-5 z-50">
                         <button type="submit"
                             class="px-5 py-3 bg-red-800 hover:bg-red-500 text-white text-xs md:text-sm rounded-lg shadow-lg font-bold focus:ring-4 focus:ring-red-300">
@@ -169,98 +176,104 @@
             </div>
         </div>
 
-        {{-- <div class="block md:hidden">
-            <div class="relative overflow-x-auto shadow-md rounded-lg">
-                <form action="{{ route('order.updateChecked') }}" method="POST">
+        <div class="block md:hidden">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <form action="{{ route('delivery.updateChecked') }}" method="POST">
                     @csrf @method('patch')
                     <table class="w-full text-sm text-left text-gray-600 border">
                         <thead class="text-xs font-bold text-white uppercase bg-red-800">
                             <tr>
-                                <th class="px-2 py-2 w-7/12">PESANAN</th>
-                                <th class="px-2 py-2 w-1/12">CEK</th>
-                                <th class="px-2 py-2 w-4/12">STATUS</th>
-                                <th class="px-2 py-2 w-1/12">AKSI</th>
+                                <th class="px-2 py-2 w-11/12">SURAT JALAN</th>
+                                {{-- <th class="px-2 py-2 w-5/12">KETERANGAN</th> --}}
+                                {{-- <th class="px-2 py-2 w-1/12">CEKLIS</th> --}}
                             </tr>
                         </thead>
                         <tbody class="">
-                            @foreach ($orders as $o)
-                                <tr class="bg-white border-b hover:bg-gray-50">
-                                    <td class="text-xs px-2 py-2 font-medium text-gray-800">
-                                        {{ $o->OdrRefNum }} <br> {{ $o->OdrDocDate->format('d-m-Y') }} <br>
-                                        <span class="text-xs">{{ $o->order_row_count }} Barang 
-                                        <br> Cabang: {{ $o->branch }}</span>
-                                        <br> Catatan: {{ $o->note }}</span><br><br>
-                                        {{ $o->customer->CardName }} <br> {{ $o->OdrCrdCode }} <br><br>
-                                        {{ $o->salesman?->SlpName ?? 'DUMMY' }}
-                                    </td>
-                                    <td class="text-xs px-2 py-2 text-center">
-                                        @if ($o->is_synced === 1)
-                                            <!-- Checkbox hanya untuk tampilan -->
-                                            <input type="checkbox" checked disabled
-                                                class="w-4 h-4 text-red-800 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500">
-
-                                            <!-- Hidden input agar value tetap terkirim -->
-                                            <input type="hidden" name="is_checked[]" value="{{ $o->id }}">
-                                        @else
-                                            <input type="checkbox" 
-                                                name="is_checked[]" 
-                                                value="{{ $o->id }}"
-                                                data-sales="{{ $o->OdrSlpCode }}"
-                                                class="w-4 h-4 text-red-800 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500"
-                                                {{ $o->is_checked === 1 ? 'checked' : '' }}>
-                                        @endif
-                                    </td>
-                                    <td class="text-xs px-2 py-2 font-medium">
-                                        <div class="mt-2">STATUS WEB:</div>
-                                        @if ($o->is_synced === 1)
-                                            <span class="text-green-600 font-semibold">TERKIRIM</span>
-                                        @else
-                                            <span class="text-yellow-600 font-semibold">TERTUNDA</span>
-                                        @endif
-                                        <div class="mt-2">STATUS SAP:</div>
-                                        @if (Str::contains(optional($o->ordrStatus)->pesanan_status, 'PESANAN TERTUNDA')) 
-                                            <span class="text-yellow-600 font-semibold">{{$o->ordrStatus->pesanan_status ?? ''}}</span>
-                                        @elseif (Str::contains(optional($o->ordrStatus)->pesanan_status, 'PESANAN SELESAI'))
-                                            <span class="text-green-600 font-semibold">{{$o->ordrStatus->pesanan_status ?? ''}}</span>
-                                        @elseif ($o->ordrStatus->pesanan_status ?? '' === 'BELUM DIPROSES DI SAP')    
-                                            <span class="text-gray-600 font-semibold">{{$o->ordrStatus->pesanan_status ?? ''}}</span>
-                                        @endif
-                                    </td>
-                                    <td class="px-2 py-2 space-y-1">
-                                        <button type="button" data-id="{{ $o->id }}"
-                                            data-OdrRefNum="{{ $o->OdrRefNum }}"
-                                            data-OdrDocDate="{{ $o->OdrDocDate->format('d-m-Y') }}"
-                                            data-OdrCardCode="{{ $o->OdrCrdCode }}"
-                                            data-OdrCardName="{{ $o->customer->CardName }}"
-                                            data-OdrSlpName="{{ $o->salesman?->SlpName ?? 'DUMMY' }}"
-                                            data-branch="{{ $o->branch }}" data-note="{{ $o->note }}"
-                                            data-modal-target="detailModal" data-modal-toggle="detailModal"
-                                            class="btn-detail open-modal-ordr-btn block px-2 py-1 text-xs rounded bg-red-800 hover:bg-red-500 w-full text-white">
-                                            <i class="ri-eye-fill"></i>
-                                        </button>
-                                        <a href="{{ route('order.progress', $o->id) }}" onclick="return confirm('Melihat Proses Pesanan Akan Memerlukan Waktu, Lanjutkan?')"
-                                            class="block px-2 py-1 text-xs rounded bg-blue-500 hover:bg-blue-400 text-white w-full text-center">
-                                            <i class="ri-swap-2-fill"></i> 
-                                        </a>
-                                        @if (in_array($user->role, ['developer', 'salesman']))
-                                            <a href="{{ route('order.edit', $o->id) }}"
-                                                class="block px-2 py-1 text-xs rounded bg-amber-500 hover:bg-amber-400 text-white w-full text-center">
-                                                <i class="ri-file-edit-fill"></i>
-                                            </a>
-                                            <a href="{{ route('order.delete', $o->id) }}"
-                                                class="block px-2 py-1 text-xs rounded bg-gray-500 hover:bg-gray-400 text-white w-full text-center">
-                                                <i class="ri-delete-back-2-fill"></i>
-                                            </a>
-                                        @endif
-                                    </td>
-                                </tr>
+                            @foreach ($deliveries as $q)
+                                <div class="hover:bg-gray-50">
+                                    <tr class="bg-white border-b">
+                                        <td class="px-2 py-2 font-medium text-gray-800">
+                                            <div>
+                                                <span>No Ref SJ: {{ $q->ref_sj }} | {{ \Carbon\Carbon::parse($q->tgl_sj)->format('d/m/Y') }}</span> <br>
+                                                <span>No Dokumen SJ: {{ $q->no_sj }}</span> <br>
+                                                <span>
+                                                    Freegood: {{ $q->freegood }} |
+                                                    @if ($q->is_synced === 1)
+                                                        <span class="text-green-600 font-semibold">TERKIRIM</span>
+                                                    @else
+                                                        <span class="text-yellow-600 font-semibold">BELUM DIKIRIM</span>
+                                                    @endif
+                                                </span>
+                                            </div>
+                                            <div class="mt-4">
+                                                {{ $q->nama_customer }} <br> {{ $q->kode_customer }} 
+                                            </div>
+                                            <div class="mt-4">
+                                                Catatan Sales: {{ $q->note_so }}
+                                            </div>
+                                            <div class="grid grid-cols-[11fr_1fr] gap-2 mt-2">
+                                                <div>
+                                                    @if ($q->is_synced === 1)
+                                                        <input type="text" name="notes[{{ $q->id }}]" autocomplete="off" value="{{ $q->ket }}" readonly rows="3"
+                                                            class="bg-gray-300 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                                                    @else
+                                                        <input type="text" name="notes[{{ $q->id }}]" autocomplete="off" value="{{ $q->ket }}" rows="3"
+                                                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                                                    @endif
+                                                </div>
+                                                <div class="">
+                                                    @if ($q->is_synced === 1)
+                                                        <!-- Checkbox hanya untuk tampilan -->
+                                                        <input type="checkbox" checked disabled
+                                                            class="w-4 h-4 text-red-800 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500">
+            
+                                                        <!-- Hidden input agar value tetap terkirim -->
+                                                        <input type="hidden" name="is_checked[]" value="{{ $q->id }}">
+                                                    @else
+                                                        <input type="checkbox" 
+                                                            name="is_checked[]" 
+                                                            value="{{ $q->id }}"
+                                                            class="w-4 h-4 text-red-800 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500"
+                                                            {{ $q->is_checked === 1 ? 'checked' : '' }}>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </td>
+                                        {{-- <td class="px-2 py-2 font-medium text-gray-800">
+                                            @if ($q->is_synced === 1)
+                                                <input type="text" name="notes[{{ $q->id }}]" autocomplete="off" value="{{ $q->ket }}" readonly
+                                                    class="bg-gray-300 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                                            @else
+                                                <input type="text" name="notes[{{ $q->id }}]" autocomplete="off" value="{{ $q->ket }}" 
+                                                    class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                                            @endif
+                                        </td> --}}
+                                        {{-- <td class="px-2 py-2 text-center">
+                                            @if ($q->is_synced === 1)
+                                                <!-- Checkbox hanya untuk tampilan -->
+                                                <input type="checkbox" checked disabled
+                                                    class="w-4 h-4 text-red-800 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500">
+    
+                                                <!-- Hidden input agar value tetap terkirim -->
+                                                <input type="hidden" name="is_checked[]" value="{{ $q->id }}">
+                                            @else
+                                                <input type="checkbox" 
+                                                    name="is_checked[]" 
+                                                    value="{{ $q->id }}"
+                                                    class="w-4 h-4 text-red-800 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500"
+                                                    {{ $q->is_checked === 1 ? 'checked' : '' }}>
+                                            @endif
+                                        </td> --}}
+                                    </tr>
+                                    
+                                </div>
                             @endforeach
                         </tbody>
                     </table>
-                    @if (in_array($user->role, ['developer', 'salesman']))
-                    <div class="fixed bottom-4 right-4 left-4 md:left-auto flex justify-center md:justify-end z-[9999]">
+                    @if (in_array($user->role, ['developer', 'warehouse']))
+                    <div class="fixed bottom-5 right-5 z-50">
                         <button type="submit"
-                            class="w-full md:w-auto px-5 py-3 bg-red-800 hover:bg-red-600 text-white text-sm font-bold rounded-xl shadow-lg focus:ring-4 focus:ring-red-300 transition-all">
+                            class="px-5 py-3 bg-red-800 hover:bg-red-500 text-white text-xs md:text-sm rounded-lg shadow-lg font-bold focus:ring-4 focus:ring-red-300">
                             <i class="ri-check-double-fill mr-1"></i> Perbarui Pengecekan
                         </button>
                     </div>
@@ -268,9 +281,9 @@
                 </form>
             </div>
             <div class="mt-5 text-gray-600">
-                {{ $query->links() }}
+                {{ $deliveries->links() }}
             </div>
-        </div> --}}
+        </div>
     </div>
 
 </x-layout>

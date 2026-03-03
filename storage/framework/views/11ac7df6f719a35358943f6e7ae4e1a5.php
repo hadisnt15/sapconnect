@@ -100,6 +100,8 @@
                                     Admin
                                 <?php elseif($u->role === 'manager'): ?>
                                     Manajer
+                                <?php elseif($u->role === 'warehouse'): ?>
+                                    Gudang
                                 <?php elseif($u->role === 'developer'): ?>
                                     IT
                                 <?php endif; ?>

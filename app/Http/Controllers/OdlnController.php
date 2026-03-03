@@ -38,7 +38,7 @@ class OdlnController extends Controller
         }
 
         // ✅ Pagination
-        $deliveries = $query->orderByDesc('id')->paginate(100)->withQueryString();
+        $deliveries = $query->orderByDesc('no_sj')->paginate(100)->withQueryString();
         // dd($query);
         $lastSync = '';
 

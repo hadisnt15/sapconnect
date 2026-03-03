@@ -325,9 +325,9 @@
                         </tbody>
                     </table>
                     <?php if(in_array($user->role, ['developer', 'salesman'])): ?>
-                    <div class="fixed bottom-4 right-4 left-4 md:left-auto flex justify-center md:justify-end z-[9999]">
+                    <div class="fixed bottom-5 right-5 z-50">
                         <button type="submit"
-                            class="w-full md:w-auto px-5 py-3 bg-red-800 hover:bg-red-600 text-white text-sm font-bold rounded-xl shadow-lg focus:ring-4 focus:ring-red-300 transition-all">
+                            class="px-5 py-3 bg-red-800 hover:bg-red-500 text-white text-xs md:text-sm rounded-lg shadow-lg font-bold focus:ring-4 focus:ring-red-300">
                             <i class="ri-check-double-fill mr-1"></i> Perbarui Pengecekan
                         </button>
                     </div>

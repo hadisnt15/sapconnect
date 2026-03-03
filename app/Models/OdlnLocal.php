@@ -12,7 +12,7 @@ class OdlnLocal extends Model
     // public $incrementing = false;
     protected $keyType = 'string';//
     protected $fillable = [
-        'no_sj','ref_sj','tgl_sj','tgl_input','waktu_input','kode_customer','nama_customer','ket','is_synced','is_checked'
+        'no_sj','ref_sj','tgl_sj','tgl_input','waktu_input','kode_customer','nama_customer','ket','is_synced','is_checked','note_so'
     ];
 
     public function scopeFilter(Builder $query, array $filters)   

@@ -34,8 +34,19 @@ class SyncOrdrFromHana extends Command
     {
         $this->info("Syncing ODLN from SAPHANA to LARAVEL...");
         // Ambil data dari HANA
-        $hanaData = DB::connection('hana')->select('SELECT "REF_SJ", "NO_DOKUMEN", "TGL_DOKUMEN", "TGL_DIBUAT", "WAKTU_DIBUAT", "KODE_CUSTOMER", "NAMA_CUSTOMER", "FREEGOOD" FROM LVKKJ_SJDIPROSES();');
-
+        $hanaData = DB::connection('hana')->select("SELECT 
+                            CAST(\"REF_SJ\" AS NVARCHAR(255)) AS \"REF_SJ\",
+                            CAST(\"NO_DOKUMEN\" AS NVARCHAR(255)) AS \"NO_DOKUMEN\",
+                            CAST(\"TGL_DOKUMEN\" AS DATE) AS \"TGL_DOKUMEN\",
+                            CAST(\"TGL_DIBUAT\" AS DATE) AS \"TGL_DIBUAT\",
+                            CAST(\"WAKTU_DIBUAT\" AS NVARCHAR(255)) AS \"WAKTU_DIBUAT\",
+                            CAST(\"KODE_CUSTOMER\" AS NVARCHAR(255)) AS \"KODE_CUSTOMER\",
+                            CAST(\"NAMA_CUSTOMER\" AS NVARCHAR(255)) AS \"NAMA_CUSTOMER\",
+                            CAST(\"FREEGOOD\" AS NVARCHAR(255)) AS \"FREEGOOD\",
+                            CAST(\"NOTE_SO\" AS NVARCHAR(255)) AS \"NOTE_SO\"
+                        FROM LVKKJ_SJDIPROSES ()");
+        //select('SELECT "REF_SJ", "NO_DOKUMEN", "TGL_DOKUMEN", "TGL_DIBUAT", "WAKTU_DIBUAT", "KODE_CUSTOMER", "NAMA_CUSTOMER", "FREEGOOD", "NOTE_SO" FROM LVKKJ_SJDIPROSES();');
+        // dd($hanaData);
         foreach ($hanaData as $row) {
             DB::table('odln_local')->updateOrInsert(
                 [ 'no_sj' => $row->NO_DOKUMEN, ], // key unik
@@ -47,7 +58,8 @@ class SyncOrdrFromHana extends Command
                     'kode_customer' => $row->KODE_CUSTOMER,
                     'nama_customer' => $row->NAMA_CUSTOMER,
                     'freegood' => $row->FREEGOOD,
-                    'ket' => ''
+                    'ket' => '',
+                    'note_so' => $row->NOTE_SO
                 ]
             );
         }

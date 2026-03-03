@@ -87,6 +87,8 @@
                                     Admin
                                 @elseif ($u->role === 'manager')
                                     Manajer
+                                @elseif ($u->role === 'warehouse')
+                                    Gudang
                                 @elseif ($u->role === 'developer')
                                     IT
                                 @endif
