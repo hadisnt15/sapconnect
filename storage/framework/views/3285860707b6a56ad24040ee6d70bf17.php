@@ -126,6 +126,7 @@ unset($__errorArgs, $__bag); ?>
                     <option value="salesman">Penjual</option>
                     <option value="supervisor">Admin</option>
                     <option value="manager">Manajer</option>
+                    <option value="warehouse">Gudang</option>
                 </select>
                 <?php $__errorArgs = ['role'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');

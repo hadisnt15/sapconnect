@@ -58,117 +58,80 @@
 <?php $component = $__componentOriginalc295f12dca9d42f28a259237a5724830; ?>
 <?php unset($__componentOriginalc295f12dca9d42f28a259237a5724830); ?>
 <?php endif; ?>
-                        <?php if (isset($component)) { $__componentOriginalc295f12dca9d42f28a259237a5724830 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc295f12dca9d42f28a259237a5724830 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => ''.e(route('order')).'','class' => ''.e(Route::is('order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' px-3 py-2 rounded-md text-sm font-medium']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('nav-link'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => ''.e(route('order')).'','class' => ''.e(Route::is('order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' px-3 py-2 rounded-md text-sm font-medium']); ?>
-                            <i class="ri-bill-fill"></i> Pesanan
-                         <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $attributes = $__attributesOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__attributesOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $component = $__componentOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__componentOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-                        <?php if (isset($component)) { $__componentOriginalc295f12dca9d42f28a259237a5724830 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc295f12dca9d42f28a259237a5724830 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => ''.e(route('item')).'','class' => ''.e(Route::is('item') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' px-3 py-2 rounded-md text-sm font-medium']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('nav-link'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => ''.e(route('item')).'','class' => ''.e(Route::is('item') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' px-3 py-2 rounded-md text-sm font-medium']); ?>
-                            <i class="ri-settings-4-fill"></i> Barang
-                         <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $attributes = $__attributesOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__attributesOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $component = $__componentOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__componentOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-                        <?php if (isset($component)) { $__componentOriginalc295f12dca9d42f28a259237a5724830 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc295f12dca9d42f28a259237a5724830 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => ''.e(route('customer')).'','class' => ''.e(Route::is('customer', 'customer.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' px-3 py-2 rounded-md text-sm font-medium']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('nav-link'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => ''.e(route('customer')).'','class' => ''.e(Route::is('customer', 'customer.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' px-3 py-2 rounded-md text-sm font-medium']); ?>
-                            <i class="ri-account-circle-2-fill"></i> Pelanggan
-                         <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $attributes = $__attributesOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__attributesOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $component = $__componentOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__componentOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
+                        
+                        <div class="relative <?php echo e(Route::is('delivery', 'delivery.*', 'order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700'); ?> rounded-md" x-data="{ open: false }">
+                            <!-- Button Dropdown -->
+                            <button 
+                                @click="open = !open"
+                                @click.away="open = false"
+                                class="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-red-700 focus:outline-none">
+                                
+                                <i class="ri-briefcase-4-fill"></i>
+                                <span>Operasional</span>
+                                <i class="ri-arrow-down-s-line"></i>
+                            </button>
 
-                        <?php if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor'])): ?>
-                            <?php if (isset($component)) { $__componentOriginalc295f12dca9d42f28a259237a5724830 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc295f12dca9d42f28a259237a5724830 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => ''.e(route('salesman')).'','class' => ''.e(Route::is('salesman', 'salesman.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' px-3 py-2 rounded-md text-sm font-medium']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('nav-link'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => ''.e(route('salesman')).'','class' => ''.e(Route::is('salesman', 'salesman.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' px-3 py-2 rounded-md text-sm font-medium']); ?>
-                                <i class="ri-group-2-fill"></i> Penjual
-                             <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $attributes = $__attributesOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__attributesOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $component = $__componentOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__componentOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-                        <?php endif; ?>
+                            <!-- Dropdown Menu -->
+                            <div x-show="open"
+                                x-transition
+                                class="absolute left-0 mt-2 w-44 bg-white rounded-md shadow-lg py-1 z-50">
 
-                        <?php if(in_array(auth()->user()->role, ['developer', 'manager'])): ?>
-                            <?php if (isset($component)) { $__componentOriginalc295f12dca9d42f28a259237a5724830 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc295f12dca9d42f28a259237a5724830 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => ''.e(route('user')).'','class' => ''.e(Route::is('user','user.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' px-3 py-2 rounded-md text-sm font-medium']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('nav-link'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => ''.e(route('user')).'','class' => ''.e(Route::is('user','user.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' px-3 py-2 rounded-md text-sm font-medium']); ?>
-                                <i class="ri-user-follow-fill"></i> Pengguna
-                             <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $attributes = $__attributesOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__attributesOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $component = $__componentOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__componentOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-                        <?php endif; ?>
+                                <a href="<?php echo e(route('order')); ?>"
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('order', 'order.*') ? 'bg-red-100 font-semibold' : ''); ?>">
+                                    <i class="ri-bill-fill mr-2"></i> Pesanan
+                                </a>
+
+                                <a href="<?php echo e(route('delivery')); ?>"
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('delivery', 'delivery.*') ? 'bg-red-100 font-semibold' : ''); ?>">
+                                    <i class="ri-truck-fill mr-2"></i> Surat Jalan
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="relative <?php echo e(Route::is('customer', 'customer.*', 'item', 'item.*', 'salesman', 'salesman.*', 'user', 'user.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700'); ?> rounded-md" x-data="{ open: false }">
+                            <!-- Button Dropdown -->
+                            <button 
+                                @click="open = !open"
+                                @click.away="open = false"
+                                class="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-red-700 focus:outline-none">
+                                
+                                <i class="ri-database-2-fill"></i>
+                                <span>Pusat Data</span>
+                                <i class="ri-arrow-down-s-line"></i>
+                            </button>
+
+                            <!-- Dropdown Menu -->
+                            <div x-show="open"
+                                x-transition
+                                class="absolute left-0 mt-2 w-44 bg-white rounded-md shadow-lg py-1 z-50">
+
+                                <a href="<?php echo e(route('customer')); ?>"
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('customer', 'customer.*') ? 'bg-red-100 font-semibold' : ''); ?>">
+                                    <i class="ri-bill-fill mr-2"></i> Pelanggan
+                                </a>
+
+                                <a href="<?php echo e(route('item')); ?>"
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('item', 'item.*') ? 'bg-red-100 font-semibold' : ''); ?>">
+                                    <i class="ri-settings-4-fill mr-2"></i> Barang
+                                </a>
+                                <?php if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor'])): ?>
+                                    <a href="<?php echo e(route('salesman')); ?>"
+                                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('salesman', 'salesman.*') ? 'bg-red-100 font-semibold' : ''); ?>">
+                                        <i class="ri-group-2-fill mr-2"></i> Penjual
+                                    </a>
+                                <?php endif; ?>
+                                <?php if(in_array(auth()->user()->role, ['developer', 'manager'])): ?>
+                                    <a href="<?php echo e(route('user')); ?>"
+                                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('user', 'user.*') ? 'bg-red-100 font-semibold' : ''); ?>">
+                                        <i class="ri-user-follow-fill mr-2"></i> Pengguna
+                                    </a>
+                                <?php endif; ?>
+
+                            </div>
+                        </div>
+                        
+
+                        
                     <?php endif; ?>
                 </div>
 
@@ -231,14 +194,14 @@
         <?php if(auth()->guard()->check()): ?>
             <?php if (isset($component)) { $__componentOriginalc295f12dca9d42f28a259237a5724830 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc295f12dca9d42f28a259237a5724830 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => '/','class' => 'block p-2 hover:bg-red-700','active' => request()->is('/')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => '/','class' => 'block px-3 py-2 hover:bg-red-700 text-sm '.e(Route::is('dashboard') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' rounded-md','active' => request()->is('/')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('nav-link'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['href' => '/','class' => 'block p-2 hover:bg-red-700','active' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->is('/'))]); ?><i class="ri-home-office-fill"></i> Beranda <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['href' => '/','class' => 'block px-3 py-2 hover:bg-red-700 text-sm '.e(Route::is('dashboard') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' rounded-md','active' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->is('/'))]); ?><i class="ri-home-office-fill"></i> Beranda <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalc295f12dca9d42f28a259237a5724830)): ?>
 <?php $attributes = $__attributesOriginalc295f12dca9d42f28a259237a5724830; ?>
@@ -250,14 +213,14 @@
 <?php endif; ?>
             <?php if (isset($component)) { $__componentOriginalc295f12dca9d42f28a259237a5724830 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc295f12dca9d42f28a259237a5724830 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => ''.e(route('report')).'','class' => 'block p-2 hover:bg-red-700 '.e(Route::is('report','report.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => ''.e(route('report')).'','class' => 'block px-3 py-2 hover:bg-red-700 text-sm '.e(Route::is('report','report.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' rounded-md']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('nav-link'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['href' => ''.e(route('report')).'','class' => 'block p-2 hover:bg-red-700 '.e(Route::is('report','report.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').'']); ?><i class="ri-folder-6-fill"></i> Laporan <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['href' => ''.e(route('report')).'','class' => 'block px-3 py-2 hover:bg-red-700 text-sm '.e(Route::is('report','report.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').' rounded-md']); ?><i class="ri-folder-6-fill"></i> Laporan <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalc295f12dca9d42f28a259237a5724830)): ?>
 <?php $attributes = $__attributesOriginalc295f12dca9d42f28a259237a5724830; ?>
@@ -267,105 +230,77 @@
 <?php $component = $__componentOriginalc295f12dca9d42f28a259237a5724830; ?>
 <?php unset($__componentOriginalc295f12dca9d42f28a259237a5724830); ?>
 <?php endif; ?>
-            <?php if (isset($component)) { $__componentOriginalc295f12dca9d42f28a259237a5724830 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc295f12dca9d42f28a259237a5724830 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => ''.e(route('order')).'','class' => 'block p-2 hover:bg-red-700 '.e(Route::is('order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('nav-link'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => ''.e(route('order')).'','class' => 'block p-2 hover:bg-red-700 '.e(Route::is('order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').'']); ?><i class="ri-bill-fill"></i> Pesanan <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $attributes = $__attributesOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__attributesOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $component = $__componentOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__componentOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-            <?php if (isset($component)) { $__componentOriginalc295f12dca9d42f28a259237a5724830 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc295f12dca9d42f28a259237a5724830 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => ''.e(route('item')).'','class' => 'block p-2 hover:bg-red-700 '.e(Route::is('item') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('nav-link'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => ''.e(route('item')).'','class' => 'block p-2 hover:bg-red-700 '.e(Route::is('item') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').'']); ?><i class="ri-settings-4-fill"></i> Barang <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $attributes = $__attributesOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__attributesOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $component = $__componentOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__componentOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-            <?php if (isset($component)) { $__componentOriginalc295f12dca9d42f28a259237a5724830 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc295f12dca9d42f28a259237a5724830 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => ''.e(route('customer')).'','class' => 'block p-2 hover:bg-red-700 '.e(Route::is('customer', 'customer.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('nav-link'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => ''.e(route('customer')).'','class' => 'block p-2 hover:bg-red-700 '.e(Route::is('customer', 'customer.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').'']); ?><i class="ri-account-circle-2-fill"></i> Pelanggan <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $attributes = $__attributesOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__attributesOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $component = $__componentOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__componentOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-            <?php if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor'])): ?>
-                <?php if (isset($component)) { $__componentOriginalc295f12dca9d42f28a259237a5724830 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc295f12dca9d42f28a259237a5724830 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => ''.e(route('salesman')).'','class' => 'block p-2 hover:bg-red-700 '.e(Route::is('salesman', 'salesman.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('nav-link'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => ''.e(route('salesman')).'','class' => 'block p-2 hover:bg-red-700 '.e(Route::is('salesman', 'salesman.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').'']); ?><i class="ri-group-2-fill"></i> Penjual <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $attributes = $__attributesOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__attributesOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $component = $__componentOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__componentOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-            <?php endif; ?>
-            <?php if(in_array(auth()->user()->role, ['developer', 'manager'])): ?>
-                <?php if (isset($component)) { $__componentOriginalc295f12dca9d42f28a259237a5724830 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc295f12dca9d42f28a259237a5724830 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.nav-link','data' => ['href' => ''.e(route('user')).'','class' => 'block p-2 hover:bg-red-700 '.e(Route::is('user','user.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('nav-link'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => ''.e(route('user')).'','class' => 'block p-2 hover:bg-red-700 '.e(Route::is('user','user.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700').'']); ?><i class="ri-user-follow-fill"></i> Pengguna <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $attributes = $__attributesOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__attributesOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc295f12dca9d42f28a259237a5724830)): ?>
-<?php $component = $__componentOriginalc295f12dca9d42f28a259237a5724830; ?>
-<?php unset($__componentOriginalc295f12dca9d42f28a259237a5724830); ?>
-<?php endif; ?>
-            <?php endif; ?>
+            <div class="relative <?php echo e(Route::is('delivery', 'delivery.*', 'order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700'); ?> rounded-md" x-data="{ open: false }">
+                <!-- Button Dropdown -->
+                <button 
+                    @click="open = !open"
+                    @click.away="open = false"
+                    class="w-full flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-red-700 focus:outline-none">
+                    
+                    <i class="ri-briefcase-4-fill"></i>
+                    <span>Operasional</span>
+                    <i class="ri-arrow-down-s-line"></i>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open"
+                    x-transition
+                    class="absolute left-0 mt-2 w-44 bg-white rounded-md shadow-lg py-1 z-50">
+
+                    <a href="<?php echo e(route('order')); ?>"
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('order', 'order.*') ? 'bg-red-100 font-semibold' : ''); ?>">
+                        <i class="ri-bill-fill mr-2"></i> Pesanan
+                    </a>
+
+                    <a href="<?php echo e(route('delivery')); ?>"
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('delivery', 'delivery.*') ? 'bg-red-100 font-semibold' : ''); ?>">
+                        <i class="ri-truck-fill mr-2"></i> Surat Jalan
+                    </a>
+
+                </div>
+            </div>
+            <div class="relative <?php echo e(Route::is('customer', 'customer.*', 'item', 'item.*', 'salesman', 'salesman.*', 'user', 'user.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700'); ?> rounded-md" x-data="{ open: false }">
+                <!-- Button Dropdown -->
+                <button 
+                    @click="open = !open"
+                    @click.away="open = false"
+                    class="w-full flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-red-700 focus:outline-none">
+                    
+                    <i class="ri-database-2-fill"></i>
+                    <span>Pusat Data</span>
+                    <i class="ri-arrow-down-s-line"></i>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open"
+                    x-transition
+                    class="absolute left-0 mt-2 w-44 bg-white rounded-md shadow-lg py-1 z-50">
+
+                    <a href="<?php echo e(route('customer')); ?>"
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('customer', 'customer.*') ? 'bg-red-100 font-semibold' : ''); ?>">
+                        <i class="ri-bill-fill mr-2"></i> Pelanggan
+                    </a>
+
+                    <a href="<?php echo e(route('item')); ?>"
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('item', 'item.*') ? 'bg-red-100 font-semibold' : ''); ?>">
+                        <i class="ri-settings-4-fill mr-2"></i> Barang
+                    </a>
+                    <?php if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor'])): ?>
+                        <a href="<?php echo e(route('salesman')); ?>"
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('salesman', 'salesman.*') ? 'bg-red-100 font-semibold' : ''); ?>">
+                            <i class="ri-group-2-fill mr-2"></i> Penjual
+                        </a>
+                    <?php endif; ?>
+                    <?php if(in_array(auth()->user()->role, ['developer', 'manager'])): ?>
+                        <a href="<?php echo e(route('user')); ?>"
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('user', 'user.*') ? 'bg-red-100 font-semibold' : ''); ?>">
+                            <i class="ri-user-follow-fill mr-2"></i> Pengguna
+                        </a>
+                    <?php endif; ?>
+
+                </div>
+            </div>
+            
             <hr class="border-red-700 my-2">
             <div class="px-2 text-sm">
                 <div class="flex items-center space-x-2">

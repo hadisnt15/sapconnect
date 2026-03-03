@@ -123,5 +123,11 @@ class AuthServiceProvider extends ServiceProvider
         //     }
         // });
         // Gate::define('user.manage', fn($user) => $user->role === 'manager');
+        Gate::define('delivery.push', function ($user) {
+            return in_array($user->role, ['developer','warehouse']);
+        });
+        Gate::define('delivery.refresh', function ($user) {
+            return in_array($user->role, ['developer','warehouse','manager']);
+        });
     }
 }

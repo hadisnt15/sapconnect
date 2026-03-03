@@ -1,44 +1,42 @@
 <?php
 
 use App\Exports\OrdrExport;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BranchController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OcrdController;
+use App\Http\Controllers\OdlnController;
 use App\Http\Controllers\OitmController;
 use App\Http\Controllers\OrdrController;
 use App\Http\Controllers\OslpController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\VisitController;
-use App\Http\Controllers\BranchController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\PasswordController;
-// use App\Http\Controllers\UserDivisionController;
-// use App\Exports\OrdrCombinedExport;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\DashboardController;
-
-use App\Http\Controllers\Report\UltahController;
-use App\Http\Controllers\Report\IdsGrupController;
-use App\Http\Controllers\Report\ProgRtlController;
-use App\Http\Controllers\Report\StokPtmController;
-use App\Http\Controllers\Report\LubRetailController;
-use App\Http\Controllers\Report\Top10LubRtlController;
-use App\Http\Controllers\Report\Piutang45HariController;
 use App\Http\Controllers\Report\BulananAverageController;
-use App\Http\Controllers\Report\PembelianHarianController;
-use App\Http\Controllers\Report\PenjualanRtlSalesController;
-use App\Http\Controllers\Report\PenjualanSprSalesController;
 use App\Http\Controllers\Report\BulananAverageLiterController;
-use App\Http\Controllers\Report\PenjualanSprSegmentController;
 use App\Http\Controllers\Report\GrafikPenjualanSalesController;
+use App\Http\Controllers\Report\IdsGrupController;
 use App\Http\Controllers\Report\JHOutstandinController;
 use App\Http\Controllers\Report\KontrakIdsController;
+use App\Http\Controllers\Report\LubRetailController;
+use App\Http\Controllers\Report\PembelianHarianController;
 use App\Http\Controllers\Report\PeminjamanBarangController;
+use App\Http\Controllers\Report\PenjualanRtlSalesController;
+use App\Http\Controllers\Report\PenjualanSprSalesController;
+use App\Http\Controllers\Report\PenjualanSprSegmentController;
+use App\Http\Controllers\Report\Piutang45HariController;
+use App\Http\Controllers\Report\ProgRtlController;
+use App\Http\Controllers\Report\StokPtmController;
+use App\Http\Controllers\Report\Top10LubRtlController;
+use App\Http\Controllers\Report\UltahController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VisitController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
@@ -84,7 +82,12 @@ Route::post('/pelanggan/simpan', [OcrdController::class, 'store'])->name('custom
 Route::get('/pelanggan/{CardCode}/edit', [OcrdController::class, 'edit'])->name('customer.edit')->middleware('role:developer|salesman'); //ok
 Route::put('/pelanggan/{CardCode}', [OcrdController::class, 'update'])->name('customer.update')->middleware('role:developer|salesman'); //ok
 
-Route::get('/pesanan', [OrdrController::class, 'index'])->name('order')->middleware('auth'); //ok
+Route::get('/suratJalan', [OdlnController::class, 'index'])->name('delivery')->middleware('role:developer|warehouse|manager'); //ok
+Route::patch('/suratJalan/perbaruiPengecekan', [OdlnController::class, 'updateChecked'])->name('delivery.updateChecked')->middleware('role:developer|warehouse'); //ok
+Route::get('/suratJalan/kirim', [OdlnController::class, 'push'])->name('delivery.push')->middleware('role:developer|warehouse'); //ok
+Route::get('/suratJalan/sinkron', [OdlnController::class, 'refresh'])->name('delivery.refresh')->middleware('role:developer|manager|warehouse'); //ok
+
+Route::get('/pesanan', [OrdrController::class, 'index'])->name('order')->middleware('role:developer|supervisor|manager'); //ok
 Route::get('/pesanan/buat/{CardCode}', [OrdrController::class, 'create'])->name('order.create')->middleware('can:order.create'); //ok
 Route::get('/pesanan/buat/baru/{RegCardCode}', [OrdrController::class, 'create'])->name('order.create.new')->middleware('role:developer|salesman'); //ok
 Route::post('/pesanan/simpan', [OrdrController::class, 'store'])->name('order.store')->middleware('role:developer|salesman'); //ok

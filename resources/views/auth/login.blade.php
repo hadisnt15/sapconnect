@@ -23,41 +23,104 @@
         </nav>
 
         <!-- Login Form -->
-        <section class="rounded-lg">
-            <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
-                <div class="w-full rounded-lg shadow bg-white border border-gray-200 sm:max-w-md">
-                    <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                        <h1 class="text-xl font-bold leading-tight tracking-tight md:text-2xl text-gray-700">
-                            Masuk
-                        </h1>
-                        <form class="space-y-4 md:space-y-6" action="{{ route('login') }}" method="post">
-                            @csrf
-                            <div>
-                                <label for="username" class="block mb-2 text-sm font-medium text-gray-700">Nama Pengguna</label>
-                                <input type="text" name="username" id="username"
-                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-700 placeholder-gray-400 focus:ring focus:ring-indigo-200 focus:border-indigo-300"
-                                    placeholder="Nama Pengguna" required autocomplete="off" autofocus>
-                                @error('phone')
-                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div>
-                                <label for="password" class="block mb-2 text-sm font-medium text-gray-700">Kata Sandi</label>
-                                <input type="password" name="password" id="password"
-                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-700 placeholder-gray-400 focus:ring focus:ring-indigo-200 focus:border-indigo-300"
-                                    placeholder="••••••••" required autocomplete="off">
-                                @error('password')
-                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <button type="submit"
-                                class="w-full mt-3 bg-red-800 hover:bg-red-600 text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                                Masuk
-                            </button>
-                        </form>
+        
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-4">
+            <div class="px-2 py-6 text-center">
+                <p class="text-sm sm:text-base text-gray-600 font-medium">
+                    Selamat Datang di
+                </p>
+
+                <h1 class="mt-1 font-extrabold text-gray-900
+                        text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight">
+                    SAP Connect
+                </h1>
+
+                <h2 class="mt-1 font-bold text-red-800
+                        text-xl sm:text-2xl md:text-3xl lg:text-4xl tracking-wide">
+                    PT Kapuas Kencana Jaya
+                </h2>
+
+                <!-- Accent line -->
+                <div class="mx-auto mt-4 w-16 h-1 bg-red-800 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                <div class="hidden md:flex relative overflow-hidden rounded-xl">
+
+                    <!-- Decorative vertical line -->
+                    <div class="absolute right-8 top-0 h-full w-px bg-gradient-to-b from-transparent via-red-700/30 to-transparent"></div>
+
+                    <!-- Content -->
+                    <div class="relative z-10 p-10 flex flex-col justify-center">
+                        
+                        <h2 class="text-2xl font-bold text-gray-800 leading-snug">
+                            Integrasi Data Bisnis dalam Satu Platform
+                        </h2>
+
+                        <p class="mt-4 text-sm text-gray-600 max-w-sm leading-relaxed">
+                            SAP Connect membantu pengguna internal mengakses informasi bisnis
+                            secara cepat, terstruktur, dan terpercaya tanpa harus masuk langsung
+                            ke sistem SAP.
+                        </p>
+
+                        <!-- Divider -->
+                        <div class="mt-6 w-16 h-1 bg-red-700 rounded-full"></div>
+
+                        <!-- Keywords -->
+                        <div class="mt-6 flex flex-wrap gap-2 text-xs font-semibold text-gray-500">
+                            <span class="px-3 py-1 border border-gray-300 rounded-full">Integrated</span>
+                            <span class="px-3 py-1 border border-gray-300 rounded-full">Reliable</span>
+                            <span class="px-3 py-1 border border-gray-300 rounded-full">Efficient</span>
+                        </div>
+
+                    </div>
+
+                    <!-- Subtle background shape -->
+                    <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-red-700/5 rounded-full"></div>
+                </div>
+                <div>
+                    
+                    
+                    <div id="accordion-collapse" data-accordion="collapse"
+                        class="rounded-xl overflow-hidden shadow-md ">
+            
+                        {{-- <section class="rounded-lg"> --}}
+                            {{-- <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0"> --}}
+                                {{-- <div class="w-full rounded-lg shadow bg-white border border-gray-200 sm:max-w-md"> --}}
+                                    <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                                        <form class="space-y-4 md:space-y-6" action="{{ route('login') }}" method="post">
+                                            @csrf
+                                            <div>
+                                                <label for="username" class="block mb-2 text-sm font-medium text-gray-700">Nama Pengguna</label>
+                                                <input type="text" name="username" id="username"
+                                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-700 placeholder-gray-400 focus:ring focus:ring-indigo-200 focus:border-indigo-300"
+                                                    placeholder="Nama Pengguna" required autocomplete="off" autofocus>
+                                                @error('phone')
+                                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                            <div>
+                                                <label for="password" class="block mb-2 text-sm font-medium text-gray-700">Kata Sandi</label>
+                                                <input type="password" name="password" id="password"
+                                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-700 placeholder-gray-400 focus:ring focus:ring-indigo-200 focus:border-indigo-300"
+                                                    placeholder="••••••••" required autocomplete="off">
+                                                @error('password')
+                                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                            <button type="submit"
+                                                class="w-full mt-3 bg-red-800 hover:bg-red-600 text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                Masuk
+                                            </button>
+                                        </form>
+                                    </div>
+                                {{-- </div> --}}
+                            {{-- </div> --}}
+                        {{-- </section> --}}
                     </div>
                 </div>
+                
             </div>
-        </section>
+        </div>
     </div>
 </x-layout>

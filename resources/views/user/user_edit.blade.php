@@ -88,6 +88,7 @@
                     <option value="salesman">Penjual</option>
                     <option value="supervisor">Admin</option>
                     <option value="manager">Manajer</option>
+                    <option value="warehouse">Gudang</option>
                 </select>
                 @error('role')
                     <p class="mt-2 text-sm text-red-600"><span class="font-medium">{{ $message }}</span></p>
