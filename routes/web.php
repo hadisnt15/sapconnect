@@ -87,7 +87,7 @@ Route::patch('/suratJalan/perbaruiPengecekan', [OdlnController::class, 'updateCh
 Route::get('/suratJalan/kirim', [OdlnController::class, 'push'])->name('delivery.push')->middleware('role:developer|warehouse'); //ok
 Route::get('/suratJalan/sinkron', [OdlnController::class, 'refresh'])->name('delivery.refresh')->middleware('role:developer|manager|warehouse'); //ok
 
-Route::get('/pesanan', [OrdrController::class, 'index'])->name('order')->middleware('role:developer|supervisor|manager'); //ok
+Route::get('/pesanan', [OrdrController::class, 'index'])->name('order')->middleware('role:developer|supervisor|manager|salesman'); //ok
 Route::get('/pesanan/buat/{CardCode}', [OrdrController::class, 'create'])->name('order.create')->middleware('can:order.create'); //ok
 Route::get('/pesanan/buat/baru/{RegCardCode}', [OrdrController::class, 'create'])->name('order.create.new')->middleware('role:developer|salesman'); //ok
 Route::post('/pesanan/simpan', [OrdrController::class, 'store'])->name('order.store')->middleware('role:developer|salesman'); //ok
