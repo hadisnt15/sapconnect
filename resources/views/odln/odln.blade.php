@@ -215,10 +215,10 @@
                                                 <div>
                                                     @if ($q->is_synced === 1)
                                                         <textarea type="text" name="notes[{{ $q->id }}]" autocomplete="off" readonly rows="3"
-                                                            class="bg-gray-300 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                                                            class="bg-gray-300 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">{{ $q->ket }}</textarea>
                                                     @else
                                                         <textarea type="text" name="notes[{{ $q->id }}]" autocomplete="off" rows="3"
-                                                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                                                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">{{ $q->ket }}</textarea>
                                                     @endif
                                                 </div>
                                                 <div class="">
