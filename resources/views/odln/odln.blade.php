@@ -124,11 +124,11 @@
                                         </td>
                                         <td class="px-2 py-2 font-medium text-gray-800">
                                             @if ($q->is_synced === 1)
-                                                <input type="text" name="notes[{{ $q->id }}]" autocomplete="off" value="{{ $q->ket }}" readonly
-                                                    class="bg-gray-300 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                                                <textarea rows="3" type="text" name="notes[{{ $q->id }}]" autocomplete="off" readonly
+                                                    class="bg-gray-300 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">{{ $q->ket }}</textarea>
                                             @else
-                                                <input type="text" name="notes[{{ $q->id }}]" autocomplete="off" value="{{ $q->ket }}" 
-                                                    class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                                                <textarea rows="3" type="text" name="notes[{{ $q->id }}]" autocomplete="off" 
+                                                    class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">{{ $q->ket }}</textarea>
                                             @endif
                                         </td>
                                         <td class="px-2 py-2 text-center">
@@ -214,11 +214,11 @@
                                             <div class="grid grid-cols-[11fr_1fr] gap-2 mt-2">
                                                 <div>
                                                     @if ($q->is_synced === 1)
-                                                        <input type="text" name="notes[{{ $q->id }}]" autocomplete="off" value="{{ $q->ket }}" readonly rows="3"
-                                                            class="bg-gray-300 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                                                        <textarea type="text" name="notes[{{ $q->id }}]" autocomplete="off" readonly rows="3"
+                                                            class="bg-gray-300 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
                                                     @else
-                                                        <input type="text" name="notes[{{ $q->id }}]" autocomplete="off" value="{{ $q->ket }}" rows="3"
-                                                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                                                        <textarea type="text" name="notes[{{ $q->id }}]" autocomplete="off" rows="3"
+                                                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
                                                     @endif
                                                 </div>
                                                 <div class="">
