@@ -6,7 +6,7 @@ use App\Models\OdlnLocal;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class SyncOrdrFromHana extends Command
+class SyncOdlnFromHana extends Command
 {
     /**
      * The name and signature of the console command.
