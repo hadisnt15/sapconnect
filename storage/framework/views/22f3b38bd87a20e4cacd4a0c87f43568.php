@@ -139,7 +139,7 @@
                             <?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr class="bg-white border-b hover:bg-gray-50">
                                     <td class="px-2 py-2 font-medium text-gray-800">
-                                        <?php echo e($o->OdrRefNum); ?> <br> <?php echo e($o->OdrDocDate->format('d-m-Y')); ?> <br> 
+                                        <?php echo e($o->OdrRefNum); ?> <br> <?php echo e($o->OdrDocDate->format('d-m-Y')); ?> <span class="text-red-800 font-bold"><?php echo e($o->created_at->format('H:i:s')); ?></span><br> 
                                         <span class="text-xs"><?php echo e($o->order_row_count); ?> Barang 
                                         <br> Cabang: <?php echo e($o->branch); ?> <br> Divisi: <?php echo e($o->profit_center); ?></span>
                                         <br> Catatan: <?php echo e($o->note); ?></span>

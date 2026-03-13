@@ -128,7 +128,7 @@
                             @foreach ($orders as $o)
                                 <tr class="bg-white border-b hover:bg-gray-50">
                                     <td class="px-2 py-2 font-medium text-gray-800">
-                                        {{ $o->OdrRefNum }} <br> {{ $o->OdrDocDate->format('d-m-Y') }} <br> 
+                                        {{ $o->OdrRefNum }} <br> {{ $o->OdrDocDate->format('d-m-Y') }} <span class="text-red-800 font-bold">{{ $o->created_at->format('H:i:s') }}</span><br> 
                                         <span class="text-xs">{{ $o->order_row_count }} Barang 
                                         <br> Cabang: {{ $o->branch }} <br> Divisi: {{ $o->profit_center }}</span>
                                         <br> Catatan: {{ $o->note }}</span>
