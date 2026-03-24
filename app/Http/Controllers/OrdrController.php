@@ -292,9 +292,11 @@ class OrdrController extends Controller
     {
         $request->validate([
             'branch' => 'required|in:HO,BJN,BTL,SPT,PLB,PLK',
+            'OdrRefNum' => 'required|unique:ordr_local,OdrRefNum',
         ], [
             'branch.required' => 'Cabang harus dipilih.',
             'branch.in' => 'Cabang yang dipilih tidak valid.',
+            'OdrRefNum.unique' => 'Nomor SO sudah pernah digunakan.',
         ]);
         
         DB::transaction(function () use ($request) {
