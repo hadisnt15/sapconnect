@@ -40,7 +40,7 @@ class OdlnController extends Controller
         // ✅ Pagination
         $deliveries = $query->orderByDesc('no_sj')->paginate(100)->withQueryString();
         // dd($query);
-        $lastSync = '';
+        $lastSync = SyncLog::where('name', 'odln')->latest('last_sync')->first();;
 
         return view('odln.odln', [
             'title'       => 'SCKKJ - Daftar Surat Jalan',

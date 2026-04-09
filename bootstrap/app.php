@@ -71,6 +71,17 @@ return Application::configure(basePath: dirname(__DIR__))
         })->everyThirtyMinutes()->when(function () {
             return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
         });
+        
+        $schedule->call(function () {
+            Artisan::call('sync:odln');
+            SyncLog::create([
+                'name' => 'odln',
+                'desc' => 'Otomatis',
+                'last_sync' => now()
+            ]);
+        })->hourly()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
         // END TRANSACTION DATA
 
         // REPORT DATA
