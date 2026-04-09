@@ -199,7 +199,7 @@
                                         <label class="text-xs text-gray-600">Harga</label>
                                         <input type="number" step="0.01"
                                             :name="'items[' + index + '][RdrItemPrice]'"
-                                            x-model="item.RdrItemPrice" required
+                                            x-model="item.RdrItemPrice" required :readonly="item.RdrItemKetHKN === 'Tidak Terdaftar' && item.RdrItemProfitCenter === 'IDP'"
                                             class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm">
                                     </div>
 
