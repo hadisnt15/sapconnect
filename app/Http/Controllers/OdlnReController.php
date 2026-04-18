@@ -9,13 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 
-class OdlnController extends Controller
+class OdlnReController extends Controller
 {
     public function index(Request $request)
     {
         $user = Auth::user();
 
-        $query = OdlnLocal::Filter(request(['search']));
+        $query = OdlnReLocal::Filter(request(['search']));
 
         // 🔹 Filter pencarian (jika ada scopeFilter)
         $query->filter($request->only(['search']));
@@ -39,14 +39,14 @@ class OdlnController extends Controller
         }
 
         // ✅ Pagination
-        $deliveries = $query->orderByDesc('no_sj')->paginate(100)->withQueryString();
+        $reDeliveries = $query->with('mainOdln')->orderByDesc('no_sj')->paginate(100)->withQueryString();
         // dd($query);
         $lastSync = SyncLog::where('name', 'odln')->latest('last_sync')->first();;
 
-        return view('odln.odln', [
-            'title'       => 'SCKKJ - Daftar Surat Jalan',
-            'titleHeader' => 'Daftar Surat Jalan',
-            'deliveries'      => $deliveries,
+        return view('odln.odln_re', [
+            'title'       => 'SCKKJ - Daftar Pengiriman Ulang Surat Jalan',
+            'titleHeader' => 'Daftar Pengiriman Ulang Surat Jalan',
+            'reDeliveries'=> $reDeliveries,
             'user'        => $user,
             'lastSync'    => $lastSync,
         ]);
@@ -59,60 +59,27 @@ class OdlnController extends Controller
         
         // Role selain salesman (misal developer, admin)
         // Reset semua
-        OdlnLocal::query()->update(['is_checked' => 0]);
+        OdlnReLocal::query()->update(['is_checked' => 0]);
 
         // Update yang dicentang
         if (!empty($ids)) {
-            OdlnLocal::whereIn('id', $ids)->update(['is_checked' => 1]);
+            OdlnReLocal::whereIn('id', $ids)->update(['is_checked' => 1]);
         }
 
         foreach ($notes as $id => $note) {
-            OdlnLocal::where('id', $id)->update([
+            OdlnReLocal::where('id', $id)->update([
                 'ket' => $note,
-                'waktu_proses' => now(),
                 // 'is_checked'    => 1
             ]);
         }
         
-        return redirect()->route('delivery')->with('success', 'Pengecekan pesanan berhasil diperbarui.');
-    }
-
-    public function allowReturn($id)
-    {
-        $delivery = OdlnLocal::findOrFail($id);
-
-        if (!in_array(auth()->user()->role, ['developer', 'manager'])) {
-            abort(403, 'Tidak punya akses');
-        }
-
-        $kirim_ke = OdlnReLocal::where('no_sj', $delivery->no_sj)->count();
-
-        OdlnReLocal::create([
-            'no_sj' => $delivery->no_sj,
-            'is_checked' => 0,
-            'is_synced' => 0,
-            'ket' => null,
-            'kirim_ke' => $kirim_ke + 1
-        ])->save();
-
-        return back()->with('success', 'Izin Pengiriman Ulang SJ Dibuka');
+        return redirect()->route('re.delivery')->with('success', 'Pengecekan pesanan berhasil diperbarui.');
     }
 
     public function push()
     {
-        Artisan::call('push:odln');
+        Artisan::call('push:odlnRe');
         // \App\Jobs\PushOrdrJob::dispatch();
-        return back()->with('success', 'Data Surat Jalan Berhasil Di-push ke SAP');
-    }
-
-    public function refresh()
-    {
-        Artisan::call('sync:odln');
-        SyncLog::create([
-            'name' => 'odln',
-            'desc' => 'Manual',
-            'last_sync' => now()
-        ]);
-        return back()->with('success', 'Data Surat Jalan Berhasil Di-refresh dari SAP');
+        return back()->with('success', 'Data Pengiriman Ulang Surat Jalan Berhasil Di-push ke SAP');
     }
 }

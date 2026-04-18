@@ -85,6 +85,10 @@
                                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('delivery', 'delivery.*') ? 'bg-red-100 font-semibold' : ''); ?>">
                                     <i class="ri-truck-fill mr-2"></i> Surat Jalan
                                 </a>
+                                <a href="<?php echo e(route('re.delivery')); ?>"
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('re.delivery') ? 'bg-red-100 font-semibold' : ''); ?>">
+                                    <i class="ri-reply-fill"></i> Pengiriman Ulang
+                                </a>
 
                             </div>
                         </div>
@@ -255,6 +259,10 @@
                     <a href="<?php echo e(route('delivery')); ?>"
                     class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('delivery', 'delivery.*') ? 'bg-red-100 font-semibold' : ''); ?>">
                         <i class="ri-truck-fill mr-2"></i> Surat Jalan
+                    </a>
+                    <a href="<?php echo e(route('re.delivery')); ?>"
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 <?php echo e(Route::is('re.delivery') ? 'bg-red-100 font-semibold' : ''); ?>">
+                        <i class="ri-reply-fill"></i> Pengiriman Ulang
                     </a>
 
                 </div>

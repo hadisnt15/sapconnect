@@ -40,28 +40,14 @@
             </div>
             <div class="md:ml-auto flex items-center gap-2">
                 @can('delivery.push')
-                    <a href="{{ route('delivery.push') }}"
+                    <a href="{{ route('reDelivery.push') }}"
                         class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
                         <i class="ri-upload-cloud-2-fill"></i> Kirim ke SAP
                     </a>
                 @endcan
-                @can('delivery.refresh')
-                    <a href="{{ route('delivery.refresh') }}"
-                        class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
-                        <i class="ri-refresh-fill"></i> Sinkronkan dengan SAP
-                    </a>
-                @endcan
             </div>
         </div>
-        <div class="text-sm font-bold text-gray-500 mb-2">
-            @if ($lastSync)
-                Terakhir Disinkronkan:{{ \Carbon\Carbon::parse($lastSync->last_sync)->timezone('Asia/Makassar')->format('d-m-Y H:i:s') }} WITA ({{ $lastSync->desc }})
-            @else
-                Belum Pernah Disinkronkan
-            @endif
-        </div>
-
-        <form method="GET" action="{{ route('delivery') }}" 
+        <form method="GET" action="{{ route('re.delivery') }}" 
             class="flex flex-col md:flex-row md:justify-start md:items-center gap-2 md:gap-3 mb-3">
 
             <div class="flex flex-col sm:flex-row gap-1 md:gap-1 items-start md:items-center">
@@ -97,7 +83,7 @@
         <!-- Table -->
         <div class="hidden md:block">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <form action="{{ route('delivery.updateChecked') }}" method="POST">
+                <form action="{{ route('reDelivery.updateChecked') }}" method="POST">
                     @csrf @method('patch')
                     <table class="w-full text-sm text-left text-gray-600 border">
                         <thead class="text-xs font-bold text-white uppercase bg-red-800">
@@ -106,22 +92,22 @@
                                 <th class="px-2 py-2 w-2/12">PELANGGAN</th>
                                 <th class="px-2 py-2 w-5/12">KETERANGAN</th>
                                 <th class="px-2 py-2 w-1/12">CEKLIS</th>
-                                <th class="px-2 py-2 w-1/12">KIRIM ULANG</th>
                             </tr>
                         </thead>
                         <tbody class="">
-                            @foreach ($deliveries as $q)
+                            @foreach ($reDeliveries as $q)
                                 <div class="hover:bg-gray-50">
                                     <tr class="bg-white">
                                         <td class="px-2 py-2 font-medium text-gray-800">
-                                            No Ref SJ: {{ $q->ref_sj }} | {{ \Carbon\Carbon::parse($q->tgl_sj)->format('d/m/Y') }} <br> 
+                                            No Ref SJ: {{ $q->mainOdln->ref_sj }} | {{ \Carbon\Carbon::parse($q->tgl_sj)->format('d/m/Y') }} <br> 
                                             No Dokumen SJ: {{ $q->no_sj }} <br> 
-                                            Freegood: {{ $q->freegood }} <br> 
+                                            Pengiriman Ulang ke: {{ $q->kirim_ke }} <br> 
+                                            Freegood: {{ $q->mainOdln->freegood }} <br> 
                                             
                                         </td>
                                         <td class="px-2 py-2 font-medium text-gray-800">
-                                            {{ $q->nama_customer }} <br> 
-                                            {{ $q->kode_customer }} 
+                                            {{ $q->mainOdln->nama_customer }} <br> 
+                                            {{ $q->mainOdln->kode_customer }} 
                                         </td>
                                         <td class="px-2 py-2 font-medium text-gray-800">
                                             @if ($q->is_synced === 1)
@@ -148,24 +134,6 @@
                                                     {{ $q->is_checked === 1 ? 'checked' : '' }}>
                                             @endif
                                         </td>
-                                        <td class="px-2 py-2 text-center" x-data="countdown('{{ $q->return_allowed_at }}')" x-init="start()">
-                                            @if(in_array(auth()->user()->role, ['developer', 'manager']))
-                                                @if($q->is_synced)
-                                                    <button type="submit"
-                                                        form="allow-return-{{ $q->id }}"
-                                                        class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs rounded">
-                                                        Buka Izin
-                                                    </button>
-                                                @else
-                                                    -
-                                                @endif
-                                            @else
-                                                <span class="text-gray-500 text-xs">
-                                                    '-'
-                                                </span>
-                                            @endif
-                                        </td>
-
                                     </tr>
                                     <tr class="bg-white border-b ">
                                         <td colspan="4" class="px-2 font-semibold">
@@ -173,7 +141,7 @@
                                                 <span class="text-green-600 font-semibold">TERKIRIM</span>
                                             @else
                                                 <span class="text-yellow-600 font-semibold">BELUM DIKIRIM</span>
-                                            @endif. Catatan Sales: {{ $q->note_so }}
+                                            @endif. Catatan Sales: {{ $q->mainOdln->note_so }}
                                         </td>
                                     </tr>
                                 </div>
@@ -189,7 +157,7 @@
                     </div>
                     @endif
                 </form>
-                @foreach ($deliveries as $q)
+                 @foreach ($reDeliveries as $q)
                     <form id="allow-return-{{ $q->id }}"
                         action="{{ route('delivery.allowReturn', $q->id) }}"
                         method="POST">
@@ -197,7 +165,7 @@
                         @method('patch')
                     </form>
                 @endforeach
-                @foreach ($deliveries as $q)
+                @foreach ($reDeliveries as $q)
                     <form id="disallow-return-{{ $q->id }}"
                         action="{{ route('delivery.disallowReturn', $q->id) }}"
                         method="POST">
@@ -207,13 +175,13 @@
                 @endforeach
             </div>
             <div class="mt-5 text-gray-600">
-                {{ $deliveries->links() }}
+                {{ $reDeliveries->links() }}
             </div>
         </div>
 
         <div class="block md:hidden">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <form action="{{ route('delivery.updateChecked') }}" method="POST">
+                <form action="{{ route('reDelivery.updateChecked') }}" method="POST">
                     @csrf @method('patch')
                     <table class="w-full text-sm text-left text-gray-600 border">
                         <thead class="text-xs font-bold text-white uppercase bg-red-800">
@@ -224,16 +192,16 @@
                             </tr>
                         </thead>
                         <tbody class="">
-                            @foreach ($deliveries as $q)
+                            @foreach ($reDeliveries as $q)
                                 <div class="hover:bg-gray-50">
                                     <tr class="bg-white border-b">
                                         <td class="px-2 py-2 font-medium text-gray-800">
                                             <div class="flex justify-between">
                                                 <div>
-                                                    <span>No Ref SJ: {{ $q->ref_sj }} | {{ \Carbon\Carbon::parse($q->tgl_sj)->format('d/m/Y') }}</span> <br>
+                                                    <span>No Ref SJ: {{ $q->mainOdln->ref_sj }} | {{ \Carbon\Carbon::parse($q->tgl_sj)->format('d/m/Y') }}</span> <br>
                                                     <span>No Dokumen SJ: {{ $q->no_sj }}</span> <br>
                                                     <span>
-                                                        Freegood: {{ $q->freegood }} |
+                                                        Freegood: {{ $q->mainOdln->freegood }} |
                                                         @if ($q->is_synced === 1)
                                                             <span class="text-green-600 font-semibold">TERKIRIM</span>
                                                         @else
@@ -247,23 +215,23 @@
                                                             <button type="submit"
                                                                 form="allow-return-{{ $q->id }}"
                                                                 class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs rounded">
-                                                                Buka Izin
+                                                                Buka Izin <br> Kirim Kembali
                                                             </button>
                                                         @else
                                                             -
                                                         @endif
                                                     @else
                                                         <span class="text-gray-500 text-xs">
-                                                            '-'
+                                                            {{ $q->is_return_allowed ? 'DIIZINKAN' : '-' }}
                                                         </span>
                                                     @endif
                                                 </div>
                                             </div>
                                             <div class="mt-4">
-                                                {{ $q->nama_customer }} <br> {{ $q->kode_customer }} 
+                                                {{ $q->mainOdln->nama_customer }} <br> {{ $q->mainOdln->kode_customer }} 
                                             </div>
                                             <div class="mt-4">
-                                                Catatan Sales: {{ $q->note_so }}
+                                                Catatan Sales: {{ $q->mainOdln->note_so }}
                                             </div>
                                             <div class="grid grid-cols-[11fr_1fr] gap-2 mt-2">
                                                 <div>
@@ -336,7 +304,7 @@
                 </form>
             </div>
             <div class="mt-5 text-gray-600">
-                {{ $deliveries->links() }}
+                {{ $reDeliveries->links() }}
             </div>
         </div>
     </div>

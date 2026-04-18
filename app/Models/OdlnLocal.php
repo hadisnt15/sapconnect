@@ -12,7 +12,7 @@ class OdlnLocal extends Model
     // public $incrementing = false;
     protected $keyType = 'string';//
     protected $fillable = [
-        'no_sj','ref_sj','tgl_sj','tgl_input','waktu_input','kode_customer','nama_customer','ket','is_synced','is_checked','note_so'
+        'no_sj','ref_sj','tgl_sj','tgl_input','waktu_input','kode_customer','nama_customer','ket','is_synced','is_checked','note_so','is_return_allowed'
     ];
 
     public function scopeFilter(Builder $query, array $filters)   
@@ -25,5 +25,10 @@ class OdlnLocal extends Model
                 ->orWhere('ref_sj', 'like', '%' . $search . '%')
                 ->orWhere('no_sj', 'like', '%' . $search . '%')
         );
+    }
+
+    public function reOdln()
+    {
+        return $this->hasMany(OdlnReLocal::class, 'no_sj');
     }
 }

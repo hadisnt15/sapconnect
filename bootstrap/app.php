@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\OdlnController;
 use App\Models\SyncLog;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\RoleMiddleware;
+use App\Models\OdlnLocal;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -82,6 +84,16 @@ return Application::configure(basePath: dirname(__DIR__))
         })->hourly()->when(function () {
             return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
         });
+
+        $schedule->call(function () {
+            OdlnLocal::where('is_return_allowed', 1)
+                ->whereNotNull('return_allowed_at')
+                ->where('return_allowed_at', '<=', now()->subMinutes(5))
+                ->update([
+                    'is_return_allowed' => 0,
+                    'return_allowed_at' => null
+                ]);
+        })->everyMinute();
         // END TRANSACTION DATA
 
         // REPORT DATA
