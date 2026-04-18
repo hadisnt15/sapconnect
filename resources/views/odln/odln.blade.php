@@ -153,7 +153,7 @@
                                                 <button type="submit"
                                                     form="allow-return-{{ $q->id }}"
                                                     class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs rounded">
-                                                    Buka Izin
+                                                    Kirim Ulang
                                                 </button>
                                             @else
                                                 -
@@ -233,7 +233,7 @@
                                                             <button type="submit"
                                                                 form="allow-return-{{ $q->id }}"
                                                                 class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs rounded">
-                                                                Buka Izin
+                                                                Kirim Ulang
                                                             </button>
                                                         @else
                                                             -
