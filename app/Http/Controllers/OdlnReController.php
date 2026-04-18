@@ -39,7 +39,7 @@ class OdlnReController extends Controller
         }
 
         // ✅ Pagination
-        $reDeliveries = $query->with('mainOdln')->orderByDesc('no_sj')->paginate(100)->withQueryString();
+        $reDeliveries = $query->with('mainOdln')->orderByDesc('created_at')->paginate(100)->withQueryString();
         // dd($query);
         $lastSync = SyncLog::where('name', 'odln')->latest('last_sync')->first();;
 

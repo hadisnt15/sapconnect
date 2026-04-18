@@ -148,21 +148,15 @@
                                                     {{ $q->is_checked === 1 ? 'checked' : '' }}>
                                             @endif
                                         </td>
-                                        <td class="px-2 py-2 text-center" x-data="countdown('{{ $q->return_allowed_at }}')" x-init="start()">
-                                            @if(in_array(auth()->user()->role, ['developer', 'manager']))
-                                                @if($q->is_synced)
-                                                    <button type="submit"
-                                                        form="allow-return-{{ $q->id }}"
-                                                        class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs rounded">
-                                                        Buka Izin
-                                                    </button>
-                                                @else
-                                                    -
-                                                @endif
+                                        <td class="px-2 py-2 text-center">
+                                            @if($q->is_synced)
+                                                <button type="submit"
+                                                    form="allow-return-{{ $q->id }}"
+                                                    class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs rounded">
+                                                    Buka Izin
+                                                </button>
                                             @else
-                                                <span class="text-gray-500 text-xs">
-                                                    '-'
-                                                </span>
+                                                -
                                             @endif
                                         </td>
 
@@ -192,14 +186,6 @@
                 @foreach ($deliveries as $q)
                     <form id="allow-return-{{ $q->id }}"
                         action="{{ route('delivery.allowReturn', $q->id) }}"
-                        method="POST">
-                        @csrf
-                        @method('patch')
-                    </form>
-                @endforeach
-                @foreach ($deliveries as $q)
-                    <form id="disallow-return-{{ $q->id }}"
-                        action="{{ route('delivery.disallowReturn', $q->id) }}"
                         method="POST">
                         @csrf
                         @method('patch')

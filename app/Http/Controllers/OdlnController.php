@@ -81,7 +81,7 @@ class OdlnController extends Controller
     {
         $delivery = OdlnLocal::findOrFail($id);
 
-        if (!in_array(auth()->user()->role, ['developer', 'manager'])) {
+        if (!in_array(auth()->user()->role, ['developer', 'manager','warehouse'])) {
             abort(403, 'Tidak punya akses');
         }
 

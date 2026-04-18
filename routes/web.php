@@ -87,8 +87,8 @@ Route::get('/suratJalan', [OdlnController::class, 'index'])->name('delivery')->m
 Route::patch('/suratJalan/perbaruiPengecekan', [OdlnController::class, 'updateChecked'])->name('delivery.updateChecked')->middleware('role:developer|warehouse'); //ok
 Route::get('/suratJalan/kirim', [OdlnController::class, 'push'])->name('delivery.push')->middleware('role:developer|warehouse'); //ok
 Route::get('/suratJalan/sinkron', [OdlnController::class, 'refresh'])->name('delivery.refresh')->middleware('role:developer|manager|warehouse'); //ok
-Route::patch('/delivery/{id}/allow-return', [OdlnController::class, 'allowReturn'])->name('delivery.allowReturn')->middleware('role:developer|manager|supervisor');
-Route::patch('/delivery/{id}/disallow-return', [OdlnController::class, 'disallowReturn'])->name('delivery.disallowReturn')->middleware('role:developer|manager|supervisor');
+Route::patch('/delivery/{id}/allow-return', [OdlnController::class, 'allowReturn'])->name('delivery.allowReturn')->middleware('role:developer|manager|warehouse');
+// Route::patch('/delivery/{id}/disallow-return', [OdlnController::class, 'disallowReturn'])->name('delivery.disallowReturn')->middleware('role:developer|manager|supervisor');
 Route::get('/pengirimanUlang', [OdlnReController::class, 'index'])->name('re.delivery')->middleware('role:developer|warehouse|manager'); //ok
 Route::patch('/pengirimanUlang/perbaruiPengecekan', [OdlnReController::class, 'updateChecked'])->name('reDelivery.updateChecked')->middleware('role:developer|warehouse'); //ok
 Route::get('/pengirimanUlang/kirim', [OdlnReController::class, 'push'])->name('reDelivery.push')->middleware('role:developer|warehouse'); //ok

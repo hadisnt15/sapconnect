@@ -157,22 +157,6 @@
                     </div>
                     @endif
                 </form>
-                 @foreach ($reDeliveries as $q)
-                    <form id="allow-return-{{ $q->id }}"
-                        action="{{ route('delivery.allowReturn', $q->id) }}"
-                        method="POST">
-                        @csrf
-                        @method('patch')
-                    </form>
-                @endforeach
-                @foreach ($reDeliveries as $q)
-                    <form id="disallow-return-{{ $q->id }}"
-                        action="{{ route('delivery.disallowReturn', $q->id) }}"
-                        method="POST">
-                        @csrf
-                        @method('patch')
-                    </form>
-                @endforeach
             </div>
             <div class="mt-5 text-gray-600">
                 {{ $reDeliveries->links() }}
