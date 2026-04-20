@@ -293,10 +293,26 @@ class OrdrController extends Controller
         $request->validate([
             'branch' => 'required|in:HO,BJN,BTL,SPT,PLB,PLK',
             'OdrRefNum' => 'required|unique:ordr_local,OdrRefNum',
+
+            'items' => 'required|array|min:1',
+
+            'items.*.RdrItemCode' => 'required|string',
+            'items.*.RdrItemQuantity' => 'required|numeric|min:1',
+            'items.*.RdrItemPrice' => 'required|numeric|min:0',
+
+            // optional tapi bagus
+            'items.*.RdrItemSatuan' => 'nullable|string',
+            'items.*.RdrItemProfitCenter' => 'nullable|string',
+            'items.*.RdrItemDisc' => 'nullable|numeric|min:0',
         ], [
             'branch.required' => 'Cabang harus dipilih.',
             'branch.in' => 'Cabang yang dipilih tidak valid.',
             'OdrRefNum.unique' => 'Nomor SO sudah pernah digunakan.',
+
+            'items.required' => 'Minimal harus ada 1 barang.',
+            'items.*.RdrItemCode.required' => 'Kode barang wajib dipilih.',
+            'items.*.RdrItemQuantity.required' => 'Qty wajib diisi.',
+            'items.*.RdrItemPrice.required' => 'Harga wajib diisi.',
         ]);
         
         DB::transaction(function () use ($request) {
@@ -428,9 +444,25 @@ class OrdrController extends Controller
     {
         $request->validate([
             'branch' => 'required|in:HO,BJN,BTL,SPT,PLB,PLK',
+
+            'items' => 'required|array|min:1',
+
+            'items.*.RdrItemCode' => 'required|string',
+            'items.*.RdrItemQuantity' => 'required|numeric|min:1',
+            'items.*.RdrItemPrice' => 'required|numeric|min:0',
+
+            // optional tapi bagus
+            'items.*.RdrItemSatuan' => 'nullable|string',
+            'items.*.RdrItemProfitCenter' => 'nullable|string',
+            'items.*.RdrItemDisc' => 'nullable|numeric|min:0',
         ], [
             'branch.required' => 'Cabang harus dipilih.',
             'branch.in' => 'Cabang yang dipilih tidak valid.',
+
+            'items.required' => 'Minimal harus ada 1 barang.',
+            'items.*.RdrItemCode.required' => 'Kode barang wajib dipilih.',
+            'items.*.RdrItemQuantity.required' => 'Qty wajib diisi.',
+            'items.*.RdrItemPrice.required' => 'Harga wajib diisi.',
         ]);
         DB::beginTransaction();
         try {

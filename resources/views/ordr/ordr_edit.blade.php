@@ -109,7 +109,22 @@
                 <!-- DETAIL BARANG -->
                 <h3 class="text-base font-semibold mb-2 text-gray-800">Detail Barang</h3>
 
-                <div x-data="{ items: @js($rows) }" class="space-y-3">
+                <div x-data="{
+                        items: @js($rows),
+                        loading: true,
+
+                        async initAll() {
+                            await loadItemsOnce();
+
+                            this.$nextTick(async () => {
+                                for (let i = 0; i < this.items.length; i++) {
+                                    await initSelect(i, this.items[i].RdrItemCode);
+                                }
+                                this.loading = false;
+                            });
+                        }
+                    }"
+                    x-init="initAll()" class="space-y-3">
 
                     <template x-for="(item, index) in items" :key="index">
                         <div
@@ -149,7 +164,7 @@
                                     <label class="text-xs text-gray-600">Kode Barang</label>
 
                                     <select :id="'itemSelect' + index"
-                                        :name="'items[' + index + '][RdrItemCode]'" required
+                                        :name="'items[' + index + '][RdrItemCode]'" 
                                         class="border border-gray-300 bg-gray-50 rounded-md w-full text-sm p-2"
                                         x-model="item.RdrItemCode"
                                         x-init="$nextTick(() => initSelect(index, item.RdrItemCode))"
@@ -255,7 +270,7 @@
                     </template>
 
                     <!-- TAMBAH BARANG -->
-                    <button type="button"
+                    <button type="button" 
                         @click="
                             items.push({
                                 RdrItemCode:'', ItemName:'', RdrItemQuantity:1, RdrItemPrice:0,
@@ -276,9 +291,10 @@
                         <i class="ri-add-circle-fill"></i> Tambah Barang
                     </button>
 
-                    <button type="submit"
+                    <button type="submit" :disabled="loading"
                         class="w-full bg-red-800 hover:bg-red-500 text-white py-2 rounded-lg text-sm font-medium">
-                        Perbarui Pesanan
+                        <span x-show="!loading">Perbarui Pesanan</span>
+                        <span x-show="loading">Memuat Data Barang...</span>
                     </button>
                 </div>
             </div>
@@ -383,7 +399,9 @@
                 }
             });
 
-            if (selectedValue) ts.setValue(selectedValue);
+            if (selectedValue) {
+                ts.setValue(selectedValue, true); // silent
+            }
         };
 
         // 🚀 INIT SAAT BROWSER IDLE (INI KUNCINYA)
@@ -397,13 +415,13 @@
     // ==================================================
     // INIT SAAT PAGE LOAD
     // ==================================================
-    document.addEventListener('DOMContentLoaded', async () => {
-        await loadItemsOnce();
+    // document.addEventListener('DOMContentLoaded', async () => {
+    //     await loadItemsOnce();
 
-        const selectedValues = @json(array_column($rows, 'RdrItemCode'));
+    //     const selectedValues = @json(array_column($rows, 'RdrItemCode'));
 
-        document.querySelectorAll('[id^="itemSelect"]').forEach((el, idx) => {
-            initSelect(idx, selectedValues[idx] ?? null);
-        });
-    });
+    //     document.querySelectorAll('[id^="itemSelect"]').forEach((el, idx) => {
+    //         initSelect(idx, selectedValues[idx] ?? null);
+    //     });
+    // });
 </script>
