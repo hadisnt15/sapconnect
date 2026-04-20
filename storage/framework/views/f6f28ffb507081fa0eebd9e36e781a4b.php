@@ -161,7 +161,7 @@
                                     <label class="text-xs text-gray-600">Kode Barang</label>
 
                                     <select :id="'itemSelect' + index"
-                                        :name="'items[' + index + '][RdrItemCode]'"
+                                        :name="'items[' + index + '][RdrItemCode]'" required
                                         class="border border-gray-300 bg-gray-50 rounded-md w-full text-sm p-2"
                                         x-model="item.RdrItemCode"
                                         x-init="$nextTick(() => initSelect(index, item.RdrItemCode))"
@@ -388,21 +388,19 @@
                             `[name="items[${index}][${name}]"]`
                         );
                         if (el) el.value = val;
+
+                        items[index][name] = val;
                     });
 
                     const priceInput = document.querySelector(
                         `[name="items[${index}][RdrItemPrice]"]`
                     );
 
-                    if (priceInput && (!priceInput.value || priceInput.value == 0)) {
+                    if (priceInput) {
                         priceInput.value = selected.HET;
                     }
 
-                    Object.assign(items[index], fields);
-
-                    if (!items[index].RdrItemPrice || items[index].RdrItemPrice == 0) {
-                        items[index].RdrItemPrice = selected.HET;
-                    }
+                    items[index].RdrItemPrice = selected.HET;
                 }
             });
 
