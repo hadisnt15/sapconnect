@@ -214,6 +214,12 @@
                                                 <i class="ri-delete-back-2-fill"></i> Hapus
                                             </a>
                                         <?php endif; ?>
+                                        <?php if(in_array($user->role, ['developer'])): ?>
+                                            <a href="<?php echo e(route('order.history', $o->id)); ?>"
+                                                class="block px-2 py-1 text-xs rounded bg-teal-500 hover:bg-teal-400 text-white w-full text-center">
+                                                <i class="ri-chat-history-fill"></i> Riwayat
+                                            </a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

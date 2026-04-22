@@ -10,6 +10,7 @@ use App\Models\OitmLocal;
 use App\Models\OrdrLocal;
 use App\Models\Rdr1Local;
 use App\Exports\OrdrExport;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -147,7 +148,6 @@ class OrdrController extends Controller
         ]);
     }
 
-
     public function refresh()
     {
         Artisan::call('sync:ordr');
@@ -227,7 +227,7 @@ class OrdrController extends Controller
             ]);
         } catch (\Exception $e) {
             return back()->with('error', "Gagal ambil data progress: " . $e->getMessage());
-    }
+        }
     }
 
     /**
@@ -402,6 +402,16 @@ class OrdrController extends Controller
         //
     }
 
+    public function history($id)
+    {
+        $history = ActivityLog::findOrFail($id);
+        return view('ordr.ordr_history', [
+            'title'       => 'SCKKJ - Riwayat Pesanan',
+            'titleHeader' => 'Riwayat Pesanan',
+            'id'          => $id
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -527,7 +537,7 @@ class OrdrController extends Controller
                 if (!isset($beforeItems[$code])) {
                     ActivityLogService::log(
                         'create_item',
-                        'pesanan',
+                        'order',
                         $id,
                         $head->OdrRefNum,
                         "Tambah item [$code]",
@@ -567,10 +577,10 @@ class OrdrController extends Controller
                 if (!empty($changes)) {
                     ActivityLogService::log(
                         'update_item',
-                        'pesanan',
+                        'order',
                         $id,
                         $head->OdrRefNum,
-                        ".Perbarui item [$code]",
+                        "Perbarui item [$code]",
                         $changes
                     );
                 }
@@ -682,7 +692,7 @@ class OrdrController extends Controller
 
                 ActivityLogService::log(
                     'update_checked',
-                    'pesanan',
+                    'order',
                     $id,
                     $after->OdrRefNum,
                     "Ubah status checklist order [{$after->OdrRefNum}]",
@@ -807,4 +817,5 @@ class OrdrController extends Controller
 
         return redirect()->route('order')->with('success', 'Pesanan berhasil dihapus.');
     }
+
 }

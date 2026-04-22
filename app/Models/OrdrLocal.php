@@ -52,6 +52,11 @@ class OrdrLocal extends Model
         return $this->hasOne(OrdrStatus::class, 'ref_num', 'OdrRefNum');
     }
 
+    public function orderLogs()
+    {
+        return $this->hasMany(ActivityLog::class, 'ref_id', 'OdrRefNum');
+    }
+
     public function scopeFilter(Builder $query, array $filters)   
     {
         $query->when(

@@ -110,6 +110,7 @@ Route::get('/pesanan/sinkron', [OrdrController::class, 'refresh'])->name('order.
     //     return Excel::download(new OrdrCombinedExport, 'ORDR_COMBINED.xlsx');
     // })->name('order.export')->middleware('role:developer|supervisor'); //ok
 Route::get('/pesanan/ekspor', [OrdrController::class, 'export'])->name('order.export')->middleware('role:developer|supervisor'); //ok
+Route::get('/pesanan/{id}/riwayat/', [OrdrController::class, 'history'])->name('order.history')->middleware('role:developer'); //ok
 
 Route::get('/kunjungan', [VisitController::class, 'index'])->name('visit')->middleware('auth');
 Route::post('/kunjungan/unggah', [VisitController::class, 'store'])->name('visit.store');

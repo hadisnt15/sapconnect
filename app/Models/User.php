@@ -86,7 +86,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Report::class, 'user_reports', 'user_id', 'report_id')->orderBy('name');
     }
 
-    public function logs()
+    public function userLogs()
     {
         return $this->hasMany(ActivityLog::class, 'user_id', 'id');
     }
