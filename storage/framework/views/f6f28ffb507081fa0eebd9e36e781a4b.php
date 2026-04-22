@@ -122,21 +122,26 @@
                 <h3 class="text-base font-semibold mb-2 text-gray-800">Detail Barang</h3>
 
                 <div x-data="{
-                        items: <?php echo \Illuminate\Support\Js::from($rows)->toHtml() ?>,
-                        loading: true,
+                    items: <?php echo \Illuminate\Support\Js::from($rows)->toHtml() ?>.map(i => ({
+                        ...i,
+                        isNew: false,
+                        oldCode: i.RdrItemCode
+                    })),
+                    loading: true,
 
-                        async initAll() {
-                            await loadItemsOnce();
+                    async initAll() {
+                        await loadItemsOnce();
 
-                            this.$nextTick(async () => {
-                                for (let i = 0; i < this.items.length; i++) {
-                                    await initSelect(i, this.items[i].RdrItemCode);
-                                }
-                                this.loading = false;
-                            });
-                        }
-                    }"
-                    x-init="initAll()" class="space-y-3">
+                        this.$nextTick(async () => {
+                            for (let i = 0; i < this.items.length; i++) {
+                                await initSelect(i, this.items[i].RdrItemCode);
+                            }
+                            this.loading = false;
+                        });
+                    }
+                }"
+                x-init="initAll()" class="space-y-3">
+
 
                     <template x-for="(item, index) in items" :key="index">
                         <div
@@ -214,7 +219,7 @@
                                         <label class="text-xs text-gray-600">Harga</label>
                                         <input type="number" step="0.01"
                                             :name="'items[' + index + '][RdrItemPrice]'"
-                                            x-model="item.RdrItemPrice" required :readonly="item.RdrItemKetHKN === 'Tidak Terdaftar' && item.RdrItemProfitCenter === 'IDP'"
+                                            x-model="item.RdrItemPrice" required :readonly="item.RdrItemProfitCenter === 'IDP' && item.RdrItemKetHKN === 'Tidak Terdaftar'"
                                             class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm">
                                     </div>
 
@@ -287,7 +292,7 @@
                             items.push({
                                 RdrItemCode:'', ItemName:'', RdrItemQuantity:1, RdrItemPrice:0,
                                 RdrItemDisc:0, RdrItemSatuan:'', RdrItemProfitCenter:'',
-                                RdrItemKetHKN:'', RdrItemKetFG:'', open:true
+                                RdrItemKetHKN:'', RdrItemKetFG:'', open:true, isNew: true, oldCode: null
                             });
 
                             $nextTick(() => initSelect(items.length - 1));
@@ -378,6 +383,11 @@
                     const alpineData = Alpine.$data(alpineRoot);
                     const items = alpineData.items;
 
+                    const currentItem = items[index];
+
+                    // =========================
+                    // 🚫 CEK DUPLIKAT
+                    // =========================
                     const duplicate = items.some(
                         (i, idx) => i.RdrItemCode === value && idx !== index
                     );
@@ -391,6 +401,14 @@
                     const selected = this.options[value];
                     if (!selected) return;
 
+                    // =========================
+                    // 🔥 DETEKSI GANTI ITEM
+                    // =========================
+                    const isChanged = currentItem.oldCode && currentItem.oldCode !== value;
+
+                    // =========================
+                    // 🔥 UPDATE FIELD
+                    // =========================
                     const fields = {
                         ItemName: selected.FrgnName,
                         RdrItemProfitCenter: selected.ProfitCenter,
@@ -405,33 +423,43 @@
                         );
                         if (el) el.value = val;
 
-                        items[index][name] = val;
+                        currentItem[name] = val;
                     });
 
+                    // =========================
+                    // 🔥 LOGIC HARGA
+                    // =========================
                     const priceInput = document.querySelector(
                         `[name="items[${index}][RdrItemPrice]"]`
                     );
 
-                    if (priceInput) {
-                        priceInput.value = selected.HET;
+                    if (currentItem.isNew || isChanged) {
+                        if (priceInput) priceInput.value = selected.HET;
+                        currentItem.RdrItemPrice = selected.HET;
                     }
 
-                    items[index].RdrItemPrice = selected.HET;
+                    // =========================
+                    // 🔥 UPDATE STATE
+                    // =========================
+                    currentItem.oldCode = value;
+                    currentItem.RdrItemCode = value;
+                    currentItem.isNew = false;
                 }
             });
 
+            // 🔥 SET VALUE AWAL TANPA TRIGGER CHANGE
             if (selectedValue) {
-                ts.setValue(selectedValue, true); // silent
+                ts.setValue(selectedValue, true);
             }
         };
 
-        // 🚀 INIT SAAT BROWSER IDLE (INI KUNCINYA)
         if ('requestIdleCallback' in window) {
             requestIdleCallback(build, { timeout: 300 });
         } else {
             setTimeout(build, 0);
         }
     }
+
 
     // ==================================================
     // INIT SAAT PAGE LOAD

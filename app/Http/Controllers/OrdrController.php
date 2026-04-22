@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Artisan;
+use App\Services\ActivityLogService;
+
 
 class OrdrController extends Controller
 {
@@ -325,7 +327,22 @@ class OrdrController extends Controller
                 'note' => $request->input('note'),
                 'branch' => $request->input('branch'),
             ]);
-            // dd($head->id);
+
+            // =========================
+            // 🔹 LOG HEADER
+            // =========================
+            ActivityLogService::log(
+                'create',
+                'order',
+                $head->id,
+                $head->OdrRefNum,
+                "Buat pesanan [{$head->OdrRefNum}]",
+                [
+                    'customer' => $head->OdrCrdCode,
+                    'branch' => $head->branch
+                ]
+            );
+            
             foreach($request->items as $item) {
                 Rdr1Local::create([
                     'OdrId' => $head->id,
@@ -338,6 +355,22 @@ class OrdrController extends Controller
                     'RdrItemKetFG' => $item['RdrItemKetFG'],
                     'RdrItemDisc' => $item['RdrItemDisc']
                 ]);
+
+                // =========================
+                // 🔹 LOG PER ITEM
+                // =========================
+                ActivityLogService::log(
+                    'create_item',
+                    'order',
+                    $head->id,
+                    $head->OdrRefNum,
+                    "Tambah item [{$item['RdrItemCode']}]",
+                    [
+                        'qty' => $item['RdrItemQuantity'],
+                        'price' => $item['RdrItemPrice'],
+                        'disc' => $item['RdrItemDisc'] ?? 0
+                    ]
+                );
             }
         });
         return redirect()->route('order')->with('success', 'Pesanan Berhasil Dibuat');
@@ -467,6 +500,97 @@ class OrdrController extends Controller
         DB::beginTransaction();
         try {
             $head = OrdrLocal::findOrFail($id);
+            
+
+            // =========================
+            // 1. AMBIL DATA LAMA
+            // =========================
+            $beforeItems = $head->orderRow()
+                ->get()
+                ->keyBy('RdrItemCode')
+                ->toArray();
+
+            // =========================
+            // 2. DATA BARU
+            // =========================
+            $newItems = collect($request->items)
+                ->filter(fn($i) => !empty($i['RdrItemCode']))
+                ->keyBy('RdrItemCode')
+                ->toArray();
+
+            // =========================
+            // 3. CEK TAMBAH & UPDATE
+            // =========================
+            foreach ($newItems as $code => $newItem) {
+
+                // 🔹 ITEM BARU
+                if (!isset($beforeItems[$code])) {
+                    ActivityLogService::log(
+                        'create_item',
+                        'pesanan',
+                        $id,
+                        $head->OdrRefNum,
+                        "Tambah item [$code]",
+                        ['after' => $newItem]
+                    );
+                    continue;
+                }
+
+                $oldItem = $beforeItems[$code];
+                $changes = [];
+
+                // cek perubahan qty
+                if ($oldItem['RdrItemQuantity'] != $newItem['RdrItemQuantity']) {
+                    $changes['qty'] = [
+                        'before' => $oldItem['RdrItemQuantity'],
+                        'after' => $newItem['RdrItemQuantity']
+                    ];
+                }
+
+                // cek perubahan harga
+                if ($oldItem['RdrItemPrice'] != $newItem['RdrItemPrice']) {
+                    $changes['price'] = [
+                        'before' => $oldItem['RdrItemPrice'],
+                        'after' => $newItem['RdrItemPrice']
+                    ];
+                }
+
+                // cek diskon
+                if ($oldItem['RdrItemDisc'] != $newItem['RdrItemDisc']) {
+                    $changes['disc'] = [
+                        'before' => $oldItem['RdrItemDisc'],
+                        'after' => $newItem['RdrItemDisc']
+                    ];
+                }
+
+                // 🔹 kalau ada perubahan
+                if (!empty($changes)) {
+                    ActivityLogService::log(
+                        'update_item',
+                        'pesanan',
+                        $id,
+                        $head->OdrRefNum,
+                        ".Perbarui item [$code]",
+                        $changes
+                    );
+                }
+            }
+
+            // =========================
+            // 4. CEK HAPUS
+            // =========================
+            foreach ($beforeItems as $code => $oldItem) {
+                if (!isset($newItems[$code])) {
+                    ActivityLogService::log(
+                        'delete_item',
+                        'order',
+                        $id,
+                        $head->OdrRefNum,
+                        "Hapus item [$code]",
+                        ['before' => $oldItem]
+                    );
+                }
+            }
 
             // 🔹 Update data header (termasuk cabang)
             $head->update([
@@ -505,7 +629,17 @@ class OrdrController extends Controller
     {
         $ids = $request->input('is_checked', []);
         $user = auth()->user();
-        // dd($ids, $user->role, $user->oslpReg->RegSlpCode);
+        
+        // =========================
+        // 🔹 1. AMBIL DATA SEBELUM
+        // =========================
+        $query = OrdrLocal::query();
+
+        if ($user->role === 'salesman') {
+            $query->where('OdrSlpCode', $user->oslpReg->RegSlpCode);
+        }
+
+        $ordersBefore = $query->get()->keyBy('id');
 
         if ($user->role === 'salesman') {
             // Reset hanya SO milik salesman ini
@@ -526,6 +660,38 @@ class OrdrController extends Controller
             // Update yang dicentang
             if (!empty($ids)) {
                 OrdrLocal::whereIn('id', $ids)->update(['is_checked' => 1]);
+            }
+        }
+
+        // =========================
+        // 🔹 3. AMBIL DATA SESUDAH
+        // =========================
+        $ordersAfter = $query->get()->keyBy('id');
+
+
+        // =========================
+        // 🔹 4. BANDINKAN & LOG
+        // =========================
+        foreach ($ordersAfter as $id => $after) {
+
+            $before = $ordersBefore[$id] ?? null;
+
+            if (!$before) continue;
+
+            if ($before->is_checked != $after->is_checked) {
+
+                ActivityLogService::log(
+                    'update_checked',
+                    'pesanan',
+                    $id,
+                    $after->OdrRefNum,
+                    "Ubah status checklist order [{$after->OdrRefNum}]",
+                    [
+                        'before' => $before->is_checked,
+                        'after' => $after->is_checked
+                    ]
+                    
+                );
             }
         }
 
@@ -595,6 +761,46 @@ class OrdrController extends Controller
     public function destroy(string $id)
     {
         $order = OrdrLocal::findOrFail($id);
+
+        // =========================
+        // 🔥 ACTIVITY LOG (HEADER)
+        // =========================
+        ActivityLogService::log(
+            'delete_order',
+            'pesanan',
+            $order->id,
+            $order->OdrRefNum,
+            "Hapus pesanan [{$order->OdrRefNum}]",
+            [
+                'before' => [
+                    'OdrRefNum' => $order->OdrRefNum,
+                    'branch' => $order->branch,
+                    'note' => $order->note,
+                ]
+            ],
+            $order->OdrRefNum // ✅ ref_id_2
+        );
+
+        // =========================
+        // 🔥 ACTIVITY LOG (DETAIL ITEM)
+        // =========================
+        foreach ($order->orderRow as $row) {
+            ActivityLogService::log(
+                'delete_item',
+                'pesanan',
+                $order->id,
+                $order->OdrRefNum,
+                "Hapus item [{$row->RdrItemCode}] dari pesanan [{$order->OdrRefNum}]",
+                [
+                    'before' => [
+                        'qty' => $row->RdrItemQuantity,
+                        'price' => $row->RdrItemPrice,
+                        'disc' => $row->RdrItemDisc,
+                    ]
+                ]
+            );
+        }
+
         $order->update([
             'is_deleted' => 1,
         ]);
