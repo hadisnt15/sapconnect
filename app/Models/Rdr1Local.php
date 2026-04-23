@@ -9,8 +9,8 @@ class Rdr1Local extends Model
 {
     protected $table = 'rdr1_local';
     protected $primaryKey = 'id';
-    public $incrementing = false;
-    protected $keyType = 'string';//
+    public $incrementing = true;
+    protected $keyType = 'int';//
     protected $fillable = [
         'OdrId','RdrItemCode','RdrItemQuantity','RdrItemSatuan','RdrItemPrice','RdrItemProfitCenter','RdrItemKetHKN','RdrItemKetFG','RdrItemDisc'
     ];

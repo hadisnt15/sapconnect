@@ -88,7 +88,7 @@ class User extends Authenticatable
 
     public function userLogs()
     {
-        return $this->hasMany(ActivityLog::class, 'user_id', 'id');
+        return $this->hasMany(ActivityLog::class, 'id', 'user_id');
     }
 
     public function scopeFilter(Builder $query, array $filters)

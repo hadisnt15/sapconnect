@@ -197,6 +197,8 @@
                                     ></select>
                                 </div>
 
+                                <input type="hidden" :name="'items[' + index + '][id]'" x-model="item.id">
+
                                 <!-- GRID INPUT -->
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>

@@ -28,6 +28,102 @@
                 </li>
             </ol>
         </nav>
-        
+        <div class="space-y-4">
+            <div class="grid grid-cols-3 gap-2">
+                @forelse($logs as $log)
+                    <div class="flex gap-3 p-4 bg-white border rounded-xl shadow-sm">
+    
+                        <!-- ICON -->
+                        <div
+                            class="w-10 h-10 flex items-center justify-center rounded-full
+                            bg-{{ $log['meta']['color'] }}-100
+                            text-{{ $log['meta']['color'] }}-600
+                            text-lg"
+                        >
+                            {{ $log['meta']['icon'] }}
+                        </div>
+    
+                        <!-- CONTENT -->
+                        <div class="flex-1">
+    
+                            <!-- TOP -->
+                            <div class="">
+                                <div class="font-semibold text-gray-800">
+                                    {{ $log['description'] }}
+                                </div>
+    
+                                <div class="text-xs text-gray-400">
+                                    {{ $log['user'] }}. {{ $log['created_at'] }}
+                                </div>
+                            </div>
+    
+                            <!-- CHANGES -->
+                            @if(!empty($log['changes']))
+                                <div class="mt-3 space-y-1 text-xs">
+    
+                                    @foreach($log['changes'] as $change)
+    
+                                        <!-- UPDATE -->
+                                        @if($change['type'] === 'update')
+                                            <div class="">
+                                                <span class="font-base text-gray-600 w-24">
+                                                    {{ ucfirst($change['field']) }}:
+                                                </span>
+    
+                                                <span class="text-red-500">
+                                                    {{ $change['before'] }}
+                                                </span>
+    
+                                                <span>→</span>
+    
+                                                <span class="text-green-600 font-semibold">
+                                                    {{ $change['after'] }}
+                                                </span>
+                                            </div>
+                                        @endif
+    
+                                        <!-- CREATE -->
+                                        @if($change['type'] === 'create')
+                                            <div class="">
+                                                <span class="font-base text-gray-600 w-24">
+                                                    {{ ucfirst($change['field']) }}:
+                                                </span>
+    
+                                                <span class="text-green-600 font-semibold">
+                                                    {{ $change['after'] }}
+                                                </span>
+                                            </div>
+                                        @endif
+    
+                                        <!-- DELETE -->
+                                        @if($change['type'] === 'delete')
+                                            <div class="">
+                                                <span class="font-base text-gray-600 w-24">
+                                                    {{ ucfirst($change['field']) }}:
+                                                </span>
+    
+                                                <span class="text-red-500 line-through">
+                                                    {{ $change['before'] }}
+                                                </span>
+                                            </div>
+                                        @endif
+    
+                                    @endforeach
+    
+                                </div>
+                            @endif
+    
+                        </div>
+                    </div>
+                @empty
+    
+                    <div class="text-center text-gray-500 py-10">
+                        Belum ada aktivitas
+                    </div>
+    
+                @endforelse
+            </div>
+
+        </div>
 </x-layout>
 

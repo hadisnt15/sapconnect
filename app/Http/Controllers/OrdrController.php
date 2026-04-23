@@ -338,13 +338,15 @@ class OrdrController extends Controller
                 $head->OdrRefNum,
                 "Buat pesanan [{$head->OdrRefNum}]",
                 [
-                    'customer' => $head->OdrCrdCode,
-                    'branch' => $head->branch
+                    'after' => [
+                        'customer' => $head->OdrCrdCode,
+                        'branch' => $head->branch
+                    ]
                 ]
             );
             
             foreach($request->items as $item) {
-                Rdr1Local::create([
+                $row = Rdr1Local::create([
                     'OdrId' => $head->id,
                     'RdrItemCode' => $item['RdrItemCode'],
                     'RdrItemQuantity' => $item['RdrItemQuantity'],
@@ -355,7 +357,6 @@ class OrdrController extends Controller
                     'RdrItemKetFG' => $item['RdrItemKetFG'],
                     'RdrItemDisc' => $item['RdrItemDisc']
                 ]);
-
                 // =========================
                 // 🔹 LOG PER ITEM
                 // =========================
@@ -363,14 +364,17 @@ class OrdrController extends Controller
                     'create_item',
                     'order',
                     $head->id,
-                    $head->OdrRefNum,
+                    $row->id,
                     "Tambah item [{$item['RdrItemCode']}]",
                     [
-                        'qty' => $item['RdrItemQuantity'],
-                        'price' => $item['RdrItemPrice'],
-                        'disc' => $item['RdrItemDisc'] ?? 0
+                        'after' => [
+                            'qty'   => $item['RdrItemQuantity'],
+                            'price' => $item['RdrItemPrice'],
+                            'disc'  => $item['RdrItemDisc'] ?? 0
+                        ]
                     ]
                 );
+
             }
         });
         return redirect()->route('order')->with('success', 'Pesanan Berhasil Dibuat');
@@ -404,13 +408,139 @@ class OrdrController extends Controller
 
     public function history($id)
     {
-        $history = ActivityLog::findOrFail($id);
+        $logs = ActivityLog::with('user')
+            ->where('module', 'order')
+            ->where('ref_id', $id)
+            ->latest('id')
+            ->get()
+            ->map(function ($log) {
+
+                $props = is_array($log->properties) ? $log->properties : json_decode($log->properties, true);
+
+                return [
+                    'id' => $log->id,
+                    'user' => $log->user->name ?? 'System',
+                    'action' => $log->action,
+                    'description' => $log->description,
+                    'created_at' => $log->created_at->format('d M Y H:i'),
+                    'meta' => $this->getActionMeta($log->action),
+                    'changes' => $this->formatChanges($props),
+                ];
+            });
         return view('ordr.ordr_history', [
             'title'       => 'SCKKJ - Riwayat Pesanan',
             'titleHeader' => 'Riwayat Pesanan',
-            'id'          => $id
+            'logs'          => $logs
         ]);
     }
+
+    private function getActionMeta($action)
+    {
+        return match ($action) {
+            'create_item' => ['icon' => '➕', 'color' => 'green'],
+            'update_item' => ['icon' => '✏', 'color' => 'yellow'],
+            'delete_item' => ['icon' => '❌', 'color' => 'red'],
+            'update_checked' => ['icon' => '✔', 'color' => 'blue'],
+            'create' => ['icon' => '📄', 'color' => 'green'],
+            'delete' => ['icon' => '🗑', 'color' => 'red'],
+            default => ['icon' => '•', 'color' => 'gray'],
+        };
+    }
+
+    private function formatChanges($props)
+    {
+        if (!$props || !is_array($props)) return [];
+
+        $result = [];
+
+        // =========================
+        // 🔥 CASE 1: FIELD-BASED UPDATE
+        // =========================
+        $isFieldFormat = collect($props)->every(function ($val) {
+            return is_array($val) && isset($val['before'], $val['after']);
+        });
+
+        if ($isFieldFormat) {
+            foreach ($props as $field => $change) {
+                $result[] = [
+                    'field' => $field,
+                    'before' => $change['before'],
+                    'after' => $change['after'],
+                    'type' => 'update'
+                ];
+            }
+            return $result;
+        }
+
+        $before = $props['before'] ?? null;
+        $after  = $props['after'] ?? null;
+
+        // =========================
+        // 🔥 CASE 2: CREATE (after only)
+        // =========================
+        if (is_array($after) && !$before) {
+            foreach ($after as $key => $val) {
+                $result[] = [
+                    'field' => $key,
+                    'after' => $val,
+                    'type' => 'create'
+                ];
+            }
+            return $result;
+        }
+
+        // =========================
+        // 🔥 CASE 3: DELETE (before only)
+        // =========================
+        if (is_array($before) && !$after) {
+            foreach ($before as $key => $val) {
+                $result[] = [
+                    'field' => $key,
+                    'before' => $val,
+                    'type' => 'delete'
+                ];
+            }
+            return $result;
+        }
+
+        // =========================
+        // 🔥 CASE 4: NORMAL ARRAY UPDATE
+        // =========================
+        if (is_array($before) && is_array($after)) {
+            foreach ($after as $key => $val) {
+                $result[] = [
+                    'field' => $key,
+                    'before' => $before[$key] ?? '-',
+                    'after' => $val,
+                    'type' => 'update'
+                ];
+            }
+            return $result;
+        }
+
+        // =========================
+        // 🔥 CASE 5: SINGLE VALUE
+        // =========================
+        if (!is_array($before) && !is_array($after)) {
+
+            // khusus checkbox
+            if ($before === 0 || $before === 1) {
+                $before = $before ? 'Checked' : 'Unchecked';
+                $after  = $after ? 'Checked' : 'Unchecked';
+            }
+
+            $result[] = [
+                'field' => 'status',
+                'before' => $before,
+                'after' => $after,
+                'type' => 'update'
+            ];
+        }
+
+        return $result;
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -510,7 +640,6 @@ class OrdrController extends Controller
         DB::beginTransaction();
         try {
             $head = OrdrLocal::findOrFail($id);
-            
 
             // =========================
             // 1. AMBIL DATA LAMA
@@ -541,7 +670,11 @@ class OrdrController extends Controller
                         $id,
                         $head->OdrRefNum,
                         "Tambah item [$code]",
-                        ['after' => $newItem]
+                        ['after' => [
+                            'qty'   => $newItem['RdrItemQuantity'],
+                            'price' => $newItem['RdrItemPrice'],
+                            'disc'  => $newItem['RdrItemDisc'] ?? 0
+                        ]]
                     );
                     continue;
                 }
@@ -569,7 +702,7 @@ class OrdrController extends Controller
                 if ($oldItem['RdrItemDisc'] != $newItem['RdrItemDisc']) {
                     $changes['disc'] = [
                         'before' => $oldItem['RdrItemDisc'],
-                        'after' => $newItem['RdrItemDisc']
+                        'after' => $newItem['RdrItemDisc'] ?? 0
                     ];
                 }
 
@@ -597,7 +730,11 @@ class OrdrController extends Controller
                         $id,
                         $head->OdrRefNum,
                         "Hapus item [$code]",
-                        ['before' => $oldItem]
+                        ['before' => [
+                            'qty'   => $oldItem['RdrItemQuantity'],
+                            'price' => $oldItem['RdrItemPrice'],
+                            'disc'  => $oldItem['RdrItemDisc'] ?? 0
+                        ]]
                     );
                 }
             }
@@ -796,7 +933,7 @@ class OrdrController extends Controller
         // =========================
         foreach ($order->orderRow as $row) {
             ActivityLogService::log(
-                'delete_item',
+                'delete',
                 'pesanan',
                 $order->id,
                 $order->OdrRefNum,
