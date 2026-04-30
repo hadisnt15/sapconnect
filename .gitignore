@@ -36,4 +36,4 @@ Thumbs.db
 
 # temporer
 /database/migrations
-/Models
+/app/Models
