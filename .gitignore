@@ -33,3 +33,7 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# temporer
+/database/migrations
+/Models
