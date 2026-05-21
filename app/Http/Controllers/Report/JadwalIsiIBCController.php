@@ -17,7 +17,7 @@ class JadwalIsiIBCController extends Controller
 
         $data = ReportJadwalIsiIBC::orderByDesc('FILLINGDATE')->orderBy('FRGNNAME')->get()->groupBy('FILLINGDATE');
 
-        $lastSync = SyncLog::where('name', 'report.jh-outstanding')->orderByDesc('last_sync')->first();
+        $lastSync = SyncLog::where('name', 'report.jadwal-isi-ibc')->orderByDesc('last_sync')->first();
 
         if ($data->isEmpty()) {
             return view('reports.jadwal_isi_ibc', [
