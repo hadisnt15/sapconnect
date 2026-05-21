@@ -18,7 +18,7 @@ use App\Http\Controllers\Report\BulananAverageController;
 use App\Http\Controllers\Report\BulananAverageLiterController;
 use App\Http\Controllers\Report\GrafikPenjualanSalesController;
 use App\Http\Controllers\Report\IdsGrupController;
-use App\Http\Controllers\report\JadwalIsiIBCController;
+use App\Http\Controllers\Report\JadwalIsiIBCController;
 use App\Http\Controllers\Report\JHOutstandinController;
 use App\Http\Controllers\Report\KetahananStokController;
 use App\Http\Controllers\Report\KontrakIdsController;
