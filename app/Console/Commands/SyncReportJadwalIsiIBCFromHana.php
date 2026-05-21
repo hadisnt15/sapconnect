@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\report\ReportJadwalIsiIBC;
+use App\Models\Report\ReportJadwalIsiIBC;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;

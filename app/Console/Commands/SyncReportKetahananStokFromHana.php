@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\report\ReportKetahananStok;
+use App\Models\Report\ReportKetahananStok;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
