@@ -318,6 +318,28 @@ return Application::configure(basePath: dirname(__DIR__))
         })->everyTwoHours()->when(function () {
             return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
         });
+        
+        $schedule->call(function () {
+            Artisan::call('sync:reportJadwalIBC');
+            SyncLog::create([
+                'name' => 'report.jadwal-isi-ibc',
+                'last_sync' => now(),
+                'desc' => 'Otomatis'
+            ]);
+        })->everyTwoHours()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
+        
+        $schedule->call(function () {
+            Artisan::call('sync:reportKetahananStok');
+            SyncLog::create([
+                'name' => 'report.ketahanan-stok',
+                'last_sync' => now(),
+                'desc' => 'Otomatis'
+            ]);
+        })->everyTwoHours()->when(function () {
+            return now()->between(now()->setTime(8, 0), now()->setTime(20, 0));
+        });
         // END REPORT DATA
     })
     ->create();

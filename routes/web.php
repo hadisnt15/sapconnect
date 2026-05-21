@@ -18,7 +18,9 @@ use App\Http\Controllers\Report\BulananAverageController;
 use App\Http\Controllers\Report\BulananAverageLiterController;
 use App\Http\Controllers\Report\GrafikPenjualanSalesController;
 use App\Http\Controllers\Report\IdsGrupController;
+use App\Http\Controllers\report\JadwalIsiIBCController;
 use App\Http\Controllers\Report\JHOutstandinController;
+use App\Http\Controllers\Report\KetahananStokController;
 use App\Http\Controllers\Report\KontrakIdsController;
 use App\Http\Controllers\Report\LubRetailController;
 use App\Http\Controllers\Report\PembelianHarianController;
@@ -177,6 +179,10 @@ Route::get('/laporan/peminjaman-barang', [PeminjamanBarangController::class, 'in
 Route::get('/laporan/sinkron/peminjaman-barang', [PeminjamanBarangController::class, 'refresh'])->name('report.refresh.peminjaman-barang')->middleware('auth');
 Route::get('/laporan/jh-outstanding', [JHOutstandinController::class, 'index'])->name('report.jh-outstanding')->middleware('auth');
 Route::get('/laporan/sinkron/jh-outstanding', [JHOutstandinController::class, 'refresh'])->name('report.refresh.jh-outstanding')->middleware('auth');
+Route::get('/laporan/jadwal-isi-ibc', [JadwalIsiIBCController::class, 'index'])->name('report.jadwal-isi-ibc')->middleware('auth');
+Route::get('/laporan/sinkron/jadwal-isi-ibc', [JadwalIsiIBCController::class, 'refresh'])->name('report.refresh.jadwal-isi-ibc')->middleware('auth');
+Route::get('/laporan/ketahanan-stok', [KetahananStokController::class, 'index'])->name('report.ketahanan-stok')->middleware('auth');
+Route::get('/laporan/sinkron/ketahanan-stok', [KetahananStokController::class, 'refresh'])->name('report.refresh.ketahanan-stok')->middleware('auth');
 Route::get('/laporan/kalender-kontrak-grup-ids', [KontrakIdsController::class, 'index'])->name('report.kalender-kontrak-grup-ids')->middleware('auth');
 
 

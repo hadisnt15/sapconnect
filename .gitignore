@@ -35,5 +35,7 @@ Homestead.yaml
 Thumbs.db
 
 # temporer
-/database/migrations
-/app/Models
+/database/migrations/2026_04_23_144217_create_dpp_header_table.php
+/database/migrations/2026_04_23_144231_create_dpp_detail_table.php
+/app/Models/DPPHeader.php
+/app/Models/DPPDetail.php

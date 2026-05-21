@@ -23,10 +23,6 @@
                             class="{{ Route::is('report', 'report.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} px-3 py-2 rounded-md text-sm font-medium">
                             <i class="ri-folder-6-fill"></i> Laporan
                         </x-nav-link>
-                        {{-- <x-nav-link href="{{ route('order') }}"
-                            class="{{ Route::is('order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} px-3 py-2 rounded-md text-sm font-medium">
-                            <i class="ri-bill-fill"></i> Pesanan
-                        </x-nav-link> --}}
                         <div class="relative {{ Route::is('delivery', 'delivery.*', 'order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md" x-data="{ open: false }">
                             <!-- Button Dropdown -->
                             <button 
@@ -101,28 +97,6 @@
 
                             </div>
                         </div>
-                        {{-- <x-nav-link href="{{ route('item') }}"
-                            class="{{ Route::is('item') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} px-3 py-2 rounded-md text-sm font-medium">
-                            <i class="ri-settings-4-fill"></i> Barang
-                        </x-nav-link>
-                        <x-nav-link href="{{ route('customer') }}"
-                            class="{{ Route::is('customer', 'customer.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} px-3 py-2 rounded-md text-sm font-medium">
-                            <i class="ri-account-circle-2-fill"></i> Pelanggan
-                        </x-nav-link>
-
-                        @if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor']))
-                            <x-nav-link href="{{ route('salesman') }}"
-                                class="{{ Route::is('salesman', 'salesman.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} px-3 py-2 rounded-md text-sm font-medium">
-                                <i class="ri-group-2-fill"></i> Penjual
-                            </x-nav-link>
-                        @endif --}}
-
-                        {{-- @if(in_array(auth()->user()->role, ['developer', 'manager']))
-                            <x-nav-link href="{{ route('user') }}"
-                                class="{{ Route::is('user','user.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} px-3 py-2 rounded-md text-sm font-medium">
-                                <i class="ri-user-follow-fill"></i> Pengguna
-                            </x-nav-link>
-                        @endif --}}
                     @endauth
                 </div>
 
@@ -177,115 +151,106 @@
                      d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
+        <!-- Mobile Dropdown -->
+        <div x-show="isOpen" x-transition 
+             class="md:hidden bg-red-900 text-white space-y-1 px-3 pb-3 rounded-b-lg">
+            @auth
+                <x-nav-link href="/" class="block px-3 py-2 hover:bg-red-700 text-sm {{ Route::is('dashboard') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md" :active="request()->is('/')"><i class="ri-home-office-fill"></i> Beranda</x-nav-link>
+                <x-nav-link href="{{ route('report') }}" class="block px-3 py-2 hover:bg-red-700 text-sm {{ Route::is('report','report.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md"><i class="ri-folder-6-fill"></i> Laporan</x-nav-link>
+                <div class="relative {{ Route::is('delivery', 'delivery.*', 'order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md" x-data="{ open: false }">
+                    <!-- Button Dropdown -->
+                    <button 
+                        @click="open = !open"
+                        @click.away="open = false"
+                        class="w-full flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-red-700 focus:outline-none">
+                        
+                        <i class="ri-briefcase-4-fill"></i>
+                        <span>Operasional</span>
+                        <i class="ri-arrow-down-s-line"></i>
+                    </button>
+    
+                    <!-- Dropdown Menu -->
+                    <div x-show="open"
+                        x-transition
+                        class="absolute left-0 mt-2 w-44 bg-white rounded-md shadow-lg py-1 z-50">
+    
+                        <a href="{{ route('order') }}"
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('order', 'order.*') ? 'bg-red-100 font-semibold' : '' }}">
+                            <i class="ri-bill-fill mr-2"></i> Pesanan
+                        </a>
+    
+                        <a href="{{ route('delivery') }}"
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('delivery', 'delivery.*') ? 'bg-red-100 font-semibold' : '' }}">
+                            <i class="ri-truck-fill mr-2"></i> Surat Jalan
+                        </a>
+                        <a href="{{ route('re.delivery') }}"
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('re.delivery') ? 'bg-red-100 font-semibold' : '' }}">
+                            <i class="ri-reply-fill"></i> Pengiriman Ulang
+                        </a>
+    
+                    </div>
+                </div>
+                <div class="relative {{ Route::is('customer', 'customer.*', 'item', 'item.*', 'salesman', 'salesman.*', 'user', 'user.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md" x-data="{ open: false }">
+                    <!-- Button Dropdown -->
+                    <button 
+                        @click="open = !open"
+                        @click.away="open = false"
+                        class="w-full flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-red-700 focus:outline-none">
+                        
+                        <i class="ri-database-2-fill"></i>
+                        <span>Pusat Data</span>
+                        <i class="ri-arrow-down-s-line"></i>
+                    </button>
+    
+                    <!-- Dropdown Menu -->
+                    <div x-show="open"
+                        x-transition
+                        class="absolute left-0 mt-2 w-44 bg-white rounded-md shadow-lg py-1 z-50">
+    
+                        <a href="{{ route('customer') }}"
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('customer', 'customer.*') ? 'bg-red-100 font-semibold' : '' }}">
+                            <i class="ri-bill-fill mr-2"></i> Pelanggan
+                        </a>
+    
+                        <a href="{{ route('item') }}"
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('item', 'item.*') ? 'bg-red-100 font-semibold' : '' }}">
+                            <i class="ri-settings-4-fill mr-2"></i> Barang
+                        </a>
+                        @if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor']))
+                            <a href="{{ route('salesman') }}"
+                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('salesman', 'salesman.*') ? 'bg-red-100 font-semibold' : '' }}">
+                                <i class="ri-group-2-fill mr-2"></i> Penjual
+                            </a>
+                        @endif
+                        @if(in_array(auth()->user()->role, ['developer', 'manager']))
+                            <a href="{{ route('user') }}"
+                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('user', 'user.*') ? 'bg-red-100 font-semibold' : '' }}">
+                                <i class="ri-user-follow-fill mr-2"></i> Pengguna
+                            </a>
+                        @endif
+    
+                    </div>
+                </div>
+                <hr class="border-red-700 my-2">
+                <div class="px-2 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <img src="{{ auth()->user()->profile_photo ? asset('storage/' . auth()->user()->profile_photo) : asset('profile-default.png') }}"
+                             class="w-8 h-8 rounded-full" alt="Profile">
+                        <span>{{ auth()->user()->name }}</span>
+                    </div>
+                    <div class="mt-2 space-y-1">
+                        <a href="{{ route('profile') }}" class="block p-2 hover:bg-red-700">Profil Saya</a>
+                        <a href="{{ route('profile.edit') }}" class="block p-2 hover:bg-red-700">Edit Profil</a>
+                        <a href="{{ route('password.edit') }}" class="block p-2 hover:bg-red-700">Ubah Kata Sandi</a>
+                        <form action="{{ route('logout') }}" method="post">@csrf
+                            <button type="submit" class="w-full text-left p-2 hover:bg-red-700">Keluar</button>
+                        </form>
+                    </div>
+                </div>
+            @else
+                <div class="px-3 py-2 text-sm">Anda Belum Login</div>
+            @endauth
+        </div>
     </div>
 
-    <!-- Mobile Dropdown -->
-    <div x-show="isOpen" x-transition 
-         class="md:hidden bg-red-900 text-white space-y-1 px-3 pb-3 rounded-b-lg">
-        @auth
-            <x-nav-link href="/" class="block px-3 py-2 hover:bg-red-700 text-sm {{ Route::is('dashboard') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md" :active="request()->is('/')"><i class="ri-home-office-fill"></i> Beranda</x-nav-link>
-            <x-nav-link href="{{ route('report') }}" class="block px-3 py-2 hover:bg-red-700 text-sm {{ Route::is('report','report.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md"><i class="ri-folder-6-fill"></i> Laporan</x-nav-link>
-            <div class="relative {{ Route::is('delivery', 'delivery.*', 'order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md" x-data="{ open: false }">
-                <!-- Button Dropdown -->
-                <button 
-                    @click="open = !open"
-                    @click.away="open = false"
-                    class="w-full flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-red-700 focus:outline-none">
-                    
-                    <i class="ri-briefcase-4-fill"></i>
-                    <span>Operasional</span>
-                    <i class="ri-arrow-down-s-line"></i>
-                </button>
-
-                <!-- Dropdown Menu -->
-                <div x-show="open"
-                    x-transition
-                    class="absolute left-0 mt-2 w-44 bg-white rounded-md shadow-lg py-1 z-50">
-
-                    <a href="{{ route('order') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('order', 'order.*') ? 'bg-red-100 font-semibold' : '' }}">
-                        <i class="ri-bill-fill mr-2"></i> Pesanan
-                    </a>
-
-                    <a href="{{ route('delivery') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('delivery', 'delivery.*') ? 'bg-red-100 font-semibold' : '' }}">
-                        <i class="ri-truck-fill mr-2"></i> Surat Jalan
-                    </a>
-                    <a href="{{ route('re.delivery') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('re.delivery') ? 'bg-red-100 font-semibold' : '' }}">
-                        <i class="ri-reply-fill"></i> Pengiriman Ulang
-                    </a>
-
-                </div>
-            </div>
-            <div class="relative {{ Route::is('customer', 'customer.*', 'item', 'item.*', 'salesman', 'salesman.*', 'user', 'user.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md" x-data="{ open: false }">
-                <!-- Button Dropdown -->
-                <button 
-                    @click="open = !open"
-                    @click.away="open = false"
-                    class="w-full flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-red-700 focus:outline-none">
-                    
-                    <i class="ri-database-2-fill"></i>
-                    <span>Pusat Data</span>
-                    <i class="ri-arrow-down-s-line"></i>
-                </button>
-
-                <!-- Dropdown Menu -->
-                <div x-show="open"
-                    x-transition
-                    class="absolute left-0 mt-2 w-44 bg-white rounded-md shadow-lg py-1 z-50">
-
-                    <a href="{{ route('customer') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('customer', 'customer.*') ? 'bg-red-100 font-semibold' : '' }}">
-                        <i class="ri-bill-fill mr-2"></i> Pelanggan
-                    </a>
-
-                    <a href="{{ route('item') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('item', 'item.*') ? 'bg-red-100 font-semibold' : '' }}">
-                        <i class="ri-settings-4-fill mr-2"></i> Barang
-                    </a>
-                    @if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor']))
-                        <a href="{{ route('salesman') }}"
-                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('salesman', 'salesman.*') ? 'bg-red-100 font-semibold' : '' }}">
-                            <i class="ri-group-2-fill mr-2"></i> Penjual
-                        </a>
-                    @endif
-                    @if(in_array(auth()->user()->role, ['developer', 'manager']))
-                        <a href="{{ route('user') }}"
-                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('user', 'user.*') ? 'bg-red-100 font-semibold' : '' }}">
-                            <i class="ri-user-follow-fill mr-2"></i> Pengguna
-                        </a>
-                    @endif
-
-                </div>
-            </div>
-            {{-- <x-nav-link href="{{ route('order') }}" class="block p-2 hover:bg-red-700 {{ Route::is('order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }}"><i class="ri-bill-fill"></i> Pesanan</x-nav-link>
-            <x-nav-link href="{{ route('item') }}" class="block p-2 hover:bg-red-700 {{ Route::is('item') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }}"><i class="ri-settings-4-fill"></i> Barang</x-nav-link>
-            <x-nav-link href="{{ route('customer') }}" class="block p-2 hover:bg-red-700 {{ Route::is('customer', 'customer.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }}"><i class="ri-account-circle-2-fill"></i> Pelanggan</x-nav-link>
-            @if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor']))
-                <x-nav-link href="{{ route('salesman') }}" class="block p-2 hover:bg-red-700 {{ Route::is('salesman', 'salesman.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }}"><i class="ri-group-2-fill"></i> Penjual</x-nav-link>
-            @endif
-            @if(in_array(auth()->user()->role, ['developer', 'manager']))
-                <x-nav-link href="{{ route('user') }}" class="block p-2 hover:bg-red-700 {{ Route::is('user','user.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }}"><i class="ri-user-follow-fill"></i> Pengguna</x-nav-link>
-            @endif --}}
-            <hr class="border-red-700 my-2">
-            <div class="px-2 text-sm">
-                <div class="flex items-center space-x-2">
-                    <img src="{{ auth()->user()->profile_photo ? asset('storage/' . auth()->user()->profile_photo) : asset('profile-default.png') }}"
-                         class="w-8 h-8 rounded-full" alt="Profile">
-                    <span>{{ auth()->user()->name }}</span>
-                </div>
-                <div class="mt-2 space-y-1">
-                    <a href="{{ route('profile') }}" class="block p-2 hover:bg-red-700">Profil Saya</a>
-                    <a href="{{ route('profile.edit') }}" class="block p-2 hover:bg-red-700">Edit Profil</a>
-                    <a href="{{ route('password.edit') }}" class="block p-2 hover:bg-red-700">Ubah Kata Sandi</a>
-                    <form action="{{ route('logout') }}" method="post">@csrf
-                        <button type="submit" class="w-full text-left p-2 hover:bg-red-700">Keluar</button>
-                    </form>
-                </div>
-            </div>
-        @else
-            <div class="px-3 py-2 text-sm">Anda Belum Login</div>
-        @endauth
-    </div>
 </nav>
