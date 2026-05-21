@@ -4,7 +4,7 @@ namespace App\Http\Controllers\report;
 
 use App\Http\Controllers\Controller;
 use App\Models\Report;
-use App\Models\report\ReportJadwalIsiIBC;
+use App\Models\Report\ReportJadwalIsiIBC;
 use App\Models\SyncLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
