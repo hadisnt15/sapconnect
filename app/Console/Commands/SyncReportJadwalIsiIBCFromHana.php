@@ -6,7 +6,6 @@ use App\Models\Report\ReportJadwalIsiIBC;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Models\SyncLog;
 
 class SyncReportJadwalIsiIBCFromHana extends Command
 {
@@ -44,10 +43,11 @@ class SyncReportJadwalIsiIBCFromHana extends Command
                             CAST(\"QTY\" AS NVARCHAR(255)) AS \"QTY\",
                             CAST(\"UOM\" AS NVARCHAR(255)) AS \"UOM\"
                         FROM LVKKJ_REP_JADWALPENGISIAN ()");
+        ReportJadwalIsiIBC::truncate();
         foreach ($hanaData2 as $row) {
-            DB::table('report_jadwal_pengisian_ibc')->updateOrInsert(
-                [ 'MAINKEY' => $row->MAINKEY, ], // key unik
+            ReportJadwalIsiIBC::create(
                 [
+                    'MAINKEY' => $row->MAINKEY, 
                     'FILLINGDATE' => $row->FILLINGDATE,
                     'ORIGINCODE' => $row->ORIGINCODE,
                     'FRGNNAME' => $row->FRGNNAME,

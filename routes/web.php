@@ -1,6 +1,5 @@
 <?php
 
-use App\Exports\OrdrExport;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisionController;
@@ -31,13 +30,11 @@ use App\Http\Controllers\Report\PenjualanSprSegmentController;
 use App\Http\Controllers\Report\Piutang45HariController;
 use App\Http\Controllers\Report\ProgRtlController;
 use App\Http\Controllers\Report\StokPtmController;
-use App\Http\Controllers\Report\Top10LubRtlController;
 use App\Http\Controllers\Report\UltahController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisitController;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 

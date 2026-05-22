@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\OdlnController;
 use App\Models\SyncLog;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\RoleMiddleware;

@@ -23,6 +23,17 @@
             </ol>
         </nav>
         
+        @can('dashboard.refresh')
+            <!-- Filter Bulan -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-end mb-4 gap-2">
+                
+                <!-- 🔴 Sinkronisasi SAP -->
+                <a href="{{ route('report.refresh.ketahanan-stok') }}"
+                    class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
+                    <i class="ri-refresh-fill"></i> Sinkronkan dengan SAP
+                </a>
+            </div>
+        @endcan
         <div class="text-sm font-bold text-gray-500 mb-2">
             @if ($lastSync)
                 Terakhir Disinkronkan: 

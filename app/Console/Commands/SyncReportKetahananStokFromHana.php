@@ -6,7 +6,6 @@ use App\Models\Report\ReportKetahananStok;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Models\SyncLog;
 
 class SyncReportKetahananStokFromHana extends Command
 {
@@ -53,10 +52,11 @@ class SyncReportKetahananStokFromHana extends Command
                             CAST(\"TOTALSTOCKPINJAM\" AS NVARCHAR(255)) AS \"TOTALSTOCKPINJAM\",
                             CAST(\"SISASTOCK\" AS NVARCHAR(255)) AS \"SISASTOCK\"
                         FROM LVKKJ_REP_KETAHANANSTOCK ()");
+        ReportKetahananStok::truncate();
         foreach ($hanaData2 as $row) {
-            DB::table('report_ketahanan_stok')->updateOrInsert(
-                [ 'MAINKEY' => $row->MAINKEY, ], // key unik
+            ReportKetahananStok::create(
                 [
+                    'MAINKEY' => $row->MAINKEY,
                     'TANGGAL' => $row->TANGGAL,
                     'ORIGINCODE' => $row->ORIGINCODE,
                     'FRGNNAME' => $row->FRGNNAME,
