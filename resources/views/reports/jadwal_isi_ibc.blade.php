@@ -109,7 +109,7 @@
                                             </tr>
                                             @endforeach
                                             <tr class="bg-white">
-                                                <th class="border px-2 py-1 font-bold bg-white" colspan="4">
+                                                <th class="border px-2 py-1 font-bold bg-white" colspan="5">
                                                     Total
                                                 </th>
                                                 <th class="border px-2 py-1 font-bold bg-white text-right">
