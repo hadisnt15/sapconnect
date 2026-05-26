@@ -99,11 +99,19 @@
                                                 <td class="border px-2 py-1 font-semibold bg-white">
                                                     {{ $item->UOM }}
                                                 </td>
-                                                <td class="border px-2 py-1 font-semibold bg-white">
+                                                <td class="border px-2 py-1 font-semibold bg-white text-right">
                                                     {{ number_format($item->QTY,0) }}
                                                 </td>
                                             </tr>
                                             @endforeach
+                                            <tr class="bg-white">
+                                                <th class="border px-2 py-1 font-bold bg-white" colspan="4">
+                                                    Total
+                                                </th>
+                                                <th class="border px-2 py-1 font-bold bg-white text-right">
+                                                    {{ number_format($items->sum('QTY'),0) }}
+                                                </th>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
