@@ -10,5 +10,5 @@ class ReportJadwalIsiIBC extends Model
     protected $primaryKey = 'MAINKEY';
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['MAINKEY', 'FILLINGDATE', 'ORIGINCODE', 'FRGNNAME', 'UOM', 'QTY'];
+    protected $fillable = ['MAINKEY', 'FILLINGDATE', 'ORIGINCODE', 'FRGNNAME', 'PROJECT', 'UOM', 'QTY'];
 }

@@ -51,7 +51,7 @@
                     Jadwal Pengisian IBC
                 </h5>
             </div>
-            <div class="grid grid-cols-2 gap-2">
+            <div class="grid md:grid-cols-2 gap-2">
                 @if ($data->count() > 0)
                     @foreach($data as $fillingDate => $items)
                         <div x-data="{ open: false }" class="mb-2 border rounded-lg shadow bg-white">
@@ -79,6 +79,7 @@
                                                 <th class="border px-2 py-1">No</th>
                                                 <th class="border px-2 py-1">Kode Barang</th>
                                                 <th class="border px-2 py-1">Nama Barang</th>
+                                                <th class="border px-2 py-1">Project</th>
                                                 <th class="border px-2 py-1">Satuan</th>
                                                 <th class="border px-2 py-1">Qty</th>
                                             </tr>
@@ -95,6 +96,9 @@
                                                 </td>
                                                 <td class="border px-2 py-1 font-semibold bg-white">
                                                     {{ $item->FRGNNAME }}
+                                                </td>
+                                                <td class="border px-2 py-1 font-semibold bg-white">
+                                                    {{ $item->PROJECT }}
                                                 </td>
                                                 <td class="border px-2 py-1 font-semibold bg-white">
                                                     {{ $item->UOM }}
@@ -115,14 +119,93 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="block md:hidden px-4 pb-4 mt-4 overflow-y-auto max-h-80 relative z-10">
+                                    <table class="w-full text-xs border border-gray-300">
+
+                                        <thead class="bg-gray-200 text-gray-700 text-center sticky top-0 z-20">
+                                            <tr>
+                                                <th class="border px-2 py-1">No</th>
+                                                <th class="border px-2 py-1">Barang</th>
+                                                <th class="border px-2 py-1">Satuan</th>
+                                                <th class="border px-2 py-1">Qty</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white">
+                                            @foreach($items as $item)
+                                            <!-- BARIS JUDUL ITEM -->
+                                            <tr class="bg-white">
+                                                <td class="border px-2 py-1 font-semibold bg-white">
+                                                    {{ $loop->iteration }}
+                                                </td>
+                                                <td class="border px-2 py-1 font-semibold bg-white">
+                                                    {{ $item->PROJECT }} - {{ $item->FRGNNAME }} ({{ $item->ORIGINCODE }})
+                                                </td>
+                                                <td class="border px-2 py-1 font-semibold bg-white">
+                                                    {{ $item->UOM }}
+                                                </td>
+                                                <td class="border px-2 py-1 font-semibold bg-white text-right">
+                                                    {{ number_format($item->QTY,0) }}
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                            <tr class="bg-white">
+                                                <th class="border px-2 py-1 font-bold bg-white" colspan="3">
+                                                    Total
+                                                </th>
+                                                <th class="border px-2 py-1 font-bold bg-white text-right">
+                                                    {{ number_format($items->sum('QTY'),0) }}
+                                                </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     @endforeach
                 @else
                     <p class="text-gray-500 text-center py-4">Tidak ada data ditemukan</p>
                 @endif
-
             </div>
+            @if ($data->count() > 0)
+                <div class="px-2 py-4 mt-4 mx-auto max-w-2xl relative z-10 border rounded-lg shadow bg-white">
+                    <div>
+                        <h5 class="text-gray-800 font-bold ms-4 mb-4">
+                            Rekap Jadwal Pengisian IBC per Project
+                        </h5>
+                    </div>
+                    <table class="w-full text-xs border border-gray-300">
+                        <thead class="bg-gray-200 text-gray-700 text-center sticky top-0 z-20">
+                            <tr>
+                                <th class="border px-2 py-1">No</th>
+                                <th class="border px-2 py-1">Barang</th>
+                                <th class="border px-2 py-1">Satuan</th>
+                                <th class="border px-2 py-1">Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            @foreach($dataRekap as $project => $items)
+                            <tr class="bg-white">
+                                <td class="border px-2 py-1 font-semibold bg-white">
+                                    {{ $loop->iteration }}
+                                </td>
+                                <td class="border px-2 py-1 font-semibold bg-white">
+                                    {{ $project }}
+                                </td>
+                                <td class="border px-2 py-1 font-semibold bg-white">
+                                    {{ $item->UOM }}
+                                </td>
+                                <td class="border px-2 py-1 font-semibold bg-white text-right">
+                                    {{ number_format($items->sum('QTY'),0) }}
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @else
+                <p class="text-gray-500 text-center py-4">Tidak ada data ditemukan</p>
+            @endif
+            
         </div>
         @endif
     </div>

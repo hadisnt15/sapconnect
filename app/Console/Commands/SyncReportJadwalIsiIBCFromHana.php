@@ -40,6 +40,7 @@ class SyncReportJadwalIsiIBCFromHana extends Command
                             CAST(\"FILLINGDATE\" AS DATE) AS \"FILLINGDATE\",
                             CAST(\"ORIGINCODE\" AS NVARCHAR(255)) AS \"ORIGINCODE\",
                             CAST(\"FRGNNAME\" AS NVARCHAR(255)) AS \"FRGNNAME\",
+                            CAST(\"PROJECT\" AS NVARCHAR(255)) AS \"PROJECT\",
                             CAST(\"QTY\" AS NVARCHAR(255)) AS \"QTY\",
                             CAST(\"UOM\" AS NVARCHAR(255)) AS \"UOM\"
                         FROM LVKKJ_REP_JADWALPENGISIAN ()");
@@ -50,6 +51,7 @@ class SyncReportJadwalIsiIBCFromHana extends Command
                     'MAINKEY' => $row->MAINKEY, 
                     'FILLINGDATE' => $row->FILLINGDATE,
                     'ORIGINCODE' => $row->ORIGINCODE,
+                    'PROJECT' => $row->PROJECT,
                     'FRGNNAME' => $row->FRGNNAME,
                     'QTY' => $row->QTY,
                     'UOM' => $row->UOM,

@@ -16,6 +16,7 @@ class JadwalIsiIBCController extends Controller
         $report = Report::where('slug', 'jadwal-isi-ibc')->first();
 
         $data = ReportJadwalIsiIBC::orderByDesc('FILLINGDATE')->orderBy('FRGNNAME')->get()->groupBy('FILLINGDATE');
+        $dataRekap = ReportJadwalIsiIBC::orderBy('PROJECT')->get()->groupBy('PROJECT');
 
         $lastSync = SyncLog::where('name', 'report.jadwal-isi-ibc')->orderByDesc('last_sync')->first();
 
@@ -34,6 +35,7 @@ class JadwalIsiIBCController extends Controller
             'title' => 'SCKKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data' => $data,
+            'dataRekap' => $dataRekap,
             'lastSync' => $lastSync,
         ]);
     }
