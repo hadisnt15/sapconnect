@@ -150,8 +150,9 @@
                                         </tr>
                                     </thead>
                                 </table>
+                                
                                 <!-- GRAFIK 12 BULAN -->
-                                <div class="px-4 pt-2 font-base text-red-800 text-xs">
+                                <div class="px-4 pt-2 mt-4 font-base text-red-800 text-xs">
                                     GRAFIK PENJUALAN<span class="font-semibold "> {{ $type }} {{ $group }} </span>SELAMA 12 BULAN TERAKHIR DALAM BENTUK KL
                                 </div>
                                 <div class="px-4 pb-4 mt-4">
@@ -211,6 +212,38 @@
                                     });
                                 </script>
 
+                                <div class="px-4 pt-2 mt-4 font-base text-red-800 text-xs">
+                                    TOP 5 RATA-RATA PER ITEM
+                                    <span class="font-semibold">{{ $type }} {{ $group }}</span>
+                                </div>
+
+                                <table class="w-full text-xs border border-gray-300 mt-2">
+                                    <thead class="bg-gray-200">
+                                        <tr>
+                                            <th class="border px-2 py-1">1</th>
+                                            <th class="border px-2 py-1">Barang</th>
+                                            <th class="border px-2 py-1">AVG (KL)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $avgklRows = $avgkl[$type][$group] ?? collect();
+                                        @endphp
+                                        @forelse($avgklRows as $item)
+                                            <tr>
+                                                <td class="border px-2 py-1">{{ $item->RANK }}</td>
+                                                <td class="border px-2 py-1">{{ $item->FRGNNAME }} - {{ $item->ORIGINCODE }}</td>
+                                                <td class="border px-2 py-1 text-right">{{ $item->AVGKL }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="3" class="border px-2 py-1 text-center">
+                                                    Data tidak ada
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
 
                             </div>
                         </div>

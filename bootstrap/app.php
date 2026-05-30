@@ -194,6 +194,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 'bulan' => $bulan,
             ]);
             Artisan::call('sync:reportIdsGrup12Bln');
+            Artisan::call('sync:reportIdsGrupAVGKL');
             SyncLog::create([
                 'name' => 'report.penjualan-industri-per-grup',
                 'last_sync' => now(),

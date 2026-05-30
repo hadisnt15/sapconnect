@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Report\ReportIdsGrup;
 use App\Models\SyncLog;
 use App\Models\Report;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -102,7 +100,25 @@ class IdsGrupController extends Controller
             ->orderBy('TAHUN', 'asc')
             ->orderBy('BULAN', 'asc');
         
+            
         $grafik = $queryGrafik->get()->groupBy(['TYPECUST','GROUPCUST']);
+        $queryAVGKL = DB::table('report_ids_grup_avgkl')
+            ->select(
+                'MAINKEY',
+                'TYPECUST',
+                'GROUPCUST',
+                DB::raw('CAST(TAHUN AS SIGNED) as TAHUN'),
+                DB::raw('CAST(BULAN AS SIGNED) as BULAN'),
+                'ORIGINCODE',
+                'FRGNNAME',
+                'RANK',
+                'AVGKL'
+            )
+            ->where('TAHUN', $tahun)
+            ->where('BULAN', $bulan)      
+            ->orderBy('GROUPCUST', 'asc')
+            ->orderBy('RANK', 'asc');  
+        $avgkl = $queryAVGKL->get()->groupBy(['TYPECUST','GROUPCUST']);
 
         // Nama bulan human-readable
         $namaPeriode = Carbon::createFromDate($tahun, $bulan, 1, 'Asia/Jakarta')
@@ -118,6 +134,7 @@ class IdsGrupController extends Controller
             'titleHeader' => $report->name,
             'data' => $data,
             'grafik' => $grafik,
+            'avgkl' => $avgkl,
             'typeTotal' => $typeTotal,
             'tahun' => $tahun,
             'bulan' => $bulan,
@@ -145,6 +162,7 @@ class IdsGrupController extends Controller
             'bulan' => $bulan,
         ]);
         Artisan::call('sync:reportIdsGrup12Bln');
+        Artisan::call('sync:reportIdsGrupAVGKL');
 
         SyncLog::create(
             [
