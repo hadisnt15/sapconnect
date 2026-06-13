@@ -305,7 +305,7 @@ class OrdrController extends Controller
             // optional tapi bagus
             'items.*.RdrItemSatuan' => 'nullable|string',
             'items.*.RdrItemProfitCenter' => 'nullable|string',
-            'items.*.RdrItemDisc' => 'nullable|numeric|min:0',
+            'items.*.RdrItemDisc' => 'nullable|numeric|min:0|max:32',
         ], [
             'branch.required' => 'Cabang harus dipilih.',
             'branch.in' => 'Cabang yang dipilih tidak valid.',
