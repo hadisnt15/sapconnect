@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PushOrdrToHana extends Command
@@ -90,6 +91,7 @@ class PushOrdrToHana extends Command
                     'U_KKJ_OdrOcrCode' => $ohead->OdrCrdCode,
                     'U_KKJ_OdrSlpCode' => $ohead->OdrSlpCode,
                     'U_KKJ_OdrDocDate' => $ohead->OdrDocDate,
+                    'U_KKJ_OdrDocTime' => Carbon::parse($ohead->created_at)->format('Hi'),
                     'U_KKJ_Address' => $ohead->note,
                     'U_KKJ_City' => $ohead->branch,
                 ];
