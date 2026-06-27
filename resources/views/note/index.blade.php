@@ -137,7 +137,7 @@
                         </template>
                     </tbody>
                 </table>
-                <table class="w-full text-sm text-left text-gray-600 border md:hidden">
+                <table class="w-full text-sm text-left text-gray-600 border block md:hidden">
                     <thead class="text-xs font-bold text-white uppercase bg-red-800">
                         <tr class="border-b">
                             <th  width="60" class="p-3 text-center">#</th>
