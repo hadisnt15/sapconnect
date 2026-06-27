@@ -10,7 +10,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{-- Livewire --}}
-    @livewireStyles
+    {{-- @livewireStyles --}}
 
     <link rel="icon" type="image/x-icon" href="{{ asset('/img/kkj.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -76,7 +76,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     {{-- Livewire --}}
-    @livewireScripts
+    {{-- @livewireScripts --}}
 
 </body>
 </html>

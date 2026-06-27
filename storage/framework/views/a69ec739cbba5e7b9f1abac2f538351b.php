@@ -10,8 +10,7 @@
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 
     
-    <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
-
+    
 
     <link rel="icon" type="image/x-icon" href="<?php echo e(asset('/img/kkj.png')); ?>">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -116,8 +115,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     
-    <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::scripts(); ?>
-
+    
 
 </body>
 </html><?php /**PATH C:\laragon\www\sapconnect\resources\views/components/layout.blade.php ENDPATH**/ ?>
