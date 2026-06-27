@@ -88,6 +88,8 @@
                     <div id="accordion-collapse" data-accordion="collapse"
                         class="rounded-xl overflow-hidden shadow-md border border-gray-300">
             
+                        <!-- ITEM 0: Agenda -->
+                        
                         <!-- ITEM 1: Pemberitahuan -->
                         <h2 id="accordion-heading-1">
                             <button type="button"

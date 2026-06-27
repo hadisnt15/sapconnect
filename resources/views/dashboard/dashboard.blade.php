@@ -78,6 +78,24 @@
                     <div id="accordion-collapse" data-accordion="collapse"
                         class="rounded-xl overflow-hidden shadow-md border border-gray-300">
             
+                        <!-- ITEM 0: Agenda -->
+                        {{-- <h2 id="accordion-heading-0">
+                            <button type="button"
+                                class="accordion-btn flex items-center justify-between w-full p-5 font-semibold text-red-800 bg-gray-50 border-b border-gray-300 hover:bg-red-800 hover:text-white transition-colors duration-200"
+                                data-target="#accordion-body-0" aria-expanded="false">
+                                <span class="text-xs md:text-sm"><i class="ri-calendar-schedule-fill"></i> Agenda</span>
+                                <svg class="w-4 h-4 rotate-0 shrink-0 transition-transform duration-200"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5 5 1 1 5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="accordion-body-0" class="hidden bg-white">
+                            <div class="p-5 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
+                                
+                            </div>
+                        </div> --}}
                         <!-- ITEM 1: Pemberitahuan -->
                         <h2 id="accordion-heading-1">
                             <button type="button"

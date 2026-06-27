@@ -4,6 +4,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\OcrdController;
 use App\Http\Controllers\OdlnController;
 use App\Http\Controllers\OdlnReController;
@@ -64,6 +65,15 @@ Route::get('/cek/sesi', function () {
 Route::get('/profil', [ProfileController::class, 'index'])->name('profile')->middleware('auth'); //ok
 Route::get('/profil/edit', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('auth'); //ok
 Route::post('/profil/perbarui', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth'); //ok
+
+Route::middleware('auth')->group(function () {
+    Route::get('/agenda', [NoteController::class, 'index'])->name('note');
+    Route::get('/agenda/list', [NoteController::class, 'list']);
+    Route::post('/agenda/store', [NoteController::class, 'store']);
+    Route::put('/agenda/{note}', [NoteController::class, 'update']);
+    Route::delete('/agenda/{note}', [NoteController::class, 'destroy']);
+    Route::patch('/agenda/{note}/selesai', [NoteController::class, 'toggle']);
+});
 
 Route::get('/kataSandi/perbarui', [PasswordController::class, 'edit'])->name('password.edit')->middleware('auth'); //ok
 Route::post('/kataSandi/perbarui', [PasswordController::class, 'update'])->name('password.update')->middleware('auth'); //ok
