@@ -66,11 +66,11 @@
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
-                <input type="text" x-model.debounce.500ms="filters.search" @input="loadNotes()" placeholder="Cari judul / catatan..." class="border rounded-lg p-2">
-                <input type="date" x-model="filters.date_from" @change="loadNotes()" class="border rounded-lg p-2">
-                <input type="date" x-model="filters.date_to" @change="loadNotes()" class="border rounded-lg p-2">
-                <select x-model="filters.status" @change="loadNotes()" class="border rounded-lg p-2">
+            <div class="grid grid-cols-1 md:grid-cols-[3fr_1fr_1fr_1fr] gap-3 mb-4">
+                <input type="text" x-model.debounce.500ms="filters.search" @input="loadNotes()" placeholder="Cari judul / catatan..." class="border rounded-lg py-1 px-2" autofocus>
+                <input type="date" x-model="filters.date_from" @change="loadNotes()" class="border rounded-lg py-1 px-2">
+                <input type="date" x-model="filters.date_to" @change="loadNotes()" class="border rounded-lg py-1 px-2">
+                <select x-model="filters.status" @change="loadNotes()" class="border rounded-lg py-1 px-2">
                     <option value="">Semua Status</option>
                     <option value="done">Selesai</option>
                     <option value="running">Berjalan</option>
@@ -80,114 +80,118 @@
                 </select>
             </div>
             <div class="relative overflow-x-auto shadow-md rounded-xl">
-                <table class="w-full text-sm text-left text-gray-600 border hidden md:block">
-                    <thead class="text-xs font-bold text-white uppercase bg-red-800">
-                        <tr class="border-b">
-                            <th  width="60" class="p-3 text-center">#</th>
-                            <th class="p-3 text-left  w-7/14">Agenda</th>
-                            <th class="p-3 text-center  w-2/14">Deadline</th>
-                            <th class="p-3 text-center w-2/14">Lampiran</th>
-                            <th class="p-3 text-center w-1/14">Status</th>
-                            <th class="p-2 text-center w-1/14">Selesai</th>
-                            <th class="p-3 text-center w-1/14" width="130">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white border-b hover:bg-gray-50">
-                        <template x-if="notes.length == 0">
-                            <tr>
-                                <td colspan="5" class="text-center py-10 text-gray-500">Belum ada agenda.</td>
+                <div class="hidden md:block">
+                    <table class="w-full text-sm text-left text-gray-600 border">
+                        <thead class="text-xs font-bold text-white uppercase bg-red-800">
+                            <tr class="border-b">
+                                <th width="60" class="p-3 text-center">#</th>
+                                <th class="p-3 text-left w-7/14">Agenda</th>
+                                <th class="p-3 text-center w-2/14">Deadline</th>
+                                <th class="p-3 text-center w-2/14">Lampiran</th>
+                                <th class="p-3 text-center w-1/14">Status</th>
+                                <th class="p-2 text-center w-1/14">Selesai</th>
+                                <th class="p-3 text-center w-1/14" width="130">Aksi</th>
                             </tr>
-                        </template>
-                        <template x-for="(note, index) in notes" :key="note.id">
-                            <tr class="bg-white border-b hover:bg-gray-50">
-                                <td class="p-2 text-center" x-text="pagination.from + index"></td>
-                                <td class="px-2 py-2 font-medium text-gray-800">
-                                    <span x-text="note.title" :class="note.is_done ? 'line-through text-gray-400' : 'font-semibold'"></span> <br>
-                                    <span x-text="note.description" :class="note.is_done ? 'line-through text-gray-400' : ''"></span>
-                                </td>
-                                <td class="px-2 py-2 font-medium text-gray-800 text-center">
-                                    <span x-show="note.due_date" x-text="new Date(note.due_date).toLocaleString('id-ID')"></span>
-                                    <span x-show="!note.due_date" class="text-gray-400">-</span>
-                                </td>
-                                <td class="px-2 py-2 font-medium text-gray-800">
-                                    <template x-if="note.attachment_url">
-                                        <a :href="note.attachment_url" target="_blank">
-                                            <img :src="note.attachment_url" class="w-14 h-14 object-cover rounded border mx-auto">
-                                        </a>
-                                    </template>
-                                    <template x-if="!note.attachment_url">
-                                        <span class="text-gray-400">-</span>
-                                    </template>
-                                </td>
-                                <td class="p-2 text-center">
-                                    <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-semibold" :class="status(note).class" x-text="status(note).text"></span>
-                                </td>
-                                <td class="px-2 py-2 font-medium text-gray-800 text-center">
-                                    <input type="checkbox" :checked="note.is_done" @change="toggleDone(note)" class="w-5 h-5 text-green-600 rounded">
-                                </td>
-                                <td class="px-2 py-2 space-y-1">
-                                    <button @click="edit(note)" class="block px-2 py-1 text-xs rounded bg-amber-500 hover:bg-amber-400 text-white w-full text-center">
-                                        <i class="ri-file-edit-fill"></i> Edit
-                                    </button>
-                                    <button @click="hapus(note.id)" class="block px-2 py-1 text-xs rounded bg-gray-500 hover:bg-gray-400 text-white w-full text-center">
-                                        <i class="ri-delete-back-2-fill"></i> Hapus
-                                    </button>
-                                </td>
+                        </thead>
+                        <tbody class="bg-white border-b hover:bg-gray-50">
+                            <template x-if="notes.length == 0">
+                                <tr>
+                                    <td colspan="5" class="text-center py-10 text-gray-500">Belum ada agenda.</td>
+                                </tr>
+                            </template>
+                            <template x-for="(note, index) in notes" :key="note.id">
+                                <tr class="bg-white border-b hover:bg-gray-50">
+                                    <td class="p-2 text-center" x-text="pagination.from + index"></td>
+                                    <td class="px-2 py-2 text-gray-800">
+                                        <span x-text="note.title" :class="note.is_done ? 'line-through text-gray-400' : 'font-semibold'"></span> <br>
+                                        <span x-text="note.description" :class="note.is_done ? 'line-through text-gray-400' : ' '"></span>
+                                    </td>
+                                    <td class="px-2 py-2 font-medium text-gray-800 text-center">
+                                        <span x-show="note.due_date" x-text="new Date(note.due_date).toLocaleString('id-ID')"></span> 
+                                        <span x-show="!note.due_date" class="text-gray-400">-</span>
+                                    </td>
+                                    <td class="px-2 py-2 font-medium text-gray-800 text-center">
+                                        <template x-if="note.attachment_url">
+                                            <a :href="note.attachment_url" target="_blank">
+                                                <img :src="note.attachment_url" class="w-14 h-14 object-cover rounded border mx-auto">
+                                            </a>
+                                        </template>
+                                        <template x-if="!note.attachment_url">
+                                            <span class="text-gray-400">-</span>
+                                        </template>
+                                    </td>
+                                    <td class="p-2 text-center">
+                                        <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-semibold" :class="status(note).class" x-text="status(note).text"></span>
+                                    </td>
+                                    <td class="px-2 py-2 font-medium text-gray-800 text-center">
+                                        <input type="checkbox" :checked="note.is_done" @change="toggleDone(note)" class="w-5 h-5 text-green-600 rounded">
+                                    </td>
+                                    <td class="px-2 py-2 space-y-1">
+                                        <button @click="edit(note)" class="block px-2 py-1 text-xs rounded bg-amber-500 hover:bg-amber-400 text-white w-full text-center">
+                                            <i class="ri-file-edit-fill"></i> Edit
+                                        </button>
+                                        <button @click="hapus(note.id)" class="block px-2 py-1 text-xs rounded bg-gray-500 hover:bg-gray-400 text-white w-full text-center">
+                                            <i class="ri-delete-back-2-fill"></i> Hapus
+                                        </button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="block md:hidden">
+                    <table class="w-full text-sm text-left text-gray-600 border">
+                        <thead class="text-xs font-bold text-white uppercase bg-red-800">
+                            <tr class="border-b">
+                                <th  width="60" class="p-3 text-center">#</th>
+                                <th class="p-3 text-left w-7/10">Agenda</th>
+                                <th class="p-3 text-center w-2/10">Lampiran</th>
+                                <th class="p-3 text-center w-1/10" width="130">Aksi</th>
                             </tr>
-                        </template>
-                    </tbody>
-                </table>
-                <table class="w-full text-sm text-left text-gray-600 border block md:hidden">
-                    <thead class="text-xs font-bold text-white uppercase bg-red-800">
-                        <tr class="border-b">
-                            <th  width="60" class="p-3 text-center">#</th>
-                            <th class="p-3 text-left w-7/10">Agenda</th>
-                            <th class="p-3 text-center w-2/10">Lampiran</th>
-                            <th class="p-3 text-center w-1/10" width="130">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white border-b hover:bg-gray-50">
-                        <template x-if="notes.length == 0">
-                            <tr>
-                                <td colspan="5" class="text-center py-10 text-gray-500">Belum ada agenda.</td>
-                            </tr>
-                        </template>
-                        <template x-for="(note, index) in notes" :key="note.id">
-                            <tr class="bg-white border-b hover:bg-gray-50">
-                                <td class="p-2 text-center" x-text="pagination.from + index"></td>
-                                <td class="px-2 py-2 font-medium text-gray-800">
-                                    <span x-text="note.title" :class="note.is_done ? 'line-through text-gray-400' : 'font-semibold'"></span> <br>
-                                    <span x-text="note.description" :class="note.is_done ? 'line-through text-gray-400' : ''"></span> <br>
-                                    <div class="mt-4">
-                                        <span class="text-xs">Deadline: </span>
-                                        <span x-show="note.due_date" x-text="new Date(note.due_date).toLocaleString('id-ID')"></span>
-                                        <span x-show="!note.due_date" class="text-gray-400">-</span> <br>
-                                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold" :class="status(note).class" x-text="status(note).text"></span>
-                                    </div>
-                                </td>
-                                <td class="px-2 py-2 font-medium text-gray-800">
-                                    <template x-if="note.attachment_url">
-                                        <a :href="note.attachment_url" target="_blank">
-                                            <img :src="note.attachment_url" class="w-14 h-14 object-cover rounded border mx-auto">
-                                        </a>
-                                    </template>
-                                    <template x-if="!note.attachment_url">
-                                        <span class="text-gray-400">-</span>
-                                    </template>
-                                </td>
-                                <td class="px-2 py-2 space-y-1">
-                                    <button @click="edit(note)" class="block px-2 py-1 text-xs rounded bg-amber-500 hover:bg-amber-400 text-white w-full text-center">
-                                        <i class="ri-file-edit-fill"></i>
-                                    </button>
-                                    <button @click="hapus(note.id)" class="block px-2 py-1 text-xs rounded bg-gray-500 hover:bg-gray-400 text-white w-full text-center">
-                                        <i class="ri-delete-back-2-fill"></i>
-                                    </button>
-                                    <input type="checkbox" :checked="note.is_done" @change="toggleDone(note)" class="w-5 h-5 text-green-600 rounded">
-                                </td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="bg-white border-b hover:bg-gray-50">
+                            <template x-if="notes.length == 0">
+                                <tr>
+                                    <td colspan="5" class="text-center py-10 text-gray-500">Belum ada agenda.</td>
+                                </tr>
+                            </template>
+                            <template x-for="(note, index) in notes" :key="note.id">
+                                <tr class="bg-white border-b hover:bg-gray-50">
+                                    <td class="p-2 text-center" x-text="pagination.from + index"></td>
+                                    <td class="px-2 py-2 font-medium text-gray-800">
+                                        <span x-text="note.title" :class="note.is_done ? 'line-through text-gray-400' : 'font-semibold'"></span> <br>
+                                        <span x-text="note.description" :class="note.is_done ? 'line-through text-gray-400' : ''"></span> <br>
+                                        <div class="mt-4">
+                                            <span class="text-xs">Deadline: </span>
+                                            <span x-show="note.due_date" x-text="new Date(note.due_date).toLocaleString('id-ID')"></span>
+                                            <span x-show="!note.due_date" class="text-gray-400">-</span> <br>
+                                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold" :class="status(note).class" x-text="status(note).text"></span>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 py-2 font-medium text-gray-800">
+                                        <template x-if="note.attachment_url">
+                                            <a :href="note.attachment_url" target="_blank">
+                                                <img :src="note.attachment_url" class="w-14 h-14 object-cover rounded border mx-auto">
+                                            </a>
+                                        </template>
+                                        <template x-if="!note.attachment_url">
+                                            <span class="text-gray-400">-</span>
+                                        </template>
+                                    </td>
+                                    <td class="px-2 py-2 space-y-1">
+                                        <button @click="edit(note)" class="block px-2 py-1 text-xs rounded bg-amber-500 hover:bg-amber-400 text-white w-full text-center">
+                                            <i class="ri-file-edit-fill"></i>
+                                        </button>
+                                        <button @click="hapus(note.id)" class="block px-2 py-1 text-xs rounded bg-gray-500 hover:bg-gray-400 text-white w-full text-center">
+                                            <i class="ri-delete-back-2-fill"></i>
+                                        </button>
+                                        <input type="checkbox" :checked="note.is_done" @change="toggleDone(note)" class="w-5 h-5 text-green-600 rounded">
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="flex justify-between items-center mt-4 p-2">
                     <div class="text-sm text-gray-600">
                         Menampilkan <span x-text="pagination.from"></span> - <span x-text="pagination.to"></span> dari <span x-text="pagination.total"></span> data
