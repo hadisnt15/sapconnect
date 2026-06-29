@@ -9,18 +9,7 @@
     @endif
 
     <div class="relative overflow-x-auto shadow-md rounded-lg border border-gray-300 py-2 px-2 bg-white">
-        {{-- <nav class="flex mb-4 px-5 py-3 border rounded-lg bg-gray-50 border-gray-200" aria-label="Breadcrumb">
-            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-                <li aria-current="page">
-                    <div class="flex items-center">
-                        <span class="ms-1 text-sm font-medium text-red-800 md:ms-2">
-                            <i class="ri-calendar-schedule-fill"></i> {{ $titleHeader }}
-                        </span>
-                    </div>
-                </li>
-            </ol>
-        </nav> --}}
-        <div x-data="noteApp()" x-init="loadNotes()" class="space-y-6">
+        <div x-ref="scrollUp" x-data="noteApp()" x-init="loadNotes()" class="space-y-6">
            <div class="bg-white rounded-lg shadow overflow-hidden">
                 <nav class="flex justify-between px-5 py-3 border rounded-lg bg-gray-50 border-gray-200" aria-label="Breadcrumb" @click="showForm = !showForm">
                     <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -39,8 +28,8 @@
                 <div x-show="showForm" x-transition class="p-4">
                     <div class="grid md:grid-cols-[5fr_1fr] gap-2 mb-1">
                         <div class="mb-2">
-                            <label class="mb-1 text-sm font-medium text-gray-700">Judul</label>
-                            <input type="text" x-model="form.title" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
+                            <label class="mb-1 text-sm font-medium text-gray-700">Judul (<span x-text="form.title.length"></span>/255 karakter)</label>
+                            <input x-ref="title" type="text" x-model="form.title" autocomplete="off" maxlength="255" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
                         </div>
                         <div class="mb-1">
                             <label class="mb-1 text-sm font-medium text-gray-700">Batas Waktu</label>
@@ -48,8 +37,8 @@
                         </div>
                     </div>
                     <div class="mb-2">
-                        <label class="mb-1 text-sm font-medium text-gray-700">Catatan</label>
-                        <textarea rows="3" x-model="form.description" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm"></textarea>
+                        <label class="mb-1 text-sm font-medium text-gray-700">Deskripsi (<span x-text="form.description.length"></span>/1000 karakter)</label>
+                        <textarea rows="3" x-model="form.description" maxlength="1000" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm"></textarea>
                     </div>
                     <div>
                         <label class="mb-1 text-sm font-medium text-gray-700">Lampiran</label>
@@ -168,7 +157,7 @@
                                             <span class="px-2.5 py-1 rounded-full text-xs font-semibold" :class="status(note).class" x-text="status(note).text"></span>
                                         </div>
                                     </td>
-                                    <td class="px-2 py-2 font-medium text-gray-800">
+                                    <td class="px-2 py-2 font-medium text-gray-800 text-center">
                                         <template x-if="note.attachment_url">
                                             <a :href="note.attachment_url" target="_blank">
                                                 <img :src="note.attachment_url" class="w-14 h-14 object-cover rounded border mx-auto">
@@ -297,12 +286,17 @@
             this.form.id = note.id;
             this.form.title = note.title;
             this.form.description = note.description;
-            this.form.due_date = note.due_date
-                ? note.due_date.substring(0, 16)
-                : '';
-
+            this.form.due_date = note.due_date ? note.due_date.substring(0, 16) : '';
             this.preview = note.attachment_url;
             this.file = null;
+            this.$nextTick(() => {
+                this.$refs.scrollUp.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+
+                this.$refs.title.focus();
+            });
         },
 
         resetForm() {
@@ -435,6 +429,16 @@
         async submit() {
             if (!this.form.title.trim()) {
                 alert('Judul wajib diisi.');
+                return;
+            }
+
+            if (this.form.title.length > 255) {
+                alert('Judul maksimal 255 karakter.');
+                return;
+            }
+           
+            if (this.form.title.length > 1000) {
+                alert('Deskripsi maksimal 1000 karakter.');
                 return;
             }
 

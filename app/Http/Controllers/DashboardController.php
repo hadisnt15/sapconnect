@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Note;
 use App\Models\OrdrLocal;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Artisan;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -70,7 +71,16 @@ class DashboardController extends Controller
                             $query->whereIn('RdrItemProfitCenter', $userDiv);
                         })->count();
         }
-        // dd($dailyOrder, $monthlyOrder);
+        
+        $agenda = [
+            'total' => Note::where('user_id', $user->id)->count(),
+            'done' => Note::where('user_id', $user->id)->where('is_done', true)->count(),
+            'pending' => Note::where('user_id', $user->id)->where('is_done', false)->count(),
+            'overdue' => Note::where('user_id', $user->id)->where('is_done', false)->whereNotNull('due_date')->where('due_date', '<', now())->count(),
+            'today' => Note::where('user_id', $user->id)->whereDate('due_date', today())->where('is_done', false)->count(),
+            'tomorrow' => Note::where('user_id', $user->id)->whereDate('due_date', today()->addDay())->where('is_done', false)->count(),
+            'latest' => Note::where('user_id', $user->id)->latest()->limit(3)->get(),
+        ];
         
         return view('dashboard.dashboard', [
             'title' => 'SCKKJ - Beranda',
@@ -81,7 +91,8 @@ class DashboardController extends Controller
             'monthlyOrder' => $monthlyOrder,
             'monthlyOrderSynced' => $monthlyOrderSynced,
             'monthlyOrderNotSyncedUncheck' => $monthlyOrderNotSyncedUncheck,
-            'user' => $user
+            'user' => $user,
+            'agenda' => $agenda
         ]);
     }
 

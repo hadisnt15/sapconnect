@@ -60,6 +60,7 @@
                         <!-- Keywords -->
                         <div class="mt-6 flex flex-wrap gap-2 text-xs font-semibold text-gray-500">
                             <span class="px-3 py-1 border border-gray-300 rounded-full">Integrated</span>
+                            <span class="px-3 py-1 border border-gray-300 rounded-full">Automation</span>
                             <span class="px-3 py-1 border border-gray-300 rounded-full">Reliable</span>
                             <span class="px-3 py-1 border border-gray-300 rounded-full">Efficient</span>
                         </div>
@@ -79,7 +80,7 @@
                         class="rounded-xl overflow-hidden shadow-md border border-gray-300">
             
                         <!-- ITEM 0: Agenda -->
-                        {{-- <h2 id="accordion-heading-0">
+                        <h2 id="accordion-heading-0">
                             <button type="button"
                                 class="accordion-btn flex items-center justify-between w-full p-5 font-semibold text-red-800 bg-gray-50 border-b border-gray-300 hover:bg-red-800 hover:text-white transition-colors duration-200"
                                 data-target="#accordion-body-0" aria-expanded="false">
@@ -92,10 +93,39 @@
                             </button>
                         </h2>
                         <div id="accordion-body-0" class="hidden bg-white">
-                            <div class="p-5 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
-                                
+                            <div class="p-2 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
+                                <div class="bg-white rounded-lg shadow p-2">
+                                    <ul class="space-y-1 text-sm">
+                                        <li><i class="ri-git-commit-line"></i>Total Agenda : <b>{{ $agenda['total'] }}</b></li>
+                                        <li><i class="ri-git-commit-line"></i>Selesai : <b>{{ $agenda['done'] }}</b></li>
+                                        <li><i class="ri-git-commit-line"></i>Belum Selesai : <b>{{ $agenda['pending'] }}</b></li>
+                                        <li><i class="ri-git-commit-line"></i>Terlambat : <b class="text-red-600">{{ $agenda['overdue'] }}</b></li>
+                                    </ul>
+                                    <div class="border-t my-4"></div>
+                                    <ul class="space-y-1 text-sm">
+                                        <li><i class="ri-git-commit-fill"></i>Deadline Hari Ini : <b>{{ $agenda['today'] }}</b></li>
+                                        <li><i class="ri-git-commit-fill"></i>Deadline Besok : <b>{{ $agenda['tomorrow'] }}</b></li>
+                                    </ul>
+                                    <div class="border-t my-4"></div>
+                                    <h3 class="font-semibold">Agenda Terbaru</h3>
+                                    @forelse($agenda['latest'] as $agenda)
+                                        <div class="text-sm flex">
+                                            {{ $loop->iteration }}. 
+                                            <div class="ms-3">{{ $agenda->title }}</div>
+                                        </div>
+                                    @empty
+                                        <div class="text-sm text-gray-500">
+                                            Belum ada agenda.
+                                        </div>
+                                    @endforelse
+                                    <p class="mt-4">
+                                        <a href="{{ route('note') }}">
+                                            <i class="ri-calendar-schedule-fill"></i> Buka Agenda
+                                        </a>
+                                    </p>
+                                </div>
                             </div>
-                        </div> --}}
+                        </div>
                         <!-- ITEM 1: Pemberitahuan -->
                         <h2 id="accordion-heading-1">
                             <button type="button"
@@ -107,61 +137,63 @@
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 5 5 1 1 5" />
                                 </svg>
-                            </button>
+                            </button> 
                         </h2>
                         <div id="accordion-body-1" class="hidden bg-white">
-                            <div class="p-5 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
-                                @if( $user->role === 'salesman')
-                                    <h2 class="mb-2 text-md font-semibold">Aktivitas Harian</h2>
-                                    <ul class="ms-2 space-y-1 list-inside">
-                                        <li>
-                                            <i class="ri-checkbox-multiple-blank-fill"></i> Hari ini Anda telah membuat sebanyak {{ $dailyOrder }} pesanan.
-                                        </li>
-                                        <li>
-                                            <i class="ri-checkbox-multiple-blank-fill"></i> Sebanyak {{ $dailyOrderSynced }} pesanan sudah berhasil dikirim ke SAP hari ini.
-                                        </li>
-                                        <li>
-                                            <i class="ri-checkbox-multiple-blank-fill"></i> Terdapat {{ $dailyOrderNotSyncedUncheck }} pesanan hari ini yang belum diceklis, mohon diperiksa terlebih dahulu.
-                                        </li>
-                                    </ul>
-                                    <h2 class="mt-4 mb-2 text-md font-semibold">Aktivitas Bulanan</h2>
-                                    <ul class="ms-2 space-y-1 list-none list-inside">
-                                        <li>
-                                            <i class="ri-checkbox-multiple-blank-fill"></i> Bulan ini Anda telah membuat sebanyak {{ $monthlyOrder }} pesanan.
-                                        </li>
-                                        <li>
-                                            <i class="ri-checkbox-multiple-blank-fill"></i> Sebanyak {{ $monthlyOrderSynced }} pesanan sudah berhasil dikirim ke SAP bulan ini.
-                                        </li>
-                                        <li>
-                                            <i class="ri-checkbox-multiple-blank-fill"></i> Terdapat {{ $monthlyOrderNotSyncedUncheck }} pesanan bulan ini yang belum diceklis, mohon diperiksa terlebih dahulu.
-                                        </li>
-                                    </ul>
-                                @else
-                                    <h2 class="mb-2 text-md font-semibold">Aktivitas Harian</h2>
-                                    <ul class="ms-2 space-y-1 list-inside">
-                                        <li>
-                                            <i class="ri-checkbox-multiple-blank-fill"></i> Hari ini terdapat total {{ $dailyOrder }} pesanan dari cabang dan divisi Anda.
-                                        </li>
-                                        <li>
-                                            <i class="ri-checkbox-multiple-blank-fill"></i> Sebanyak {{ $dailyOrderSynced }} pesanan sudah berhasil dikirim ke SAP hari ini.
-                                        </li>
-                                        <li>
-                                            <i class="ri-checkbox-multiple-blank-fill"></i> Terdapat {{ $dailyOrderNotSyncedUncheck }} pesanan hari ini yang belum diceklis, masih menunggu pemeriksaan dari Sales terlebih dahulu.
-                                        </li>
-                                    </ul>
-                                    <h2 class="mt-4 mb-2 text-md font-semibold">Aktivitas Bulanan</h2>
-                                    <ul class="ms-2 space-y-1 list-none list-inside">
-                                        <li>
-                                            <i class="ri-checkbox-multiple-blank-fill"></i> Hari ini terdapat total {{ $monthlyOrder }} pesanan dari cabang dan divisi anda.
-                                        </li>
-                                        <li>
-                                            <i class="ri-checkbox-multiple-blank-fill"></i> Sebanyak {{ $monthlyOrderSynced }} pesanan sudah berhasil dikirim ke SAP bulan ini.
-                                        </li>
-                                        <li>
-                                            <i class="ri-checkbox-multiple-blank-fill"></i> Terdapat {{ $monthlyOrderNotSyncedUncheck }} pesanan bulan ini yang belum diceklis, masih menunggu pemeriksaan dari Sales terlebih dahulu.
-                                        </li>
-                                    </ul>
-                                @endif
+                            <div class="p-2 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
+                                <div class="bg-white rounded-lg shadow p-2">
+                                    @if( $user->role === 'salesman')
+                                        <h2 class="mb-2 text-md font-semibold">Aktivitas Harian</h2>
+                                        <ul class="ms-2 space-y-1 list-inside">
+                                            <li>
+                                                <i class="ri-checkbox-multiple-blank-fill"></i> Hari ini Anda telah membuat sebanyak {{ $dailyOrder }} pesanan.
+                                            </li>
+                                            <li>
+                                                <i class="ri-checkbox-multiple-blank-fill"></i> Sebanyak {{ $dailyOrderSynced }} pesanan sudah berhasil dikirim ke SAP hari ini.
+                                            </li>
+                                            <li>
+                                                <i class="ri-checkbox-multiple-blank-fill"></i> Terdapat {{ $dailyOrderNotSyncedUncheck }} pesanan hari ini yang belum diceklis, mohon diperiksa terlebih dahulu.
+                                            </li>
+                                        </ul>
+                                        <h2 class="mt-4 mb-2 text-md font-semibold">Aktivitas Bulanan</h2>
+                                        <ul class="ms-2 space-y-1 list-none list-inside">
+                                            <li>
+                                                <i class="ri-checkbox-multiple-blank-fill"></i> Bulan ini Anda telah membuat sebanyak {{ $monthlyOrder }} pesanan.
+                                            </li>
+                                            <li>
+                                                <i class="ri-checkbox-multiple-blank-fill"></i> Sebanyak {{ $monthlyOrderSynced }} pesanan sudah berhasil dikirim ke SAP bulan ini.
+                                            </li>
+                                            <li>
+                                                <i class="ri-checkbox-multiple-blank-fill"></i> Terdapat {{ $monthlyOrderNotSyncedUncheck }} pesanan bulan ini yang belum diceklis, mohon diperiksa terlebih dahulu.
+                                            </li>
+                                        </ul>
+                                    @else
+                                        <h2 class="mb-2 text-md font-semibold">Aktivitas Harian</h2>
+                                        <ul class="ms-2 space-y-1 list-inside">
+                                            <li>
+                                                <i class="ri-checkbox-multiple-blank-fill"></i> Hari ini terdapat total {{ $dailyOrder }} pesanan dari cabang dan divisi Anda.
+                                            </li>
+                                            <li>
+                                                <i class="ri-checkbox-multiple-blank-fill"></i> Sebanyak {{ $dailyOrderSynced }} pesanan sudah berhasil dikirim ke SAP hari ini.
+                                            </li>
+                                            <li>
+                                                <i class="ri-checkbox-multiple-blank-fill"></i> Terdapat {{ $dailyOrderNotSyncedUncheck }} pesanan hari ini yang belum diceklis, masih menunggu pemeriksaan dari Sales terlebih dahulu.
+                                            </li>
+                                        </ul>
+                                        <h2 class="mt-4 mb-2 text-md font-semibold">Aktivitas Bulanan</h2>
+                                        <ul class="ms-2 space-y-1 list-none list-inside">
+                                            <li>
+                                                <i class="ri-checkbox-multiple-blank-fill"></i> Hari ini terdapat total {{ $monthlyOrder }} pesanan dari cabang dan divisi anda.
+                                            </li>
+                                            <li>
+                                                <i class="ri-checkbox-multiple-blank-fill"></i> Sebanyak {{ $monthlyOrderSynced }} pesanan sudah berhasil dikirim ke SAP bulan ini.
+                                            </li>
+                                            <li>
+                                                <i class="ri-checkbox-multiple-blank-fill"></i> Terdapat {{ $monthlyOrderNotSyncedUncheck }} pesanan bulan ini yang belum diceklis, masih menunggu pemeriksaan dari Sales terlebih dahulu.
+                                            </li>
+                                        </ul>
+                                    @endif
+                                </div>
                             </div>
                         </div>
             
@@ -179,13 +211,15 @@
                             </button>
                         </h2>
                         <div id="accordion-body-2" class="hidden bg-white">
-                            <div class="p-5 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
-                                <p class="mb-3">
-                                    SAP Business One adalah sistem yang membantu perusahaan mengelola berbagai kegiatan bisnis — seperti penjualan, pembelian, keuangan, dan persediaan — dalam satu aplikasi terpadu.
-                                </p>
-                                <p>
-                                    Dengan SAP Business One, setiap bagian perusahaan dapat bekerja lebih teratur dan efisien. Data dari berbagai departemen diolah menjadi informasi yang jelas dan mudah dipahami, sehingga memudahkan manajemen dalam mengambil keputusan yang tepat dan cepat.
-                                </p>
+                            <div class="p-2 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
+                                <div class="bg-white rounded-lg shadow p-2">
+                                    <p class="mb-3">
+                                        SAP Business One adalah sistem yang membantu perusahaan mengelola berbagai kegiatan bisnis — seperti penjualan, pembelian, keuangan, dan persediaan — dalam satu aplikasi terpadu.
+                                    </p>
+                                    <p>
+                                        Dengan SAP Business One, setiap bagian perusahaan dapat bekerja lebih teratur dan efisien. Data dari berbagai departemen diolah menjadi informasi yang jelas dan mudah dipahami, sehingga memudahkan manajemen dalam mengambil keputusan yang tepat dan cepat.
+                                    </p>
+                                </div>
                             </div>
                         </div>
             
@@ -203,13 +237,15 @@
                             </button>
                         </h2>
                         <div id="accordion-body-3" class="hidden bg-white">
-                            <div class="p-5 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
-                                <p class="mb-3">
-                                    SAP Connect PT Kapuas Kencana Jaya dikembangkan sebagai jembatan antara sistem SAP Business One dan pengguna internal perusahaan. Website ini menyajikan data dan laporan penting yang telah diproses dari sistem SAP, agar bisa diakses dengan lebih mudah, cepat, dan terjadwal.
-                                </p>
-                                <p>
-                                    Dengan demikian, setiap pengguna dapat memperoleh informasi penting tanpa harus langsung masuk ke dalam sistem SAP, membuat proses kerja menjadi lebih efisien dan praktis.
-                                </p>
+                            <div class="p-2 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
+                                <div class="bg-white rounded-lg shadow p-2">
+                                    <p class="mb-3">
+                                        SAP Connect PT Kapuas Kencana Jaya dikembangkan sebagai jembatan antara sistem SAP Business One dan pengguna internal perusahaan. Website ini menyajikan data dan laporan penting yang telah diproses dari sistem SAP, agar bisa diakses dengan lebih mudah, cepat, dan terjadwal.
+                                    </p>
+                                    <p>
+                                        Dengan demikian, setiap pengguna dapat memperoleh informasi penting tanpa harus langsung masuk ke dalam sistem SAP, membuat proses kerja menjadi lebih efisien dan praktis.
+                                    </p>
+                                </div>
                             </div>
                         </div>
             
@@ -227,13 +263,15 @@
                             </button>
                         </h2>
                         <div id="accordion-body-4" class="hidden bg-white rounded-b-xl">
-                            <div class="p-5 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
-                                <p class="mb-3">Silakan unduh dan pelajari dokumen di bawah ini untuk panduan penggunaan website SAP Connect.</p>
-                                <p>
-                                    <a href="{{ asset('storage/panduan/SAPConnect-Untuk-Sales.pdf') }}" target="_blank">
-                                        <i class="ri-folder-download-fill"></i> Panduan untuk Sales
-                                    </a>
-                                </p>
+                            <div class="p-2 border-t border-gray-300 text-gray-600 font-medium text-xs md:text-sm">
+                                <div class="bg-white rounded-lg shadow p-2">
+                                    <p class="mb-3">Silakan unduh dan pelajari dokumen di bawah ini untuk panduan penggunaan website SAP Connect.</p>
+                                    <p>
+                                        <a href="{{ asset('storage/panduan/SAPConnect-Untuk-Sales.pdf') }}" target="_blank">
+                                            <i class="ri-folder-download-fill"></i> Panduan untuk Sales
+                                        </a>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>

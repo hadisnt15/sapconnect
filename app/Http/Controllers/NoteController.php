@@ -82,7 +82,7 @@ class NoteController extends Controller
     {
         $validated = $request->validate([
             'title' => ['required', 'max:255'],
-            'description' => ['nullable'],
+            'description' => ['nullable', 'max:1000'],
             'due_date' => ['nullable', 'date'],
             'attachment' => ['nullable', 'image', 'max:512', 'mimes:jpg,jpeg,png,webp'], // 5 MB
         ],
