@@ -16,14 +16,22 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $roles): Response
     {
+        $user = Auth::user();
         
+        
+        $rolesArray = array_map(
+            fn ($r) => strtolower(trim($r)),
+            explode('|', $roles)
+        );
+
         dd([
-            'auth_check' => Auth::check(),
-            'user' => Auth::user(),
-            'roles' => $roles,
+            'user_role_raw' => $user->role,
+            'user_role_lower' => strtolower($user->role ?? ''),
+            'allowed_roles' => $rolesArray,
+            'in_array' => in_array(strtolower($user->role ?? ''), $rolesArray, true),
         ]);
 
-        $user = Auth::user();
+        
 
         // Kalau user belum login, langsung tolak
         if (!$user) {
