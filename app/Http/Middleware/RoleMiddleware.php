@@ -16,6 +16,13 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $roles): Response
     {
+        
+        dd([
+            'auth_check' => Auth::check(),
+            'user' => Auth::user(),
+            'roles' => $roles,
+        ]);
+
         $user = Auth::user();
 
         // Kalau user belum login, langsung tolak
