@@ -39,6 +39,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
+Route::get('/tes500', function () {
+    dd('OK');
+})->withoutMiddleware();
+
 Route::get('/pengguna/daftar', [RegisterController::class, 'index'])->name('user.register')->middleware('auth'); //ok
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register')->middleware('auth'); //ok
 Route::get('/masuk', [LoginController::class, 'index'])->name('login')->middleware('guest'); //ok
