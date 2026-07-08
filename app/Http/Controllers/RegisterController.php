@@ -14,7 +14,7 @@ class RegisterController extends Controller
     public function index()
     {
         return view('user.user_registration', [
-            'title' => 'SCKKJ - Daftarkan Pengguna',
+            'title' => 'SAPConnect KKJ - Daftarkan Pengguna',
             'titleHeader' => 'Daftarkan Pengguna',
         ]);
     }

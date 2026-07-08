@@ -140,7 +140,7 @@ class OrdrController extends Controller
         $lastSync = SyncLog::where('name', 'ordr')->latest('last_sync')->first();
 
         return view('ordr.ordr', [
-            'title'       => 'SCKKJ - Daftar Pesanan',
+            'title'       => 'SAPConnect KKJ - Daftar Pesanan',
             'titleHeader' => 'Daftar Pesanan',
             'orders'      => $orders,
             'user'        => $user,
@@ -207,7 +207,7 @@ class OrdrController extends Controller
             // dd($progress);
             if (empty($progress)) {
                 return view('ordr.ordr_progress', [
-                    'title'       => 'SCKKJ - Proses Pesanan',
+                    'title'       => 'SAPConnect KKJ - Proses Pesanan',
                     'titleHeader' => 'Proses Pesanan',
                     'id'          => $id,
                     'progress'    => [],
@@ -219,7 +219,7 @@ class OrdrController extends Controller
             $columns = array_keys((array) $progress[0]);
 
             return view('ordr.ordr_progress', [
-                'title'       => 'SCKKJ - Proses Pesanan',
+                'title'       => 'SAPConnect KKJ - Proses Pesanan',
                 'titleHeader' => 'Proses Pesanan',
                 'id'          => $id,
                 'progress'    => $progress,
@@ -279,7 +279,7 @@ class OrdrController extends Controller
                 ->pluck('branch.branch_name')
                 ->toArray();
         return view('ordr.ordr_create', [
-            'title' => 'SCKKJ - Buat Pesanan',
+            'title' => 'SAPConnect KKJ - Buat Pesanan',
             'titleHeader' => 'Buat Pesanan',
             'cust' => $cust,
             'dataOrder' => $dataOrder,
@@ -428,7 +428,7 @@ class OrdrController extends Controller
                 ];
             });
         return view('ordr.ordr_history', [
-            'title'       => 'SCKKJ - Riwayat Pesanan',
+            'title'       => 'SAPConnect KKJ - Riwayat Pesanan',
             'titleHeader' => 'Riwayat Pesanan',
             'logs'          => $logs
         ]);
@@ -599,7 +599,7 @@ class OrdrController extends Controller
                 ->toArray();
 
         return view('ordr.ordr_edit', [
-            'title' => 'SCKKJ - Perbarui Pesanan',
+            'title' => 'SAPConnect KKJ - Perbarui Pesanan',
             'titleHeader' => 'Perbarui Pesanan',
             'head' => $head,
             'rows' => $rows,
@@ -892,7 +892,7 @@ class OrdrController extends Controller
         ])->get();
 
         return view('ordr.ordr_delete', [
-            'title' => 'SCKKJ - Hapus Pesanan',
+            'title' => 'SAPConnect KKJ - Hapus Pesanan',
             'titleHeader' => 'Hapus Pesanan',
             'head' => $head,
             'rows' => $rows,

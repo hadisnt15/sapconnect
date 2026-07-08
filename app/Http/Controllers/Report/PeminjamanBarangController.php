@@ -28,7 +28,7 @@ class PeminjamanBarangController extends Controller
 
         if ($data->isEmpty()) {
             return view('reports.peminjaman_barang', [
-                'title' => 'SCKKJ - Laporan ' . $report->name,
+                'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
                 'titleHeader' => $report->name,
                 'data' => collect([]),
                 'date' => $date,
@@ -38,7 +38,7 @@ class PeminjamanBarangController extends Controller
         }
 
         return view('reports.peminjaman_barang', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data' => $data,
             'date' => $date2,

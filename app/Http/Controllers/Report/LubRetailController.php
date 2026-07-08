@@ -58,7 +58,7 @@ class LubRetailController extends Controller
         // Jika tidak ada data, tampilkan notifikasi
         if ($data->isEmpty()) {
             return view('reports.penjualan_lub_retail', [
-                'title' => 'SCKKJ - Laporan ' . $report->name,
+                'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
                 'titleHeader' => $report->name,
                 'data' => collect([]),
                 'data2' => collect([]),
@@ -71,7 +71,7 @@ class LubRetailController extends Controller
         }
 
         return view('reports.penjualan_lub_retail', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data' => $data,
             'data2' => $data2,

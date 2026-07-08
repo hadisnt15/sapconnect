@@ -149,7 +149,7 @@ class BulananAverageController extends Controller
         // 🔹 Jika tidak ada data
         if ($customers->isEmpty()) {
             return view('reports.bulanan_dan_average', [
-                'title' => 'SCKKJ - Laporan ' . $report->name,
+                'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
                 'titleHeader' => $report->name,
                 'customers' => collect([]),
                 'bulanHeaders' => $bulanHeaders,
@@ -164,7 +164,7 @@ class BulananAverageController extends Controller
         }
 
         return view('reports.bulanan_dan_average', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'customers' => $pagedCustomers,
             'bulanHeaders' => $bulanHeaders,

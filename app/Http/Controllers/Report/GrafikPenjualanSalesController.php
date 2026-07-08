@@ -80,7 +80,7 @@ class GrafikPenjualanSalesController extends Controller
         }
 
         return view('reports.grafik_harian_sales', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'tanggalList' => $tanggalList,
             'chartData' => $chartData,

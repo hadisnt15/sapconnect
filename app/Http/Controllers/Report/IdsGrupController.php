@@ -130,7 +130,7 @@ class IdsGrupController extends Controller
             ->first();
 
         return view('reports.ids_grup', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data' => $data,
             'grafik' => $grafik,

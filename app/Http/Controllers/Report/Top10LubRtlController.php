@@ -36,7 +36,7 @@ class Top10LubRtlController extends Controller
         // Jika tidak ada data, tampilkan notifikasi
         if ($data->isEmpty()) {
             return view('reports.penjualan_lub_retail', [
-                'title' => 'SCKKJ - Laporan ' . $report->name,
+                'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
                 'titleHeader' => $report->name,
                 'data2' => collect([]),
                 'tahun' => $tahun,
@@ -48,7 +48,7 @@ class Top10LubRtlController extends Controller
         }
 
         return view('reports.penjualan_lub_retail', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data2' => $data,
             'tahun' => $tahun,

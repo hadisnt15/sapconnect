@@ -104,7 +104,7 @@ class Piutang45HariController extends Controller
         $lastSync = SyncLog::where('name', 'report.piutang-45-hari')->orderByDesc('last_sync')->first();
 
         return view('reports.piutang_45_hari',[
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'grouped' => $grouped,
             'groupedSum' => $groupedSum,

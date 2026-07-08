@@ -31,7 +31,7 @@ class ReportController extends Controller
 
         
         return view('reports.report', [
-            'title' => 'SCKKJ - Daftar Laporan',
+            'title' => 'SAPConnect KKJ - Daftar Laporan',
             'titleHeader' => 'Daftar Laporan',
             'report' => $report,
         ]);
@@ -47,7 +47,7 @@ class ReportController extends Controller
         $user = User::with('reports')->findOrFail($userId);
         $reports = Report::all();
         return view('user.user_report', [
-            'title' => 'SCKKJ - Laporan Pengguna',
+            'title' => 'SAPConnect KKJ - Laporan Pengguna',
             'titleHeader' => 'Laporan Pengguna',
             'user' => $user,
             'reports' => $reports,
@@ -69,7 +69,7 @@ class ReportController extends Controller
     public function create()
     {
         return view('reports.report_create', [
-            'title' => 'SCKKJ - Buat Laporan',
+            'title' => 'SAPConnect KKJ - Buat Laporan',
             'titleHeader' => 'Buat Laporan',
         ]);
     }
@@ -112,7 +112,7 @@ class ReportController extends Controller
         $report = Report::findOrFail($id);
 
         return view('reports.report_edit', [
-            'title' => 'SCKKJ - Perbarui Laporan',
+            'title' => 'SAPConnect KKJ - Perbarui Laporan',
             'titleHeader' => 'Perbarui Laporan',
             'report' => $report,
         ]);

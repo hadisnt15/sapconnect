@@ -141,7 +141,7 @@ class ProgRtlController extends Controller
         $lastSync = SyncLog::where('name', 'report.program-retail')->orderByDesc('last_sync')->first();
 
         return view('reports.prog_rtl', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'grouped' => $paginatedGrouped,
             'search' => $search,

@@ -12,7 +12,7 @@ class NoteController extends Controller
     public function index()
     {
         return view('note.index', [
-            'title' => 'SCKKJ - Agenda',
+            'title' => 'SAPConnect KKJ - Agenda',
             'titleHeader' => 'Agenda',
         ]);
     }

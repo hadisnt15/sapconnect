@@ -15,7 +15,7 @@ class LoginController extends Controller
     public function index()
     {
         return view('auth.login', [
-            'title' => 'SCKKJ - Masuk',
+            'title' => 'SAPConnect KKJ - Masuk',
             'titleHeader' => 'Masuk',
         ]);
     }

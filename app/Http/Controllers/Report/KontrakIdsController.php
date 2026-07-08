@@ -49,7 +49,7 @@ class KontrakIdsController extends Controller
         // dd($data);
 
         return view('reports.kontrak_ids', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data' => $data,
             'kontrak' => $kontrak,

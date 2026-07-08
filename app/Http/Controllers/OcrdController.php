@@ -23,7 +23,7 @@ class OcrdController extends Controller
         $custs = OcrdLocal::Filter(request(['search']))->whereIn('div_name',$userDiv)->orderBy('Group')->orderBy('CardName')->paginate(100)->withQueryString();
         $lastSync = SyncLog::where('name', 'ocrd')->orderByDesc('last_sync')->first();
         return view('ocrd.ocrd', [
-            'title' => 'SCKKJ - Daftar Pelanggan',
+            'title' => 'SAPConnect KKJ - Daftar Pelanggan',
             'titleHeader' => 'Daftar Pelanggan',
             'custs' => $custs,
             'lastSync' => $lastSync,
@@ -48,7 +48,7 @@ class OcrdController extends Controller
     public function create()
     {
         return view('ocrd.ocrd_registration', [
-            'title' => 'SCKKJ - Buat Pelanggan',
+            'title' => 'SAPConnect KKJ - Buat Pelanggan',
             'titleHeader' => 'Buat Pelanggan',
         ]);
     }
@@ -126,7 +126,7 @@ class OcrdController extends Controller
         }
         // dd($cust);
         return view('ocrd.ocrd_edit', [
-            'title' => 'SCKKJ - Perbarui Pelanggan',
+            'title' => 'SAPConnect KKJ - Perbarui Pelanggan',
             'titleHeader' => 'Perbarui Pelanggan',
             'cust' => $cust
         ]);

@@ -150,7 +150,7 @@ class BulananAverageLiterController extends Controller
         // 🔹 Jika tidak ada data
         if ($customers->isEmpty()) {
             return view('reports.bulanan_dan_average_liter', [
-                'title' => 'SCKKJ - Laporan ' . $report->name,
+                'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
                 'titleHeader' => $report->name,
                 'customers' => collect([]),
                 'bulanHeaders' => $bulanHeaders,
@@ -165,7 +165,7 @@ class BulananAverageLiterController extends Controller
         }
 
         return view('reports.bulanan_dan_average_liter', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'customers' => $pagedCustomers,
             'bulanHeaders' => $bulanHeaders,

@@ -73,7 +73,7 @@ class PenjualanSprSalesController extends Controller
         $lastSync = SyncLog::where('name', 'report.penjualan_spr_sales')->orderByDesc('last_sync')->first();
         
         return view('reports.penjualan_spr_sales', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'grouped' => $grouped,
             'namaPeriode' => $namaPeriode,

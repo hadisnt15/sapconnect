@@ -13,7 +13,7 @@ class BranchController extends Controller
         $user = User::with('branches')->findOrFail($userId);
         $branches = Branch::all();
         return view('user.user_branch', [
-            'title' => 'SCKKJ - Cabang Pengguna',
+            'title' => 'SAPConnect KKJ - Cabang Pengguna',
             'titleHeader' => 'Cabang Pengguna',
             'user' => $user,
             'branches' => $branches,

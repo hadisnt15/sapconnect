@@ -83,7 +83,7 @@ class DashboardController extends Controller
         ];
         
         return view('dashboard.dashboard', [
-            'title' => 'SCKKJ - Beranda',
+            'title' => 'SAPConnect KKJ - Beranda',
             'titleHeader' => 'Beranda',
             'dailyOrder' => $dailyOrder,
             'dailyOrderSynced' => $dailyOrderSynced,

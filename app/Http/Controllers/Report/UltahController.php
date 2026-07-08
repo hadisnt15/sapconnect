@@ -54,7 +54,7 @@ class UltahController extends Controller
         // dd($data);
 
         return view('reports.kalender_ulang_tahun', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data' => $data,
             'ultah' => $ultah,

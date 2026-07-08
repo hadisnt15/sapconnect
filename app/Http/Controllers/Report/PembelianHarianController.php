@@ -54,7 +54,7 @@ class PembelianHarianController extends Controller
 
         if ($data->isEmpty()) {
             return view('reports.pembelian_harian', [
-                'title' => 'SCKKJ - Laporan ' . $report->name,
+                'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
                 'titleHeader' => $report->name,
                 'data' => collect([]),
                 'date' => $date,
@@ -64,7 +64,7 @@ class PembelianHarianController extends Controller
         }
 
         return view('reports.pembelian_harian', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data' => $data,
             'date' => $date2,

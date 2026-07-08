@@ -21,7 +21,7 @@ class DivisionController extends Controller
         $user = User::with('divisions')->findOrFail($userId);
         $divisions = Division::all();
         return view('user.user_division', [
-            'title' => 'SCKKJ - Divisi Pengguna',
+            'title' => 'SAPConnect KKJ - Divisi Pengguna',
             'titleHeader' => 'Divisi Pengguna',
             'user' => $user,
             'divisions' => $divisions,

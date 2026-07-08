@@ -23,7 +23,7 @@ class KetahananStokController extends Controller
 
         if ($data->isEmpty()) {
             return view('reports.ketahanan_stok', [
-                'title' => 'SCKKJ - Laporan ' . $report->name,
+                'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
                 'titleHeader' => $report->name,
                 'data' => collect([]),
                 // 'date' => $date,
@@ -33,7 +33,7 @@ class KetahananStokController extends Controller
         }
 
         return view('reports.ketahanan_stok', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data' => $data,
             'lastSync' => $lastSync,

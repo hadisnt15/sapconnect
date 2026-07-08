@@ -52,7 +52,7 @@ class StokPtmController extends Controller
             ->first();
 
         return view('reports.stok_ptm', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data' => $data,
             'lastSync' => $lastSync,

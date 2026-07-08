@@ -16,7 +16,7 @@ class ProfileController extends Controller
     {
         $profile = Auth::user();
         return view('profile.profile', [
-            'title' => 'SCKKJ - Profil Saya',
+            'title' => 'SAPConnect KKJ - Profil Saya',
             'titleHeader' => 'Profil Saya',
             'profile' => $profile
         ]);
@@ -53,7 +53,7 @@ class ProfileController extends Controller
     {
         $profile = Auth::user();
         return view('profile.profile_edit', [
-            'title' => 'SCKKJ - Perbarui Profil',
+            'title' => 'SAPConnect KKJ - Perbarui Profil',
             'titleHeader' => 'Perbarui Profil',
             'profile' => $profile
         ]);

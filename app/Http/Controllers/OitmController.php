@@ -34,7 +34,7 @@ class OitmController extends Controller
         $lastSync = SyncLog::where('name', 'oitm')->orderByDesc('last_sync')->first();
 
         return view('oitm.oitm', [
-            'title' => 'SCKKJ - Daftar Barang',
+            'title' => 'SAPConnect KKJ - Daftar Barang',
             'titleHeader' => 'Daftar Barang',
             'items' => $items,
             'lastSync' => $lastSync

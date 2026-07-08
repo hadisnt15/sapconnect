@@ -25,7 +25,7 @@ class JHOutstandinController extends Controller
 
         if ($data->isEmpty()) {
             return view('reports.jh_outstanding', [
-                'title' => 'SCKKJ - Laporan ' . $report->name,
+                'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
                 'titleHeader' => $report->name,
                 'data' => collect([]),
                 'lastSync' => $lastSync,
@@ -34,7 +34,7 @@ class JHOutstandinController extends Controller
         }
 
         return view('reports.jh_outstanding', [
-            'title' => 'SCKKJ - Laporan ' . $report->name,
+            'title' => 'SAPConnect KKJ - Laporan ' . $report->name,
             'titleHeader' => $report->name,
             'data' => $data,
             'lastSync' => $lastSync,

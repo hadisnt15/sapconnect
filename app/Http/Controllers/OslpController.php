@@ -19,7 +19,7 @@ class OslpController extends Controller
         // $slps = OslpLocal::Filter(request(['search']))->orderBy('SlpName')->paginate(20)->withQueryString();
         $slps = OslpReg::Filter(request(['search']))->paginate(100)->withQueryString();
         return view('oslp.oslp', [
-            'title' => 'SCKKJ - Daftar Penjual',
+            'title' => 'SAPConnect KKJ - Daftar Penjual',
             'titleHeader' => 'Daftar Penjual',
             'slps' => $slps,
         ]);
@@ -36,7 +36,7 @@ class OslpController extends Controller
     public function create()
     {
         return view('oslp.oslp_registration', [
-            'title' => 'SCKKJ - Pendaftaran Penjual',
+            'title' => 'SAPConnect KKJ - Pendaftaran Penjual',
             'titleHeader' => 'Pendaftaran Penjual',
         ]); 
     }

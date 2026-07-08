@@ -15,7 +15,7 @@ class UserController extends Controller
     {   
         $user = User::with(['divisions','branches'])->where('role', '!=', 'developer')->Filter(request(['search']))->paginate(100)->withQueryString();
         return view('user.user', [
-            'title' => 'SCKKJ - Daftar Pengguna',
+            'title' => 'SAPConnect KKJ - Daftar Pengguna',
             'titleHeader' => 'Daftar Pengguna',
             'user' => $user
         ]);
@@ -45,7 +45,7 @@ class UserController extends Controller
         $devices = UserDevice::with('user')->get();
 
         return view('user.user_device', [
-            'title' => 'SCKKJ - Perangkat Pengguna',
+            'title' => 'SAPConnect KKJ - Perangkat Pengguna',
             'titleHeader' => 'Perangkat Pengguna',
             'devices' => $devices
         ]);
@@ -104,7 +104,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         // dd($user);
         return view('user.user_edit', [
-            'title' => 'SCKKJ - Perbarui Pengguna',
+            'title' => 'SAPConnect KKJ - Perbarui Pengguna',
             'titleHeader' => 'Perbarui Pengguna',
             'user' => $user
         ]);

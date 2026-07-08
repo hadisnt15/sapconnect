@@ -44,7 +44,7 @@ class OdlnReController extends Controller
         $lastSync = SyncLog::where('name', 'odln')->latest('last_sync')->first();;
 
         return view('odln.odln_re', [
-            'title'       => 'SCKKJ - Daftar Pengiriman Ulang Surat Jalan',
+            'title'       => 'SAPConnect KKJ - Daftar Pengiriman Ulang Surat Jalan',
             'titleHeader' => 'Daftar Pengiriman Ulang Surat Jalan',
             'reDeliveries'=> $reDeliveries,
             'user'        => $user,

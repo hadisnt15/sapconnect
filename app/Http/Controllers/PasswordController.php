@@ -45,7 +45,7 @@ class PasswordController extends Controller
     public function edit()
     {
         return view('profile.profile_password', [
-            'title' => 'SCKKJ - Perbarui Kata Sandi',
+            'title' => 'SAPConnect KKJ - Perbarui Kata Sandi',
             'titleHeader' => 'Perbarui Kata Sandi',
             // 'orders' => $orders,
         ]);
