@@ -106,7 +106,7 @@ Route::get('/pengirimanUlang', [OdlnReController::class, 'index'])->name('re.del
 Route::patch('/pengirimanUlang/perbaruiPengecekan', [OdlnReController::class, 'updateChecked'])->name('reDelivery.updateChecked')->middleware('role:developer|warehouse'); //ok
 Route::get('/pengirimanUlang/kirim', [OdlnReController::class, 'push'])->name('reDelivery.push')->middleware('role:developer|warehouse'); //ok
 
-Route::get('/pesanan', [OrdrController::class, 'index'])->name('order')->middleware('role:developer|supervisor|manager|salesman'); //ok
+Route::get('/pesanan', [OrdrController::class, 'index'])->name('order')->middleware('can:dashboard.refresh'); //ok
 // Route::get('/pesanan', function () {
 //     dd('route');
 // });
