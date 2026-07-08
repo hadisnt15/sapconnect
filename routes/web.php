@@ -109,7 +109,7 @@ Route::get('/pengirimanUlang/kirim', [OdlnReController::class, 'push'])->name('r
 // Route::get('/pesanan', [OrdrController::class, 'index'])->name('order')->middleware('role:developer|supervisor|manager|salesman'); //ok
 Route::get('/pesanan', function () {
     dd('route');
-})->middleware('role:developer');
+});
 Route::get('/pesanan/buat/{CardCode}', [OrdrController::class, 'create'])->name('order.create')->middleware('can:order.create'); //ok
 Route::get('/pesanan/buat/baru/{RegCardCode}', [OrdrController::class, 'create'])->name('order.create.new')->middleware('role:developer|salesman'); //ok
 Route::post('/pesanan/simpan', [OrdrController::class, 'store'])->name('order.store')->middleware('role:developer|salesman'); //ok
