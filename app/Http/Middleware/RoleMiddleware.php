@@ -53,7 +53,7 @@ class RoleMiddleware
             abort(403, 'Unauthorized');
         }
 
-        dd('pass');
+        // dd('passed');
 
         return $next($request);
     }
