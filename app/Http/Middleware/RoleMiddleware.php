@@ -41,20 +41,17 @@ class RoleMiddleware
 
 
         $user = Auth::user();
-
+        if (!$user) {
+            abort(403, 'Unauthorized');
+        }
         $roles = array_map(
             fn ($r) => strtolower(trim($r)),
             explode('|', $roles)
         );
-
         $userRole = strtolower($user->role ?? '');
-
         if (!in_array($userRole, $roles, true)) {
             abort(403, 'Unauthorized');
         }
-
-        // dd('passed');
-
         return $next($request);
     }
 }
