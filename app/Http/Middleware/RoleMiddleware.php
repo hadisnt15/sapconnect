@@ -19,17 +19,17 @@ class RoleMiddleware
         $user = Auth::user();
         
         
-        $rolesArray = array_map(
-            fn ($r) => strtolower(trim($r)),
-            explode('|', $roles)
-        );
+        // $rolesArray = array_map(
+        //     fn ($r) => strtolower(trim($r)),
+        //     explode('|', $roles)
+        // );
 
-        dd([
-            'user_role_raw' => $user->role,
-            'user_role_lower' => strtolower($user->role ?? ''),
-            'allowed_roles' => $rolesArray,
-            'in_array' => in_array(strtolower($user->role ?? ''), $rolesArray, true),
-        ]);
+        // dd([
+        //     'user_role_raw' => $user->role,
+        //     'user_role_lower' => strtolower($user->role ?? ''),
+        //     'allowed_roles' => $rolesArray,
+        //     'in_array' => in_array(strtolower($user->role ?? ''), $rolesArray, true),
+        // ]);
 
         
 
