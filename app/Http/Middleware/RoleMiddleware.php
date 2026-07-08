@@ -16,41 +16,44 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $roles): Response
     {
-        $user = Auth::user();
-        
-        
-        // $rolesArray = array_map(
-        //     fn ($r) => strtolower(trim($r)),
-        //     explode('|', $roles)
-        // );
+        // $user = Auth::user();
 
-        // dd([
-        //     'user_role_raw' => $user->role,
-        //     'user_role_lower' => strtolower($user->role ?? ''),
-        //     'allowed_roles' => $rolesArray,
-        //     'in_array' => in_array(strtolower($user->role ?? ''), $rolesArray, true),
+        // // Kalau user belum login, langsung tolak
+        // if (!$user) {
+        //     abort(403, 'Unauthorized');
+        // }
+        
+        // // explode + trim + lowercase
+        // $roles = array_map(fn($r) => strtolower(trim($r)), explode('|', $roles));
+        // $userRole = strtolower($user->role ?? '');
+
+        // // debug cek isi
+        // \Log::info('Role middleware', [
+        //     'route_roles' => $roles,
+        //     'user_role'   => $userRole,
         // ]);
 
-        
+        // if (!$user || !in_array($userRole, $roles, true)) {
+        //     abort(403, 'Unauthorized');
+        // }
 
-        // Kalau user belum login, langsung tolak
-        if (!$user) {
-            abort(403, 'Unauthorized');
-        }
-        
-        // explode + trim + lowercase
-        $roles = array_map(fn($r) => strtolower(trim($r)), explode('|', $roles));
+        // return $next($request);
+
+
+        $user = Auth::user();
+
+        $roles = array_map(
+            fn ($r) => strtolower(trim($r)),
+            explode('|', $roles)
+        );
+
         $userRole = strtolower($user->role ?? '');
 
-        // debug cek isi
-        \Log::info('Role middleware', [
-            'route_roles' => $roles,
-            'user_role'   => $userRole,
-        ]);
-
-        if (!$user || !in_array($userRole, $roles, true)) {
+        if (!in_array($userRole, $roles, true)) {
             abort(403, 'Unauthorized');
         }
+
+        dd('pass');
 
         return $next($request);
     }
