@@ -20,7 +20,7 @@
                         <x-nav-link href="{{ route('report') }}" class="{{ Route::is('report', 'report.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} px-3 py-2 rounded-md text-sm font-medium">
                             <i class="ri-folder-6-fill"></i> Laporan
                         </x-nav-link>
-                        <div class="relative {{ Route::is('delivery', 'delivery.*', 'order', 'order.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md" x-data="{ open: false }">
+                        <div class="relative {{ Route::is('delivery', 'delivery.*', 'order', 'order.*', 'visit', 'visit.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md" x-data="{ open: false }">
                             <!-- Button Dropdown -->
                             <button @click="open = !open" @click.away="open = false" class="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-red-700 focus:outline-none">
                                 <i class="ri-briefcase-4-fill"></i>
@@ -43,7 +43,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="relative {{ Route::is('customer', 'customer.*', 'item', 'item.*', 'salesman', 'salesman.*', 'user', 'user.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md" x-data="{ open: false }">
+                        <div class="relative {{ Route::is('customer', 'customer.*', 'item', 'item.*', 'salesman', 'salesman.*', 'user', 'user.*', 'card.*') ? 'bg-red-500 text-white' : 'text-white hover:bg-red-700' }} rounded-md" x-data="{ open: false }">
                             <!-- Button Dropdown -->
                             <button  @click="open = !open" @click.away="open = false" class="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-red-700 focus:outline-none">
                                 <i class="ri-database-2-fill"></i>
