@@ -156,8 +156,14 @@
                                         Penjual
                                     @elseif ($u->role === 'supervisor')
                                         Admin
+                                    @elseif ($u->role === 'supervisor_ids')
+                                        Admin (IDS)
+                                    @elseif ($u->role === 'salesman_ids')
+                                        Penjual (IDS)
                                     @elseif ($u->role === 'manager')
                                         Manajer
+                                    @elseif ($u->role === 'warehouse')
+                                        Gudang
                                     @elseif ($u->role === 'developer')
                                         IT
                                     @endif
