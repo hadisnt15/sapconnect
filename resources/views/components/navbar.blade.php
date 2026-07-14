@@ -36,7 +36,10 @@
                                     <i class="ri-truck-fill mr-2"></i> Surat Jalan
                                 </a>
                                 <a href="{{ route('re.delivery') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('re.delivery') ? 'bg-red-100 font-semibold' : '' }}">
-                                    <i class="ri-reply-fill"></i> Pengiriman Ulang
+                                    <i class="ri-reply-fill mr-2"></i> Pengiriman Ulang
+                                </a>
+                                <a href="{{ route('visit') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-100 {{ Route::is('re.delivery') ? 'bg-red-100 font-semibold' : '' }}">
+                                    <i class="ri-passport-fill mr-2"></i> Kunjungan
                                 </a>
                             </div>
                         </div>

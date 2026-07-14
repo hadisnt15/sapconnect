@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\OcrdCard;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -40,5 +41,15 @@ class OslpLocal extends Model
     public function oslpTeam()
     {
         return $this->hasMany(OslpTeam::class, 'SlpCode', 'SlpCodeLeader');
+    }
+
+    public function ocrd_card()
+    {
+        return $this->hasOne(OcrdCard::class, 'slp_code', 'SlpCode');
+    }
+
+    public function visits()
+    {
+        return $this->hasMany(Visit::class, 'slp_code', 'SlpCode');
     }
 }

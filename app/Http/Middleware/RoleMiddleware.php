@@ -16,33 +16,9 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $roles): Response
     {
-        // $user = Auth::user();
-
-        // // Kalau user belum login, langsung tolak
-        // if (!$user) {
-        //     abort(403, 'Unauthorized');
-        // }
-        
-        // // explode + trim + lowercase
-        // $roles = array_map(fn($r) => strtolower(trim($r)), explode('|', $roles));
-        // $userRole = strtolower($user->role ?? '');
-
-        // // debug cek isi
-        // \Log::info('Role middleware', [
-        //     'route_roles' => $roles,
-        //     'user_role'   => $userRole,
-        // ]);
-
-        // if (!$user || !in_array($userRole, $roles, true)) {
-        //     abort(403, 'Unauthorized');
-        // }
-
-        // return $next($request);
-
-
         $user = Auth::user();
         if (!$user) {
-            abort(403, 'Unauthorized');
+            return redirect()->route('login');;
         }
         $roles = array_map(
             fn ($r) => strtolower(trim($r)),

@@ -61,10 +61,7 @@
                         class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
                         <i class="ri-upload-cloud-2-fill"></i> Kirim ke SAP
                     </a>
-                    <a href="<?php echo e(route('order.export')); ?>"
-                        class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white" onclick="setTimeout(() => location.reload(), 1000)">
-                        <i class="ri-file-excel-2-fill"></i> Ekspor ke Excel
-                    </a>
+                    
                 <?php endif; ?>
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('order.refresh')): ?>
                     <a href="<?php echo e(route('order.refresh')); ?>"
@@ -82,11 +79,8 @@
             <?php endif; ?>
         </div>
 
-        <form method="GET" action="<?php echo e(route('order')); ?>" 
-            class="flex flex-col md:flex-row md:justify-start md:items-center gap-2 md:gap-3 mb-3">
-
+        <form method="GET" action="<?php echo e(route('order')); ?>" class="flex flex-col md:flex-row md:justify-start md:items-center gap-2 md:gap-3 mb-3">
             <div class="flex flex-col sm:flex-row gap-1 md:gap-1 items-start md:items-center">
-
                 <!-- 🔹 Select Filter -->
                 <select name="checked" onchange="this.form.submit()" 
                     class="bg-gray-50 border border-gray-300 text-xs rounded-md text-gray-700 focus:ring focus:ring-indigo-200 py-1 px-2 w-full sm:w-auto">
@@ -114,10 +108,6 @@
                 </button>
             </div>
         </form>
-
-
-
-
         <!-- Table -->
         <div class="md:block hidden">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">

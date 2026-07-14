@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\OcrdCard;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OcrdLocal extends Model
@@ -45,5 +46,10 @@ class OcrdLocal extends Model
     public function division()
     {
         return $this->belongsTo(Division::class, 'div_name');
+    }
+
+    public function ocrd_card()
+    {
+        return $this->hasOne(OcrdCard::class, 'card_code', 'CardCode');
     }
 }

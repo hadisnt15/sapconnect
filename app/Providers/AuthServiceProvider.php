@@ -5,8 +5,9 @@ namespace App\Providers;
 // use Illuminate\Support\ServiceProvider;
 use App\Models\OcrdLocal;
 use App\Models\OrdrLocal;
-use Illuminate\Support\Facades\Gate;
+use App\Models\Visit;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -128,6 +129,22 @@ class AuthServiceProvider extends ServiceProvider
         });
         Gate::define('delivery.refresh', function ($user) {
             return in_array($user->role, ['developer','warehouse','manager']);
+        });
+        Gate::define('visit.create', function ($user) {
+            return in_array($user->role, ['developer','salesman_ids']);
+        });
+        Gate::define('visit.edit', function ($user, Visit $visit) {
+            // Manager bebas edit
+            if ($user->role === 'developer') {
+                return true;
+            }
+            // Salesman: cek relasi oslp_reg
+            $reg = $user->oslpReg; // ambil oslp_reg dari user login
+            if ($user->role === 'salesman_ids' && $reg) {
+                return $visit->slp_code == $reg->RegSlpCode;
+            }
+
+            return false;
         });
     }
 }

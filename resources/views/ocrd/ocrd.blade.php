@@ -8,7 +8,7 @@
         </div>
     @endif
 
-    <div class="relative overflow-x-auto shadow-md rounded-lg border border-gray-300 py-2 px-2 bg-white">
+    <div class="relative overflow-visible shadow-md rounded-lg border border-gray-300 py-2 px-2 bg-white">
         <nav class="flex mb-4 px-5 py-3 border rounded-lg bg-gray-50 border-gray-200" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                 <li aria-current="page">
@@ -39,12 +39,12 @@
             <div class="md:ml-auto">
                 <div class="flex items-center">
                     @can('customer.create')
-                    <div class="me-2">
+                    {{-- <div class="me-2">
                         <a href="{{ route('customer.create') }}"
                             class="text-xs rounded-lg px-3 py-2 bg-red-800 hover:bg-red-500 font-medium text-white">
                             <i class="ri-user-add-fill"></i> Buat Pelanggan Baru
                         </a>
-                    </div>
+                    </div> --}}
                     @endcan
                     @if(in_array(auth()->user()->role, ['developer', 'manager', 'supervisor']))
                     <div>
@@ -72,118 +72,151 @@
         @endphp
 
         <div class="space-y-4">
+            @foreach ($custs as $c)
+                {{-- === GROUPING BERDASARKAN GROUP === --}}
+                @if ($currentGroup !== $c->Group)
+                    {{-- TUTUP GRID SEBELUMNYA --}}
+                    @if ($isGridOpen)
+                        </div>
+                        @php $isGridOpen = false; @endphp
+                    @endif
 
-        @foreach ($custs as $c)
+                    @php
+                        $currentGroup = $c->Group;
+                        $isGridOpen = true;
+                    @endphp
 
-            {{-- === GROUPING BERDASARKAN GROUP === --}}
-            @if ($currentGroup !== $c->Group)
-
-                {{-- TUTUP GRID SEBELUMNYA --}}
-                @if ($isGridOpen)
+                    {{-- HEADER GROUP --}}
+                    <div class="w-full bg-red-800 text-white font-bold px-3 py-2 rounded">
+                        GROUP: {{ $currentGroup }}
                     </div>
-                    @php $isGridOpen = false; @endphp
+
+                    {{-- GRID BARU --}}
+                    <div class="px-5 grid md:grid-cols-4 gap-3 mb-2">
                 @endif
 
-                @php
-                    $currentGroup = $c->Group;
-                    $isGridOpen = true;
-                @endphp
 
-                {{-- HEADER GROUP --}}
-                <div class="w-full bg-red-800 text-white font-bold px-3 py-2 rounded">
-                    GROUP: {{ $currentGroup }}
-                </div>
-
-                {{-- GRID BARU --}}
-                <div class="px-5 grid md:grid-cols-4 gap-3 mb-2">
-            @endif
-
-
-            {{-- === CUSTOMER CARD === --}}
-            <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
-                <div class="flex justify-between items-center mb-1 text-gray-500">
-                    <span
-                        class="text-xs font-bold border border-gray-400 me-2 px-2.5 py-0.5 rounded-lg bg-white text-red-800">
-                        @if ($c->Type1 === 'PELANGGAN BARU')
-                            {{ $c->Type1 }}
+                {{-- === CUSTOMER CARD === --}}
+                <article class="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 transition">
+                    <div class="flex justify-between items-center mb-1 text-gray-500">
+                        <span
+                            class="text-xs font-bold border border-gray-400 me-2 px-2.5 py-0.5 rounded-lg bg-white text-red-800">
+                            @if ($c->Type1 === 'PELANGGAN BARU')
+                                {{ $c->Type1 }}
+                            @else
+                                {{ $c->Type1 }} - {{ $c->Type2 }} - {{ $c->Group }}
+                            @endif
+                        </span>
+                        @if($c->ocrd_card)
+                            <a href="{{ route('card.create', $c->CardCode) }}"
+                            title="Kartu Pelanggan Sudah Dibuat"
+                            class="inline-flex items-center text-green-600 hover:text-green-500 transition">
+                                <i class="ri-id-card-fill text-lg"></i>
+                                <i class="ri-checkbox-circle-fill text-xs -ml-1 -mt-2"></i>
+                            </a>
                         @else
-                            {{ $c->Type1 }} - {{ $c->Type2 }} - {{ $c->Group }}
-                        @endif
-                    </span>
-                </div>
-
-                <h5 class="font-bold tracking-tight text-gray-800">
-                    {{ $c->CardCode }}
-                </h5>
-
-                <div class="mb-2 border-b border-gray-300">
-                    <p class="text-sm font-medium text-gray-600">{{ Str::limit($c->CardName, 30) }}</p>
-                </div>
-
-                <div class="text-xs font-medium text-gray-700">
-                    <p>{{ strtoupper($c->Contact) }}: {{ strtoupper($c->Phone) }}</p>
-                    <p>{{ Str::limit(strtoupper($c->Address), 30) }}</p>
-                    <p>{{ strtoupper($c->City) }}, {{ strtoupper($c->State) }}</p>
-                </div>
-
-                <div class="ml-auto w-full">
-                    <div class="flex items-center justify-end">
-                        @if ($c->Type1 === 'PELANGGAN BARU')
-                            <a href="{{ route('customer.edit', $c->CardCode) }}" class="mt-1">
-                                <span
-                                    class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
-                                    <i class="ri-edit-2-fill"></i> Edit
-                                </span>
+                            <a href="{{ route('card.create', $c->CardCode) }}"
+                            title="Buat Kartu Pelanggan"
+                            class="inline-flex items-center text-gray-500 hover:text-red-600 transition">
+                                <i class="ri-id-card-line text-lg"></i>
                             </a>
                         @endif
-                        <a href="{{ route('order.create', $c->CardCode) }}" class="mt-1">
-                            <span
-                                class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
-                                <i class="ri-bill-fill"></i> Pesanan
-                            </span>
-                        </a>
-
-                        {{-- Modal Detail --}}
-                        <button data-modal-target="ocrd-view" data-modal-toggle="ocrd-view" type="button"
-                            class="open-modal-ocrd-btn mt-1"
-                            data-cardcode="{{ $c->CardCode }}"
-                            data-cardname="{{ $c->CardName }}"
-                            data-address="{{ $c->Address }}"
-                            data-city="{{ $c->City }}"
-                            data-state="{{ $c->State }}"
-                            data-contact="{{ strtoupper($c->Contact) }}"
-                            data-phone="{{ $c->Phone }}"
-                            data-group="{{ $c->Group }}"
-                            data-type1="{{ $c->Type1 }}"
-                            data-type2="{{ $c->Type2 }}"
-                            data-createdate="{{ $c->CreateDate }}"
-                            data-lastodrdate="{{ $c->LastOdrDate }}"
-                            data-termin="{{ $c->Termin }}"
-                            data-limit="{{ number_format($c->Limit, 0, ',', '.') }}"
-                            data-actbal="{{ number_format($c->ActBal, 0, ',', '.') }}"
-                            data-dlvbal="{{ number_format($c->DlvBal, 0, ',', '.') }}"
-                            data-odrbal="{{ number_format($c->OdrBal, 0, ',', '.') }}"
-                            data-piutangjt="{{ number_format($c->piutang_jt, 0, ',', '.') }}">
-                            <span
-                                class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
-                                <i class="ri-eye-fill"></i> Detail
-                            </span>
-                        </button>
                     </div>
-                </div>
-            </article>
 
+                    <h5 class="font-bold tracking-tight text-gray-800">
+                        {{ $c->CardCode }}
+                    </h5>
 
-            {{-- === TUTUP GRID JIKA LOOP BERAKHIR === --}}
-            @if ($loop->last)
-                </div>
-            @endif
+                    <div class="mb-2 border-b border-gray-300">
+                        <p class="text-sm font-medium text-gray-600">{{ Str::limit($c->CardName, 30) }}</p>
+                    </div>
 
-        @endforeach
+                    <div class="text-xs font-medium text-gray-700">
+                        <p>{{ strtoupper($c->Contact) }}: {{ strtoupper($c->Phone) }}</p>
+                        <p>{{ Str::limit(strtoupper($c->Address), 30) }}</p>
+                        <p>{{ strtoupper($c->City) }}, {{ strtoupper($c->State) }}</p>
+                    </div>
 
+                    <div class="ml-auto w-full">
+                        <div class="flex items-center justify-end">
+                            @if ($c->Type1 === 'PELANGGAN BARU')
+                                <a href="{{ route('customer.edit', $c->CardCode) }}" class="mt-1">
+                                    <span
+                                        class="border text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg bg-red-800 hover:bg-red-500 text-white transition">
+                                        <i class="ri-edit-2-fill"></i> Edit
+                                    </span>
+                                </a>
+                            @endif
+                            <div x-data="{ open: false }" class="relative inline-block text-left">
+                                <!-- Tombol -->
+                                <button @click="open = !open" class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-white bg-red-800 rounded-lg hover:bg-red-600">
+                                    Aksi
+                                    <i class="ri-arrow-down-s-line"></i>
+                                </button>
+                                <!-- Dropdown -->
+                                <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 z-50 mt-2 w-56 bg-white border rounded-lg shadow-lg overflow-hidden">
+                                    {{-- Kartu Pelanggan --}}
+                                    <a href="{{ route('card.create', $c->CardCode) }}" class="flex items-center justify-between px-4 py-2 text-sm hover:bg-gray-100">
+                                        <div class="flex items-center gap-2">
+                                            <i class="ri-id-card-fill text-red-700"></i>
+                                            @if($c->ocrd_card)
+                                                <span>Kartu Pelanggan</span>
+                                            @else
+                                                <span>Buat Kartu Pelanggan</span>
+                                            @endif
+                                        </div>
+
+                                        @if($c->ocrd_card)
+                                            <i class="ri-checkbox-circle-fill text-green-500"></i>
+                                        @endif
+                                    </a>
+
+                                    {{-- Buat Pesanan --}}
+                                    <a href="{{ route('order.create', $c->CardCode) }}" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100">
+                                        <i class="ri-bill-fill text-blue-600"></i> Buat Pesanan
+                                    </a>
+
+                                    {{-- Detail --}}
+                                    <button
+                                        type="button"
+                                        @click="open = false"
+                                        data-modal-target="ocrd-view"
+                                        data-modal-toggle="ocrd-view"
+                                        class="open-modal-ocrd-btn flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100"
+
+                                        data-cardcode="{{ $c->CardCode }}"
+                                        data-cardname="{{ $c->CardName }}"
+                                        data-address="{{ $c->Address }}"
+                                        data-city="{{ $c->City }}"
+                                        data-state="{{ $c->State }}"
+                                        data-contact="{{ strtoupper($c->Contact) }}"
+                                        data-phone="{{ $c->Phone }}"
+                                        data-group="{{ $c->Group }}"
+                                        data-type1="{{ $c->Type1 }}"
+                                        data-type2="{{ $c->Type2 }}"
+                                        data-createdate="{{ $c->CreateDate }}"
+                                        data-lastodrdate="{{ $c->LastOdrDate }}"
+                                        data-termin="{{ $c->Termin }}"
+                                        data-limit="{{ number_format($c->Limit,0,',','.') }}"
+                                        data-actbal="{{ number_format($c->ActBal,0,',','.') }}"
+                                        data-dlvbal="{{ number_format($c->DlvBal,0,',','.') }}"
+                                        data-odrbal="{{ number_format($c->OdrBal,0,',','.') }}"
+                                        data-piutangjt="{{ number_format($c->piutang_jt,0,',','.') }}">
+
+                                        <i class="ri-eye-fill text-gray-600"></i> Lihat Detail
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                {{-- === TUTUP GRID JIKA LOOP BERAKHIR === --}}
+                @if ($loop->last)
+                    </div>
+                @endif
+            @endforeach
         </div>
         {{-- END DESKTOP --}}
-
         <div class="mt-5 text-gray-700">
             {{ $custs->links() }}
         </div>

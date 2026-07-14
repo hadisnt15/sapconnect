@@ -20,7 +20,7 @@ class OcrdController extends Controller
         $user = auth()->user();
         // ambil semua divisi milik user
         $userDiv = $user->divisions->pluck('div_name');
-        $custs = OcrdLocal::Filter(request(['search']))->whereIn('div_name',$userDiv)->orderBy('Group')->orderBy('CardName')->paginate(100)->withQueryString();
+        $custs = OcrdLocal::query()->withExists('ocrd_card')->Filter(request(['search']))->whereIn('div_name',$userDiv)->orderBy('Group')->orderBy('CardName')->paginate(100)->withQueryString();
         $lastSync = SyncLog::where('name', 'ocrd')->orderByDesc('last_sync')->first();
         return view('ocrd.ocrd', [
             'title' => 'SAPConnect KKJ - Daftar Pelanggan',
