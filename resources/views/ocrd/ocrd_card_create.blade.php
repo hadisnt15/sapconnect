@@ -65,7 +65,7 @@
             </div>
             <div x-data="{ open: false }" class=" rounded-lg shadow-md mx-4 my-8 p-2 shadow-gray-300">
                 <div @click="open = !open" class="bg-gray-200 rounded-lg border px-4 py-2 flex justify-between items-center cursor-pointer text-sm font-medium text-gray-700">
-                    Kantor Pusat
+                    Kantor Pusat {{$ocrdCard->address}}
                 </div>
                 <div x-show="open" x-collapse class="grid grid grid-cols-1 md:grid-cols-6 gap-2 p-2">
                     <div class="mb-2 md:col-span-6">

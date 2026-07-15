@@ -18,9 +18,14 @@ class OcrdCardController extends Controller
         $ocrdCard = OcrdCard::firstOrNew(
             ['card_code' => $cardCode],
             [
-                'card_name' => $ocrdMaster->CardName,
+                'card_name' => $ocrdMaster->npwp_name ?? $ocrdMaster->CardName,
+                'office_address' => $ocrdMaster->npwp_address ?? '',
             ]
         );
+
+        if (blank($ocrdCard->office_address)) {
+            $ocrdCard->office_address = $ocrdMaster->npwp_address;
+        }
 
         // map detail rows ke array buat AlpineJS
         $persons = $ocrdCard->person->sortBy('id')->values()->map(function($r){

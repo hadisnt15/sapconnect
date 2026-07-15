@@ -35,7 +35,7 @@ class SyncOcrdFromHana extends Command
         $this->info("Syncing OCRD from SAPHANA to LARAVEL...");
         // Ambil data dari HANA
         $hanaData = DB::connection('hana')->select('SELECT "CARDCODE","CARDNAME","ADDRESS","STATE","CITY","CONTACT",TO_NVARCHAR("PHONE") AS PHONE,
-            "GROUP","TYPE1","TYPE2","CREATEDATE","LASTODRDATE","TERMIN","LIMIT","ACTBAL","DLVBAL","ODRBAL","PIUTANGJT","DIVISI" FROM LVKKJ_CUSTOMER();');
+            "GROUP","TYPE1","TYPE2","CREATEDATE","LASTODRDATE","TERMIN","LIMIT","ACTBAL","DLVBAL","ODRBAL","PIUTANGJT","DIVISI","NPWPADDRESS","NPWPNAME" FROM LVKKJ_CUSTOMER();');
 
         foreach ($hanaData as $row) {
             DB::table('ocrd_local')->updateOrInsert(
@@ -60,6 +60,8 @@ class SyncOcrdFromHana extends Command
                     'OdrBal' => $row->ODRBAL,
                     'piutang_jt' => $row->PIUTANGJT,
                     'div_name' => $row->DIVISI,
+                    'npwp_name' => $row->NPWPNAME,
+                    'npwp_address' => $row->NPWPADDRESS,
                     'updated_at'    => now(),
                     // tambahkan field lain sesuai schema
                 ]

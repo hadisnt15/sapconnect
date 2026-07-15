@@ -15,7 +15,7 @@ class OcrdLocal extends Model
     protected $keyType = 'string';//
     protected $fillable = [
         'CardCode','CardName','Address','City','State','Contact','Phone','Group','Type1','Type2', 'div_name',
-        'CreateDate','LastOdrDate','Termin','Limit','ActBal','DlvBal','OdrBal','created_by','NIK','piutang_jt'
+        'CreateDate','LastOdrDate','Termin','Limit','ActBal','DlvBal','OdrBal','created_by','NIK','piutang_jt','npwp_address','npwp_name'
     ];
 
     public function scopeFilter(Builder $query, array $filters)
