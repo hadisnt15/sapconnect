@@ -13,8 +13,7 @@
         <nav class=" flex mb-4 px-5 py-3 border rounded-lg bg-gray-50 border-gray-200" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                 <li class="inline-flex items-center">
-                    <a href="{{ route('order') }}"
-                        class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-red-800">
+                    <a href="{{ route('order') }}" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-red-800">
                         <i class="ri-bill-fill"></i> Daftar Pesanan
                     </a>
                 </li>
@@ -37,19 +36,14 @@
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="mb-2">
                         <label for="OdrCrdCode" class="mb-2 text-sm font-medium text-gray-700">Kode Pelanggan</label>
-                        <input type="text" id="OdrCrdCode" name="OdrCrdCode"
-                            value="{{ old('OdrCrdCode', $dataOrder['OdrCrdCode']) }}" autocomplete="off"
-                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                            readonly />
+                        <input type="text" id="OdrCrdCode" name="OdrCrdCode" value="{{ old('OdrCrdCode', $dataOrder['OdrCrdCode']) }}" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" readonly />
                         @error('OdrCrdCode')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="mb-2">
                         <label class="mb-2 text-sm font-medium text-gray-700">Nama Pelanggan</label>
-                        <input type="text" value="{{ old('CstName', $cust->CardName) }}" autocomplete="off"
-                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                            readonly />
+                        <input type="text" value="{{ old('CstName', $cust->CardName) }}" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" readonly />
                         @error('CstName')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -59,20 +53,14 @@
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="mb-2">
                         <label for="OdrRefNum" class="mb-2 text-sm font-medium text-gray-700">No Ref SO</label>
-                        <input type="text" id="OdrRefNum" name="OdrRefNum"
-                            value="{{ old('OdrRefNum', $dataOrder['OdrRefNum']) }}" autocomplete="off"
-                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                            readonly />
+                        <input type="text" id="OdrRefNum" name="OdrRefNum" value="{{ old('OdrRefNum', $dataOrder['OdrRefNum']) }}" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" readonly />
                         @error('OdrRefNum')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="mb-2">
                         <label class="mb-2 text-sm font-medium text-gray-700">Tanggal SO</label>
-                        <input type="date" name="OdrDocDate"
-                            value="{{ old('OdrDocDate', $dataOrder['OdrDocDate']) }}" autocomplete="off"
-                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                            readonly />
+                        <input type="date" name="OdrDocDate" value="{{ old('OdrDocDate', $dataOrder['OdrDocDate']) }}" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" readonly />
                         @error('OdrDocDate')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -81,8 +69,7 @@
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="mb-2">
                         <label for="branch" class="mb-2 text-sm font-medium text-gray-700">Cabang</label>
-                        <select id="branch" name="branch" required
-                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <select id="branch" name="branch" required class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
                             <option value="">Pilih Cabang</option>
                             @foreach ($userBranches as $branch)
                                 <option value="{{ $branch }}" {{ old('branch') == $branch ? 'selected' : '' }}>
@@ -98,15 +85,9 @@
                         <label class="mb-2 text-sm font-medium text-gray-700">Piutang JT</label>
                         @php
                             $piutangJT = $dataOrder['PiutangJT'] ?? 0;
-                            $piutangClass = $piutangJT > 0
-                                ? 'border-red-500 bg-red-100 text-red-700 font-semibold'
-                                : 'border-gray-300 text-gray-700';
+                            $piutangClass = $piutangJT > 0 ? 'border-red-500 bg-red-100 text-red-700 font-semibold' : 'border-gray-300 text-gray-700';
                         @endphp
-                        <input type="text"
-                            value="{{ number_format($piutangJT, 0, '.', ',') }}"
-                            autocomplete="off"
-                            class="bg-gray-50 {{ $piutangClass }} border rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                            readonly />
+                        <input type="text" value="{{ number_format($piutangJT, 0, '.', ',') }}" autocomplete="off" class="bg-gray-50 {{ $piutangClass }} border rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" readonly />
                         @error('CstName')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -114,8 +95,7 @@
                 </div>
                 <div class="mb-2">
                     <label class="mb-2 text-sm font-medium text-gray-700">Catatan</label>
-                    <input type="text" name="note" autocomplete="off" value="{{ old('note') }}" 
-                        class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    <input type="text" name="note" autocomplete="off" value="{{ old('note') }}" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500" />
                     @error('note')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -130,22 +110,15 @@
                 <div 
                     x-data="{
                         items: [{
-                            RdrItemCode: '', ItemName: '', RdrItemQuantity: 1, RdrItemPrice: 0,
+                            RdrItemCode: '', ItemName: '', RdrItemQuantity: 1, RdrItemPrice: 0, RdrItemPriceType: 'HET', RdrItemHkn: [],
                             RdrItemSatuan: '', RdrItemProfitCenter: '', RdrItemKetHKN: '', RdrItemKetFG: '', open: true
                         }]
                     }" 
                     class="space-y-3"
                 >
                     <template x-for="(item, index) in items" :key="index">
-                        
                         <!-- ADD: Border merah jika belum lengkap -->
-                        <div 
-                            class="border bg-white rounded-lg shadow-sm"
-                            :class="(!item.RdrItemCode || !item.RdrItemQuantity || !item.RdrItemPrice) 
-                                        ? 'border-red-500' 
-                                        : 'border-gray-200'"
-                        >
-
+                        <div  class="border bg-white rounded-lg shadow-sm" :class="(!item.RdrItemCode || !item.RdrItemQuantity || !item.RdrItemPrice) ? 'border-red-500' : 'border-gray-200'">
                             <!-- Header item -->
                             <div class="flex justify-between items-center p-3 bg-gray-100 rounded-t-lg cursor-pointer"
                                 @click="item.open = !item.open">
@@ -189,52 +162,53 @@
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
                                         <label class="text-xs text-gray-600">Deskripsi</label>
-                                        <input type="text" :name="'items[' + index + '][ItemName]'" x-model="item.ItemName"
-                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
+                                        <input type="text" :name="'items[' + index + '][ItemName]'" x-model="item.ItemName" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
                                     </div>
                                     <div>
                                         <label class="text-xs text-gray-600">Qty</label>
-                                        <input type="number" :name="'items[' + index + '][RdrItemQuantity]'"
-                                            x-model="item.RdrItemQuantity" required
-                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
+                                        <input type="number" :name="'items[' + index + '][RdrItemQuantity]'" x-model="item.RdrItemQuantity" required class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
                                     </div>
                                     <div>
                                         <label class="text-xs text-gray-600">Harga</label>
-                                        <input type="number" step="0.01" :name="'items[' + index + '][RdrItemPrice]'"
-                                            x-model="item.RdrItemPrice" required :readonly="item.RdrItemKetHKN === 'Tidak Terdaftar' && item.RdrItemProfitCenter === 'IDP'"
-                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
+                                        <!-- Item NON HKN -->
+                                        <template x-if="item.RdrItemKetHKN === 'Tidak Terdaftar'">
+                                            <input type="number" step="0.01" :name="'items[' + index + '][RdrItemPrice]'" x-model="item.RdrItemPrice" required :readonly="item.RdrItemProfitCenter === 'IDP'" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
+                                        </template>
+                                        <!-- Item HKN -->
+                                        <template x-if="item.RdrItemKetHKN !== 'Tidak Terdaftar'">
+                                            <select x-model="item.RdrItemPrice" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
+                                                <!-- HET -->
+                                                <option :value="item.HET" x-text="'HET (Rp ' + ((item.HET ?? 0).toLocaleString('id-ID')) + ')'">HET</option>
+                                                <!-- HKN -->
+                                                <template x-for="hkn in item.RdrItemHkn" :key="hkn.min_qty">
+                                                    <option :value="hkn.price" x-text="hkn.label"></option>
+                                                </template>
+                                            </select>
+                                        </template>
+                                        <!-- Nilai yang dikirim ke controller -->
+                                        <input type="hidden" :name="'items[' + index + '][RdrItemPrice]'" x-model="item.RdrItemPrice">
                                     </div>
                                     <div>
                                         <label class="text-xs text-gray-600">Diskon</label>
-                                        <input type="number" step="0.01" :name="'items[' + index + '][RdrItemDisc]'"
-                                            x-model="item.RdrItemDisc" value="0"
-                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
+                                        <input type="number" step="0.01" :name="'items[' + index + '][RdrItemDisc]'" x-model="item.RdrItemDisc" value="0" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs">
                                     </div>
                                     <div>
                                         <label class="text-xs text-gray-600">Satuan</label>
-                                        <input type="text" :name="'items[' + index + '][RdrItemSatuan]'"
-                                            x-model="item.RdrItemSatuan"
-                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
+                                        <input type="text" :name="'items[' + index + '][RdrItemSatuan]'" x-model="item.RdrItemSatuan" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
                                     </div>
                                     <div>
                                         <label class="text-xs text-gray-600">Profit Center</label>
-                                        <input type="text" :name="'items[' + index + '][RdrItemProfitCenter]'"
-                                            x-model="item.RdrItemProfitCenter"
-                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
+                                        <input type="text" :name="'items[' + index + '][RdrItemProfitCenter]'" x-model="item.RdrItemProfitCenter" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
                                     </div>
                                 </div>
 
                                 <div>
                                     <label class="text-xs text-gray-600">Ket HKN</label>
-                                    <input type="text" :name="'items[' + index + '][RdrItemKetHKN]'"
-                                        x-model="item.RdrItemKetHKN"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
+                                    <input type="text" :name="'items[' + index + '][RdrItemKetHKN]'" x-model="item.RdrItemKetHKN" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
                                 </div>
                                 <div>
                                     <label class="text-xs text-gray-600">Ket FG</label>
-                                    <input type="text" :name="'items[' + index + '][RdrItemKetFG]'"
-                                        x-model="item.RdrItemKetFG"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
+                                    <input type="text" :name="'items[' + index + '][RdrItemKetFG]'" x-model="item.RdrItemKetFG" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 md:text-sm text-xs" readonly>
                                 </div>
 
                                 <!-- Tombol hapus -->
@@ -260,7 +234,7 @@
                     <button type="button"
                         @click="
                             items.push({
-                                RdrItemCode:'', ItemName:'', RdrItemQuantity:1, RdrItemPrice:0,
+                                RdrItemCode:'', ItemName:'', RdrItemQuantity:1, RdrItemPrice:0, HET: 0, RdrItemHkn: [],
                                 RdrItemSatuan:'', RdrItemProfitCenter:'', RdrItemKetHKN:'', RdrItemKetFG:'', open:true
                             });
 
@@ -280,8 +254,7 @@
 
 
                     <!-- Tombol submit -->
-                    <button type="submit"
-                        class="w-full bg-red-800 hover:bg-red-500 text-white py-2 rounded-lg text-sm font-medium">
+                    <button type="submit" class="w-full bg-red-800 hover:bg-red-500 text-white py-2 rounded-lg text-sm font-medium">
                         Buat Pesanan
                     </button>
                 </div>
@@ -360,7 +333,9 @@
                 // sync ke Alpine
                 Object.assign(alpineData.items[index], {
                     ItemName: selected.FrgnName,
+                    HET: selected.HET,
                     RdrItemPrice: selected.HET,
+                    RdrItemHkn: selected.hkn ?? [],
                     RdrItemProfitCenter: selected.ProfitCenter,
                     RdrItemSatuan: selected.Satuan,
                     RdrItemKetHKN: selected.KetHKN,

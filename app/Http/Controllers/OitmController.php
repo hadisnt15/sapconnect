@@ -159,12 +159,14 @@ class OitmController extends Controller
         // UNION ALL
         // ==========================
         $union = $pertaminaSub->unionAll($nonPertaminaSub);
+        $final = DB::query()->fromSub($union, 'X')->where('Cek', 1)->orderBy('ItemLabel')->get();
+        $items = OitmLocal::whereIn('ItemCode', $final->pluck('ItemCode'))->get()->keyBy('ItemCode');
 
-        $final = DB::query()
-            ->fromSub($union, 'X')
-            ->where('Cek', 1)
-            ->orderBy('ItemLabel')
-            ->get();
+        $final->transform(function ($item) use ($items) {
+            $model = $items->get($item->ItemCode);
+            $item->hkn = $model?->hkn_price ?? [];
+            return $item;
+        });
 
         return $final;
     }

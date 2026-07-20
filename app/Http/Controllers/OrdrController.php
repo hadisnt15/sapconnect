@@ -567,6 +567,7 @@ class OrdrController extends Controller
 
         // map detail rows ke array buat AlpineJS
         $rows = $head->orderRow->sortBy('id')->values()->map(function($r){
+            $item = OitmLocal::where('ItemCode', $r->RdrItemCode)->first();
             return [
                 'RdrItemCode'       => $r->RdrItemCode,
                 'ItemName'          => $r->orderItem?->ItemName,
@@ -577,6 +578,8 @@ class OrdrController extends Controller
                 'RdrItemKetHKN'     => $r->RdrItemKetHKN,
                 'RdrItemKetFG'      => $r->RdrItemKetFG,
                 'RdrItemDisc'       => $r->RdrItemDisc,
+                'HET'                 => $item?->HET ?? $r->RdrItemPrice,
+                'RdrItemHkn'          => $item?->hknPrice ?? [],   
             ];
         })->toArray();
 
@@ -597,7 +600,7 @@ class OrdrController extends Controller
                 ->where('user_branch.user_id', $user->id)
                 ->pluck('branch.branch_name')
                 ->toArray();
-
+                    
         return view('ordr.ordr_edit', [
             'title' => 'SAPConnect KKJ - Perbarui Pesanan',
             'titleHeader' => 'Perbarui Pesanan',

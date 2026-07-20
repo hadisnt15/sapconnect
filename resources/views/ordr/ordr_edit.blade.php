@@ -31,50 +31,37 @@
         </nav>
 
         <!-- Form Update -->
-        <form class="mx-auto" action="{{ route('order.update', $head->id) }}" method="post">
-            @csrf
-            @method('PUT')
-
+        <form class="mx-auto" action="{{ route('order.update', $head->id) }}" method="post">@csrf @method('PUT')
             <div>
-
                 <!-- HEADER -->
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="mb-2">
                         <label class="mb-2 text-sm font-medium text-gray-700">Kode Pelanggan</label>
-                        <input type="text" name="OdrCrdCode" id="OdrCrdCode"
-                            value="{{ old('OdrCrdCode', $head['OdrCrdCode']) }}"
-                            readonly
-                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
+                        <input type="text" name="OdrCrdCode" id="OdrCrdCode" value="{{ old('OdrCrdCode', $head['OdrCrdCode']) }}" readonly class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
                     </div>
 
                     <div class="mb-2">
                         <label class="mb-2 text-sm font-medium text-gray-700">Nama Pelanggan</label>
-                        <input type="text" value="{{ $cust->CardName }}" readonly
-                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
+                        <input type="text" value="{{ $cust->CardName }}" readonly class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
                     </div>
                 </div>
 
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="mb-2">
                         <label class="mb-2 text-sm font-medium text-gray-700">No Ref SO</label>
-                        <input type="text" name="OdrRefNum" readonly
-                            value="{{ $head['OdrRefNum'] }}"
-                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
+                        <input type="text" name="OdrRefNum" readonly value="{{ $head['OdrRefNum'] }}" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
                     </div>
 
                     <div class="mb-2">
                         <label class="mb-2 text-sm font-medium text-gray-700">Tanggal SO</label>
-                        <input type="text" name="OdrDocDate" readonly
-                            value="{{ $OdrDocDate }}"
-                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
+                        <input type="text" name="OdrDocDate" readonly value="{{ $OdrDocDate }}" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
                     </div>
                 </div>
 
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="mb-2">
                         <label class="mb-2 text-sm font-medium text-gray-700">Cabang</label>
-                        <select name="branch"
-                            class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
+                        <select name="branch" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
                             @foreach ($userBranches as $branch)
                                 <option value="{{ $branch }}" {{ $head['branch'] == $branch ? 'selected' : '' }}>
                                     {{ $branch }}
@@ -87,20 +74,15 @@
                         <label class="mb-2 text-sm font-medium text-gray-700">Piutang JT</label>
                         @php
                             $piutangJT = $dataOrder['PiutangJT'] ?? 0;
-                            $piutangClass = $piutangJT > 0
-                                ? 'border-red-500 bg-red-100 text-red-700 font-semibold'
-                                : 'border-gray-300 text-gray-700';
+                            $piutangClass = $piutangJT > 0 ? 'border-red-500 bg-red-100 text-red-700 font-semibold' : 'border-gray-300 text-gray-700';
                         @endphp
-                        <input type="text" readonly
-                            value="{{ number_format($piutangJT, 0, '.', ',') }}"
-                            class="bg-gray-50 {{ $piutangClass }} border rounded-lg w-full p-2.5 text-sm">
+                        <input type="text" readonly value="{{ number_format($piutangJT, 0, '.', ',') }}" class="bg-gray-50 {{ $piutangClass }} border rounded-lg w-full p-2.5 text-sm">
                     </div>
                 </div>
 
                 <div class="mb-2">
                     <label class="mb-2 text-sm font-medium text-gray-700">Catatan</label>
-                    <input type="text" name="note" value="{{ old('note', $head['note']) }}"
-                        class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
+                    <input type="text" name="note" value="{{ old('note', $head['note']) }}" class="bg-gray-50 border border-gray-300 text-gray-700 rounded-lg w-full p-2.5 text-sm">
                 </div>
 
                 <input type="hidden" name="OdrSlpCode" value="{{ $head['OdrSlpCode'] }}">
@@ -112,6 +94,7 @@
                 <div x-data="{
                     items: @js($rows).map(i => ({
                         ...i,
+                        RdrItemHkn: i.RdrItemHkn ?? [],
                         isNew: false,
                         oldCode: i.RdrItemCode
                     })),
@@ -129,29 +112,18 @@
                     }
                 }"
                 x-init="initAll()" class="space-y-3">
-
-
                     <template x-for="(item, index) in items" :key="index">
-                        <div
-                            class="bg-white rounded-lg shadow-sm"
-                            :class="(!item.RdrItemCode || !item.RdrItemQuantity || !item.RdrItemPrice)
-                                ? 'border border-red-500'
-                                : 'border border-gray-200'"
-                        >
-
+                        <div class="bg-white rounded-lg shadow-sm" :class="(!item.RdrItemCode || !item.RdrItemQuantity || !item.RdrItemPrice) ? 'border border-red-500' : 'border border-gray-200'">
                             <!-- Header -->
                             <div class="flex justify-between items-center p-3 bg-gray-100 rounded-t-lg cursor-pointer"
                                 @click="item.open = !item.open">
                                 <div>
-                                    <span class="font-semibold text-gray-800 text-sm mr-2"
-                                          x-text="'#' + (index + 1)"></span>
+                                    <span class="font-semibold text-gray-800 text-sm mr-2" x-text="'#' + (index + 1)"></span>
                                     <span class="text-xs text-gray-500">
                                         <span x-text="'Kode: ' + (item.RdrItemCode || '-')"></span>
                                     </span><br>
                                     <span class="text-xs text-gray-500">
-                                        <span
-                                            x-text="'Qty: ' + (item.RdrItemQuantity || 0) + ' - Harga: ' + (item.RdrItemPrice || 0) + ' - Diskon: ' + (item.RdrItemDisc || 0)">
-                                        </span>
+                                        <span x-text="'Qty: ' + (item.RdrItemQuantity || 0) + ' - Harga: ' + (item.RdrItemPrice || 0) + ' - Diskon: ' + (item.RdrItemDisc || 0)"></span>
                                     </span><br>
                                     <span class="text-sm font-semibold text-gray-700" x-show="item.ItemName">
                                         (<span x-text="item.ItemName"></span>)
@@ -163,11 +135,9 @@
                             </div>
 
                             <div x-show="item.open" x-collapse class="p-3 space-y-2">
-
                                 <!-- SELECT BARANG -->
                                 <div>
                                     <label class="text-xs text-gray-600">Kode Barang</label>
-
                                     <select :id="'itemSelect' + index"
                                         :name="'items[' + index + '][RdrItemCode]'" 
                                         class="border border-gray-300 bg-gray-50 rounded-md w-full text-sm p-2"
@@ -191,69 +161,57 @@
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
                                         <label class="text-xs text-gray-600">Deskripsi</label>
-                                        <input type="text"
-                                            :name="'items[' + index + '][ItemName]'"
-                                            x-model="item.ItemName"
-                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
+                                        <input type="text" :name="'items[' + index + '][ItemName]'" x-model="item.ItemName" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
                                     </div>
-
                                     <div>
                                         <label class="text-xs text-gray-600">Qty</label>
-                                        <input type="number"
-                                            :name="'items[' + index + '][RdrItemQuantity]'"
-                                            x-model="item.RdrItemQuantity" required
-                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm">
+                                        <input type="number" :name="'items[' + index + '][RdrItemQuantity]'" x-model="item.RdrItemQuantity" required class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm">
                                     </div>
-
                                     <div>
                                         <label class="text-xs text-gray-600">Harga</label>
-                                        <input type="number" step="0.01"
-                                            :name="'items[' + index + '][RdrItemPrice]'"
-                                            x-model="item.RdrItemPrice" required :readonly="item.RdrItemProfitCenter === 'IDP' && item.RdrItemKetHKN === 'Tidak Terdaftar'"
-                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm">
+                                        {{-- NON HKN --}}
+                                        <template x-if="item.RdrItemKetHKN === 'Tidak Terdaftar'">
+                                            <input type="number" step="0.01" :name="'items[' + index + '][RdrItemPrice]'" x-model="item.RdrItemPrice" required :readonly="item.RdrItemProfitCenter === 'IDP'" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm">
+                                        </template>
+                                        {{-- HKN --}}
+                                        <template x-if="item.RdrItemKetHKN !== 'Tidak Terdaftar'">
+                                            <select x-model="item.RdrItemPrice" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm">
+                                                {{-- Harga yang tersimpan --}}
+                                                <option :value="item.RdrItemPrice">
+                                                    <span x-text="item.HET == item.RdrItemPrice ? 'HET - Rp ' + Number(item.RdrItemPrice).toLocaleString('id-ID') : (item.RdrItemHkn.find(h => h.price == item.RdrItemPrice)?.label ?? ('Rp ' + Number(item.RdrItemPrice).toLocaleString('id-ID')))"></span>
+                                                </option>
+                                                {{-- HET --}}
+                                                <option :value="item.HET">HET - Rp<span x-text="Number(item.HET ?? 0).toLocaleString('id-ID')"></span></option>
+                                                {{-- HKN --}}
+                                                <template x-for="hkn in item.RdrItemHkn" :key="hkn.min_qty">
+                                                    <option :value="hkn.price" x-text="hkn.label"></option>
+                                                </template>
+                                            </select>
+                                        </template>
+                                        {{-- Nilai yang dikirim ke controller --}}
+                                        <input type="hidden" :name="'items[' + index + '][RdrItemPrice]'" x-model="item.RdrItemPrice">
                                     </div>
-
                                     <div>
                                         <label class="text-xs text-gray-600">Diskon</label>
-                                        <input type="number" step="0.01"
-                                            :name="'items[' + index + '][RdrItemDisc]'"
-                                            x-model="item.RdrItemDisc"
-                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm">
+                                        <input type="number" step="0.01" :name="'items[' + index + '][RdrItemDisc]'" x-model="item.RdrItemDisc" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm">
                                     </div>
-
                                     <div>
                                         <label class="text-xs text-gray-600">Satuan</label>
-                                        <input type="text"
-                                            :name="'items[' + index + '][RdrItemSatuan]'"
-                                            x-model="item.RdrItemSatuan"
-                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
+                                        <input type="text" :name="'items[' + index + '][RdrItemSatuan]'" x-model="item.RdrItemSatuan" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
                                     </div>
-
                                     <div>
                                         <label class="text-xs text-gray-600">Profit Center</label>
-                                        <input type="text"
-                                            :name="'items[' + index + '][RdrItemProfitCenter]'"
-                                            x-model="item.RdrItemProfitCenter"
-                                            class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
+                                        <input type="text" :name="'items[' + index + '][RdrItemProfitCenter]'" x-model="item.RdrItemProfitCenter" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
                                     </div>
                                 </div>
-
                                 <div>
                                     <label class="text-xs text-gray-600">Ket HKN</label>
-                                    <input type="text"
-                                        :name="'items[' + index + '][RdrItemKetHKN]'"
-                                        x-model="item.RdrItemKetHKN"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
+                                    <input type="text" :name="'items[' + index + '][RdrItemKetHKN]'" x-model="item.RdrItemKetHKN" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
                                 </div>
-
                                 <div>
                                     <label class="text-xs text-gray-600">Ket FG</label>
-                                    <input type="text"
-                                        :name="'items[' + index + '][RdrItemKetFG]'"
-                                        x-model="item.RdrItemKetFG"
-                                        class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
+                                    <input type="text" :name="'items[' + index + '][RdrItemKetFG]'" x-model="item.RdrItemKetFG" class="w-full border border-gray-300 bg-gray-50 rounded-md p-2 text-sm" readonly>
                                 </div>
-
                                 <!-- HAPUS ITEM -->
                                 <div class="flex justify-end mt-2">
                                     <button type="button"
@@ -280,7 +238,7 @@
                     <button type="button" 
                         @click="
                             items.push({
-                                RdrItemCode:'', ItemName:'', RdrItemQuantity:1, RdrItemPrice:0,
+                                RdrItemCode:'', ItemName:'', RdrItemQuantity:1, RdrItemPrice:0, HET:0, RdrItemHkn:[],
                                 RdrItemDisc:0, RdrItemSatuan:'', RdrItemProfitCenter:'',
                                 RdrItemKetHKN:'', RdrItemKetFG:'', open:true, isNew: true, oldCode: null
                             });
@@ -364,8 +322,6 @@
                     const alpineData = Alpine.$data(alpineRoot);
                     const items = alpineData.items;
 
-                    const currentItem = items[index];
-
                     // =========================
                     // 🚫 CEK DUPLIKAT
                     // =========================
@@ -379,6 +335,7 @@
                         return;
                     }
 
+                    const currentItem = items[index];
                     const selected = this.options[value];
                     if (!selected) return;
 
@@ -407,6 +364,9 @@
                         currentItem[name] = val;
                     });
 
+                    currentItem.HET = selected.HET;
+                    currentItem.RdrItemHkn = selected.hkn ?? [];
+
                     // =========================
                     // 🔥 LOGIC HARGA
                     // =========================
@@ -414,15 +374,15 @@
                         `[name="items[${index}][RdrItemPrice]"]`
                     );
 
-                    if (currentItem.isNew || isChanged) {
-                        if (priceInput) priceInput.value = selected.HET;
+                    if (currentItem.isNew) {
+                        // Barang baru ditambahkan
                         currentItem.RdrItemPrice = selected.HET;
+                    } else if (currentItem.oldCode !== value) {
+                        // User mengganti barang
+                        currentItem.RdrItemPrice = selected.HET;
+                        currentItem.oldCode = value;
                     }
 
-                    // =========================
-                    // 🔥 UPDATE STATE
-                    // =========================
-                    currentItem.oldCode = value;
                     currentItem.RdrItemCode = value;
                     currentItem.isNew = false;
                 }

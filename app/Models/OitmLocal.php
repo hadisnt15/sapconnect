@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OitmLocal extends Model
@@ -14,7 +15,7 @@ class OitmLocal extends Model
     protected $keyType = 'string';//
     protected $fillable = [
         'ItemCode','ItemName','FrgnName','ProfitCenter','Brand','Segment','Type','Series',
-        'Satuan','TotalStock','HET','StatusHKN','StatusFG','KetHKN','KetFG','KetStock','div_name',
+        'Satuan','TotalStock','HET','StatusHKN','StatusFG','KetHKN','KetHKN3','KetFG','KetStock','div_name',
     ];
 
     public function scopeFilter(Builder $query, array $filters)   
@@ -40,5 +41,56 @@ class OitmLocal extends Model
     public function division()
     {
         return $this->belongsTo(Division::class, 'div_name');
+    }
+
+    protected function hknPrice(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+
+                if (blank($this->KetHKN3)) {
+                    return [];
+                }
+
+                return collect(explode(';', $this->KetHKN3))
+                    ->map(function ($row) {
+
+                        $row = trim($row);
+
+                        if ($row === '') {
+                            return null;
+                        }
+
+                        $parts = array_map('trim', explode('|', $row));
+
+                        if (count($parts) !== 3) {
+                            return null;
+                        }
+
+                        return [
+                            'min_qty' => (int) $parts[0],
+                            'max_qty' => (int) $parts[1],
+                            'price'   => (int) $parts[2],
+                            'label'   => sprintf(
+                                'HKN %d%s (Rp %s)',
+                                (int) $parts[0],
+                                (int) $parts[1] >= 999999
+                                    ? '+'
+                                    : '-' . (int) $parts[1],
+                                number_format((int) $parts[2], 0, ',', '.')
+                            ),
+                        ];
+                    })
+                    ->filter()
+                    ->values()
+                    ->all();
+            }
+        );
+    }
+
+    public function getHknPriceByQty(int $qty): ?float
+    {
+        $range = collect($this->hknPrice)->first(fn ($item) => $qty >= $item['min_qty'] && $qty <= $item['max_qty']);
+        return $range['price'] ?? null;
     }
 }
