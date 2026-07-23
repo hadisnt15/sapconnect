@@ -110,7 +110,7 @@
                 <div 
                     x-data="{
                         items: [{
-                            RdrItemCode: '', ItemName: '', RdrItemQuantity: 1, RdrItemPrice: 0, RdrItemPriceType: 'HET', RdrItemHkn: [],
+                            RdrItemCode: '', ItemName: '', RdrItemQuantity: 0, RdrItemPrice: 0, RdrItemPriceType: 'HET', RdrItemHkn: [],
                             RdrItemSatuan: '', RdrItemProfitCenter: '', RdrItemKetHKN: '', RdrItemKetFG: '', open: true
                         }]
                     }" 

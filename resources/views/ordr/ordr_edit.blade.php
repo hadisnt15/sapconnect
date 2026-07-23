@@ -238,7 +238,7 @@
                     <button type="button" 
                         @click="
                             items.push({
-                                RdrItemCode:'', ItemName:'', RdrItemQuantity:1, RdrItemPrice:0, HET:0, RdrItemHkn:[],
+                                RdrItemCode:'', ItemName:'', RdrItemQuantity:0, RdrItemPrice:0, HET:0, RdrItemHkn:[],
                                 RdrItemDisc:0, RdrItemSatuan:'', RdrItemProfitCenter:'',
                                 RdrItemKetHKN:'', RdrItemKetFG:'', open:true, isNew: true, oldCode: null
                             });
