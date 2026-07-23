@@ -35,8 +35,9 @@ class SyncOcrdFromHana extends Command
         $this->info("Syncing OCRD from SAPHANA to LARAVEL...");
         // Ambil data dari HANA
         $hanaData = DB::connection('hana')->select('SELECT "CARDCODE","CARDNAME","ADDRESS","STATE","CITY","CONTACT",TO_NVARCHAR("PHONE") AS PHONE,
-            "GROUP","TYPE1","TYPE2","CREATEDATE","LASTODRDATE","TERMIN","LIMIT","ACTBAL","DLVBAL","ODRBAL","PIUTANGJT","DIVISI","NPWPADDRESS","NPWPNAME" FROM LVKKJ_CUSTOMER();');
-
+            "GROUP","TYPE1","TYPE2","CREATEDATE","LASTODRDATE","TERMIN","LIMIT","ACTBAL","DLVBAL","ODRBAL","PIUTANGJT","DIVISI","NPWPNAME"--TO_NVARCHAR("NPWPADDRESS") AS NPWPADDRESS,
+            FROM LVKKJ_CUSTOMER();');
+        $totalInsert = 0;
         foreach ($hanaData as $row) {
             DB::table('ocrd_local')->updateOrInsert(
                 [ 'CardCode' => $row->CARDCODE, ], // key unik
@@ -61,12 +62,15 @@ class SyncOcrdFromHana extends Command
                     'piutang_jt' => $row->PIUTANGJT,
                     'div_name' => $row->DIVISI,
                     'npwp_name' => $row->NPWPNAME,
-                    'npwp_address' => $row->NPWPADDRESS,
+                    // 'npwp_address' => $row->NPWPADDRESS,
                     'updated_at'    => now(),
                     // tambahkan field lain sesuai schema
                 ]
             );
+            $totalInsert++;
         }
+
+        $this->info("Looping: ".$totalInsert);
         $this->info("Total data dari HANA: " . count($hanaData));
         $this->info("Total data di LARA: " . count($hanaData));
     }
